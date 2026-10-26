@@ -1,0 +1,60 @@
+Plasmid Eco-Evo — licence
+=========================
+
+NOTE: This dual licence is the project's proposed default and is awaiting the
+author's confirmation before the repository is published anywhere. If it is
+kept, the Creative Commons legal text should be vendored into this repository
+alongside this file rather than left as a link.
+
+This repository contains two kinds of material, licensed separately.
+
+1. CONTENT — Creative Commons Attribution 4.0 International (CC BY 4.0)
+-----------------------------------------------------------------------
+
+Applies to all prose, documentation, figures and data files: every .md file,
+the files under evidence/ (including references.bib and claims.yml), and the
+rendered figures under figures/output/.
+
+You are free to share and adapt this material for any purpose, including
+commercially, provided you give appropriate credit, link to the licence, and
+indicate if changes were made.
+
+Licence deed:  https://creativecommons.org/licenses/by/4.0/
+Full text:     https://creativecommons.org/licenses/by/4.0/legalcode
+
+Suggested attribution:
+
+    "Plasmid Eco-Evo — Educational ecology and evolution of plasmids and
+    mobile DNA" by Thanakrit (Austin) Wongsatit, CC BY 4.0.
+
+Note on third-party material: the facts and findings described here come from
+the cited literature, which this project does not relicense. Quoted or
+reproduced third-party material, if any is added later, remains under its own
+terms and must be marked as such.
+
+2. CODE — MIT Licence
+---------------------
+
+Applies to all source code, including everything under figures/source/.
+
+MIT License
+
+Copyright (c) 2026 Thanakrit (Austin) Wongsatit
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

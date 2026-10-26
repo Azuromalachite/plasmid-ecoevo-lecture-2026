@@ -1,0 +1,8 @@
+# Keep LF in the working copy on every platform.
+#
+# Generated figures must round-trip byte-identically: the build scripts write
+# LF, so a CRLF checkout would make every rebuild look like a whole-file diff
+# and destroy the "a diff in output/ means a diff in source/" guarantee.
+* text=auto eol=lf
+*.svg text eol=lf
+*.py  text eol=lf

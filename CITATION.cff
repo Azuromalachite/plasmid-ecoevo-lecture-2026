@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+title: >-
+  Plasmid Eco-Evo — Educational ecology and evolution of plasmids
+  and mobile DNA
+message: >-
+  If you use or adapt this material, please cite it as below.
+type: dataset
+authors:
+  - family-names: Wongsatit
+    given-names: Thanakrit
+    alias: Austin
+    email: austinwongsatit@kaist.ac.kr
+abstract: >-
+  An educational collection of biological case studies, conceptual
+  frameworks, quantitative models and teaching figures on the ecology
+  and evolution of plasmids and mobile DNA. It treats plasmids not
+  only as molecular vectors but as evolving ecological entities whose
+  persistence depends jointly on replication, host physiology,
+  horizontal transmission, ecological interactions, environmental
+  context and evolutionary history. Material derives only from
+  published literature and independent teaching examples; every
+  reference has a resolving DOI whose metadata has been checked.
+keywords:
+  - plasmid biology
+  - horizontal gene transfer
+  - mobile genetic elements
+  - antimicrobial resistance
+  - evolutionary ecology
+  - science education
+version: 0.1.0
+date-released: '2026-10-26'
+license:
+  - CC-BY-4.0
+  - MIT
+license-url: 'https://creativecommons.org/licenses/by/4.0/'

@@ -1,0 +1,223 @@
+# Tracked claims for Plasmid Eco-Evo.
+#
+# Only reusable, load-bearing claims live here. Status vocabulary and the
+# rules for assigning it: evidence-levels.md
+#
+# Fields:
+#   id          stable identifier, never reused or renumbered
+#   statement   the claim, as precisely as it can be stated
+#   layer       source | interpretation | model | observation
+#   status      supported | contested | unsupported | refuted
+#               | model-derived | definitional
+#   references  BibTeX keys in references.bib
+#   notes       caveats, scope, and what IS established if the claim is not
+#   pages       repository pages that depend on this claim
+
+version: 0.1
+
+claims:
+  - id: claim.shewanella.oxa_native_context
+    statement: >
+      Chromosomal class D beta-lactamases of environmental Shewanella species
+      are embedded in the cell's own envelope physiology: their expression is
+      regulated through peptidoglycan recycling enzymes and penicillin-binding
+      protein 1a / LpoA, not through the canonical AmpR-AmpC induction
+      pathway, which Shewanella lacks.
+    layer: source
+    status: supported
+    references:
+      - yin2014recycling
+      - yin2015pbp1a
+      - poirel2004progenitor
+    notes: >
+      Demonstrated in S. oneidensis for blaA. Loss of AmpG or NagZ strongly
+      changes beta-lactam resistance, and inactivation of mrcA or lpoA
+      drastically raises blaA expression without beta-lactam exposure. The
+      OXA-54 enzyme of S. oneidensis shares 92% amino acid identity with
+      plasmid-encoded OXA-48. Scope: S. oneidensis is the studied
+      representative; the regulatory detail is not shown for every Shewanella
+      species carrying a blaOXA-48-like gene.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.shewanella.oxa_ancestral_selection
+    statement: >
+      The historical selective agent that maintained chromosomal
+      blaOXA-48-like genes in environmental Shewanella is known.
+    layer: interpretation
+    status: unsupported
+    references:
+      - dcosta2011ancient
+      - martinez2008natural
+      - potron2011oxa181
+      - yin2015pbp1a
+    notes: >
+      This is a deliberately recorded gap, not a refutation. What IS
+      supported: resistance determinants long predate therapeutic antibiotic
+      use (functional beta-lactam, tetracycline and glycopeptide resistance
+      genes recovered from 30,000-year-old permafrost), environmental
+      resistance genes need not have arisen under therapeutic selection, and
+      the native regulatory context of the Shewanella enzyme is cell-wall
+      physiology. What is NOT established: whether the agent for this gene in
+      this lineage was environmental beta-lactams from competitors, a
+      physiological role in envelope turnover, or neutral retention. Do not
+      let the ancient-resistance literature be read as answering this; it
+      answers a different question. Downgrade to 'contested' only if direct
+      evidence for a specific agent appears.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.oxa48.mobilization_changes_expression
+    statement: >
+      Mobilization of blaOXA-48 by IS1999 changed both the gene's location and
+      its expression, because the beta-lactamase is transcribed from the
+      insertion sequence's own outward-directed promoter.
+    layer: source
+    status: supported
+    references:
+      - aubert2006is1999
+      - poirel2004emergence
+      - poirel2012genetic
+    notes: >
+      5' RACE located the Pout promoter in IS1999 driving blaOXA-48 and
+      blaVEB-1. Caveat for teaching: in the same study, transposition of the
+      putative natural Tn1999 itself was below the assay's detection limit,
+      although IS1999 and laboratory-constructed IS1999 composite transposons
+      did transpose. The evidence that Tn1999 is the mobile unit carrying
+      blaOXA-48 onto plasmids is structural, not a measured rate.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.oxa48.phenotype_needs_host_context
+    statement: >
+      Clinically significant carbapenem resistance from OXA-48-like enzymes
+      requires host context — in particular reduced outer-membrane
+      permeability — and is not a property of the enzyme alone.
+    layer: source
+    status: supported
+    references:
+      - poirel2012phantom
+      - poirel2004emergence
+    notes: >
+      OXA-48-like enzymes hydrolyse penicillins strongly and carbapenems only
+      weakly, sparing broad-spectrum cephalosporins; high-level carbapenem
+      resistance appears when enzyme production combines with a permeability
+      defect. The index K. pneumoniae isolate 11978 lacked a ~36 kDa porin
+      and also expressed several other beta-lactamases, so that single isolate
+      does not isolate the porin's contribution on its own.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.transfer_is_not_spread
+    statement: >
+      A detected conjugative transfer event does not establish that a plasmid
+      is spreading: contact, transfer, establishment, persistence and
+      secondary spread are separate steps, and later steps fail independently
+      of transfer rate.
+    layer: interpretation
+    status: supported
+    references:
+      - fox2008spatial
+      - novick1987incompatibility
+      - garcillan2008entry
+      - simonsen1990endpoint
+      - alonsodelvalle2021variability
+    notes: >
+      The decomposition into five steps is this project's framing
+      (interpretation layer); each individual step is independently evidenced.
+      Strongest single demonstration: plasmid pB10 invades E. coli populations
+      from a frequency as low as 1e-7 on filters with nutrient replenishment
+      but cannot invade in liquid culture, with the same plasmid and host.
+    pages:
+      - misconceptions/transfer-is-not-spread.md
+      - concepts/copy-carry-spread.md
+
+  - id: claim.copy_number.evolution_not_proportional
+    statement: >
+      Higher plasmid copy number does not produce a proportionally higher
+      plasmid evolutionary rate, because segregational drift at cell division
+      loses new variants and extends their fixation time.
+    layer: source
+    status: supported
+    references:
+      - ilhan2019segregational
+      - rodriguezbeltran2018tradeoffs
+      - sanmillan2016multicopy
+    notes: >
+      Experimental evolution of low- and high-copy non-mobile plasmids in
+      E. coli, supported by simulation. This does not contradict the finding
+      that multicopy carriage potentiates resistance evolution and allows
+      escape from fitness trade-offs: those benefits come from allelic
+      heterozygosity within a cell, which is a different mechanism from a
+      higher substitution rate. Keep the two distinct when teaching.
+    pages:
+      - misconceptions/more-copy-is-always-better.md
+      - concepts/copy-carry-spread.md
+
+  - id: claim.persistence.transfer_can_offset_cost
+    statement: >
+      Conjugative transfer can maintain a costly plasmid in a population
+      without selection for its cargo, at transfer rates that real plasmids
+      achieve.
+    layer: source
+    status: supported
+    references:
+      - lopatkin2017persistence
+      - stewart1977population
+      - bergstrom2000natural
+      - hernandezbeltran2021models
+    notes: >
+      The existence condition is classical theory; the empirical part is that
+      nine plasmids from six incompatibility groups transfer fast enough for
+      maintenance without antibiotics in E. coli. Contested context worth
+      recording: Bergstrom et al. argue from empirical transfer rates that
+      plasmids generally cannot persist as pure genetic parasites, and propose
+      other mechanisms. The two are compatible (different plasmids, hosts and
+      conditions) but a teaching page should not present either as the settled
+      general answer; the plasmid paradox remains open (carroll2018persistence).
+    pages:
+      - concepts/fitness-vs-persistence.md
+      - concepts/plasmid-vs-host-fitness.md
+
+  - id: claim.fitness.cost_is_host_dependent
+    statement: >
+      The fitness effect of a given plasmid varies substantially across
+      wild-type bacterial hosts, is sometimes beneficial, and that variability
+      itself changes the conditions for plasmid persistence.
+    layer: source
+    status: supported
+    references:
+      - alonsodelvalle2021variability
+      - sanmillan2017costs
+      - delafuente2022withinpatient
+    notes: >
+      Measured for pOXA-48_K8 across ecologically compatible wild-type
+      enterobacteria from the human gut; effects tracked host phylogeny. The
+      persistence consequence (persistence rising with community diversity and
+      depending less on conjugation) is model-derived within that paper, from
+      the measured fitness distribution — treat that half as model, not
+      observation.
+    pages:
+      - concepts/fitness-vs-persistence.md
+      - concepts/plasmid-vs-host-fitness.md
+      - concepts/copy-carry-spread.md
+
+  - id: claim.terminology.persistence_boundary
+    statement: >
+      Absent evidence of self-reinforcing dynamics, bistability or path
+      dependence, this project says 'persistence boundary' and 'stability
+      landscape' rather than 'tipping point', 'bifurcation', 'bistability' or
+      'hysteresis'.
+    layer: interpretation
+    status: definitional
+    references: []
+    notes: >
+      A convention of this repository, not a claim about plasmids. Each of the
+      stronger terms carries a commitment a persistence study rarely tests:
+      a tipping point needs positive feedback past the threshold; a
+      bifurcation needs a specified model, parameter and equilibrium
+      structure; bistability needs two stable states at identical parameters;
+      hysteresis additionally needs a reversed sweep. Upgrade the wording when
+      the evidence exists, and say what it was.
+    pages:
+      - concepts/fitness-vs-persistence.md

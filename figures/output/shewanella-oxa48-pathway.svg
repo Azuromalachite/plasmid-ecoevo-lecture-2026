@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620">
+<rect width="1120" height="620" fill="#ffffff"/>
+<text x="40" y="44" font-family="Helvetica,Arial,sans-serif" font-size="21" fill="#1b1f23" text-anchor="start" font-weight="bold" font-style="normal">From an environmental chromosome to a clinical plasmid</text>
+<text x="40" y="68" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5a6570" text-anchor="start" font-weight="normal" font-style="normal">blaOXA-48-like genes: the same enzyme in three genetic contexts</text>
+<rect x="40" y="96" width="310" height="196" rx="6" fill="#dceaf1" stroke="#2b6f8a" stroke-width="1.6"/>
+<text x="58" y="122" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#2b6f8a" text-anchor="start" font-weight="bold" font-style="normal">1 · ENVIRONMENTAL CHROMOSOME</text>
+<text x="58" y="142" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#5a6570" text-anchor="start" font-weight="normal" font-style="italic">Shewanella spp., water and sediment</text>
+<line x1="58" y1="186" x2="332" y2="186" stroke="#2b6f8a" stroke-width="3"/>
+<polygon points="58,170 98,170 112,186.0 98,202 58,202" fill="#ffffff" stroke="#2b6f8a" stroke-width="1.4"/><text x="78.0" y="190.0" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#1b1f23" text-anchor="middle" font-weight="normal" font-style="italic">endA</text>
+<polygon points="118,170 158,170 172,186.0 158,202 118,202" fill="#ffffff" stroke="#2b6f8a" stroke-width="1.4"/><text x="138.0" y="190.0" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#1b1f23" text-anchor="middle" font-weight="normal" font-style="italic">rsmE</text>
+<polygon points="178,170 236,170 250,186.0 236,202 178,202" fill="#cfe3ec" stroke="#2b6f8a" stroke-width="1.4"/><text x="207.0" y="190.0" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#1b1f23" text-anchor="middle" font-weight="normal" font-style="italic">blaOXA</text>
+<polygon points="256,170 296,170 310,186.0 296,202 256,202" fill="#ffffff" stroke="#2b6f8a" stroke-width="1.4"/><text x="276.0" y="190.0" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#1b1f23" text-anchor="middle" font-weight="normal" font-style="italic">lysR</text>
+<text x="58" y="228" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">Single copy, vertically inherited.</text>
+<text x="58" y="246" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">Expression wired into envelope physiology</text>
+<text x="58" y="262" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">(peptidoglycan recycling, PBP1a/LpoA).</text>
+<text x="58" y="282" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#96342f" text-anchor="start" font-weight="bold" font-style="normal">Ancestral selective agent: unresolved.</text>
+<rect x="405" y="96" width="310" height="196" rx="6" fill="#f2e4d2" stroke="#8a5a2b" stroke-width="1.6"/>
+<text x="423" y="122" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#8a5a2b" text-anchor="start" font-weight="bold" font-style="normal">2 · MOBILIZED ON Tn1999</text>
+<text x="423" y="142" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#5a6570" text-anchor="start" font-weight="normal" font-style="italic">Composite transposon, two IS1999 copies</text>
+<rect x="423" y="164" width="274" height="44" rx="4" fill="#ffffff" stroke="#8a5a2b" stroke-width="1.6"/>
+<polygon points="431,170 487,170 501,186.0 487,202 431,202" fill="#e6cfae" stroke="#8a5a2b" stroke-width="1.4"/><text x="459.0" y="190.0" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#1b1f23" text-anchor="middle" font-weight="normal" font-style="normal">IS1999</text>
+<polygon points="507,170 599,170 613,186.0 599,202 507,202" fill="#cfe3ec" stroke="#2b6f8a" stroke-width="1.4"/><text x="553.0" y="190.0" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#1b1f23" text-anchor="middle" font-weight="normal" font-style="italic">blaOXA-48</text>
+<polygon points="619,170 675,170 689,186.0 675,202 619,202" fill="#e6cfae" stroke="#8a5a2b" stroke-width="1.4"/><text x="647.0" y="190.0" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#1b1f23" text-anchor="middle" font-weight="normal" font-style="normal">IS1999</text>
+<text x="423" y="232" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">IS1999 supplies the outward promoter Pout:</text>
+<text x="423" y="248" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">the gene is now read from the element's own</text>
+<text x="423" y="264" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">promoter, not its native one.</text>
+<text x="423" y="284" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#8a5a2b" text-anchor="start" font-weight="bold" font-style="normal">Cargo and vehicle change together.</text>
+<rect x="770" y="96" width="310" height="196" rx="6" fill="#f6dedc" stroke="#96342f" stroke-width="1.6"/>
+<text x="788" y="122" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#96342f" text-anchor="start" font-weight="bold" font-style="normal">3 · IncL PLASMID pOXA-48</text>
+<text x="788" y="142" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#5a6570" text-anchor="start" font-weight="normal" font-style="italic">~62 kb, self-transferable</text>
+<circle cx="862" cy="222" r="56" fill="#ffffff" stroke="#96342f" stroke-width="3"/>
+<path d="M 822 183 A 56 56 0 0 1 902 183" fill="none" stroke="#8a5a2b" stroke-width="9" stroke-linecap="round"/>
+<text x="862" y="158" font-family="Helvetica,Arial,sans-serif" font-size="10" fill="#8a5a2b" text-anchor="middle" font-weight="bold" font-style="normal">Tn1999</text>
+<text x="862" y="228" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="middle" font-weight="bold" font-style="normal">pOXA-48</text>
+<text x="862" y="246" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="middle" font-weight="normal" font-style="normal">IncL</text>
+<circle cx="902" cy="183" r="5" fill="#96342f"/>
+<text x="916" y="182" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#96342f" text-anchor="start" font-weight="normal" font-style="italic">into tir</text>
+<text x="962" y="224" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">No other</text>
+<text x="962" y="240" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">resistance gene</text>
+<text x="962" y="256" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">on the backbone.</text>
+<text x="788" y="284" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#96342f" text-anchor="start" font-weight="bold" font-style="normal">tir insertion raises transfer frequency.</text>
+<line x1="352" y1="194" x2="394" y2="194" stroke="#8a5a2b" stroke-width="2.0"/><polygon points="403,194 394,188.6 394,199.4" fill="#8a5a2b"/>
+<text x="377" y="180" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#8a5a2b" text-anchor="middle" font-weight="normal" font-style="normal">mobilization</text>
+<line x1="717" y1="194" x2="759" y2="194" stroke="#96342f" stroke-width="2.0"/><polygon points="768,194 759,188.6 759,199.4" fill="#96342f"/>
+<text x="742" y="180" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#96342f" text-anchor="middle" font-weight="normal" font-style="normal">transposition</text>
+<line x1="925" y1="296" x2="925" y2="339" stroke="#96342f" stroke-width="2.0"/><polygon points="925,348 919.6,339 930.4,339" fill="#96342f"/>
+<rect x="40" y="352" width="1040" height="118" rx="6" fill="#ffffff" stroke="#96342f" stroke-width="1.6"/>
+<text x="58" y="378" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#96342f" text-anchor="start" font-weight="bold" font-style="normal">4 · NEW HOST, NEW PHENOTYPE, NEW EPIDEMIOLOGY</text>
+<text x="58" y="404" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="bold" font-style="normal">Enterobacteria (e.g. Klebsiella pneumoniae)</text>
+<text x="58" y="424" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">High-level carbapenem resistance needs the enzyme</text>
+<text x="58" y="440" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">AND reduced outer-membrane permeability.</text>
+<line x1="408" y1="392" x2="408" y2="452" stroke="#d8d8d8" stroke-width="1.5"/>
+<text x="430" y="404" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="bold" font-style="normal">Two routes, simultaneously</text>
+<text x="430" y="424" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">between patients: plasmid-carrying clones</text>
+<text x="430" y="440" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">within patients: plasmid transfer in the gut</text>
+<line x1="760" y1="392" x2="760" y2="452" stroke="#d8d8d8" stroke-width="1.5"/>
+<text x="782" y="404" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="bold" font-style="normal">And it keeps evolving</text>
+<text x="782" y="424" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">cost compensated within patients;</text>
+<text x="782" y="440" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#1b1f23" text-anchor="start" font-weight="normal" font-style="normal">resistance level rises, with a trade-off.</text>
+<text x="40" y="506" font-family="Helvetica,Arial,sans-serif" font-size="17" fill="#1b1f23" text-anchor="start" font-weight="bold" font-style="normal">Same enzyme.  Different cell.  Different meaning.</text>
+<line x1="40" y1="528" x2="1080" y2="528" stroke="#e2e2e2" stroke-width="1"/>
+<text x="40" y="550" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal" font-style="normal">Illustrative diagram — not to scale, no calibrated quantities. Gene order in panel 1 after Zong (2012).</text>
+<text x="40" y="568" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal" font-style="normal">Sources: potron2011oxa181 · zong2012oxa199 · yin2014recycling · yin2015pbp1a · poirel2004progenitor · aubert2006is1999 · poirel2004emergence</text>
+<text x="40" y="584" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal" font-style="normal">poirel2012genetic · poirel2012phantom · carattoli2015incl · potron2014derepressed · leonsampedro2021pervasive · delafuente2022withinpatient</text>
+<text x="40" y="604" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#6b6b6b" text-anchor="start" font-weight="normal" font-style="italic">The ancestral selective agent for chromosomal blaOXA-48-like genes is not established (claim.shewanella.oxa_ancestral_selection).</text>
+</svg>
