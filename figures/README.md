@@ -79,6 +79,40 @@ chromosomal context → Tn*1999* → pOXA-48 → new host and clinical spread.
   `claim.shewanella.oxa_ancestral_selection` in
   [`../evidence/claims.yml`](../evidence/claims.yml)).
 
+## Colour
+
+[`source/palette.py`](source/palette.py) holds the shared palette and its
+accessibility self-test. Run it:
+
+```bash
+python figures/source/palette.py
+```
+
+Two rules:
+
+1. Colours stay distinguishable under simulated deuteranopia and protanopia.
+   The self-test enforces this and fails loudly.
+2. **Colour never carries meaning alone.** Every distinction is also carried
+   by a label, shape, line style or position. Rule 1 limits the damage when
+   colour fails; rule 2 is what makes a figure survive greyscale printing and
+   a reader who sees no colour at all.
+
+The module records two measured constraints rather than hiding them: COPY and
+SPREAD are both blues because that is the only assignment of Okabe-Ito colours
+to those three roles that clears the threshold under *both* simulations, and
+the route and stage vocabularies share a colour because six Okabe-Ito colours
+cannot supply two fully separable triples. A figure needing both must call
+`check_union()`, which fails by design.
+
+### The v0.1 figure predates this
+
+`shewanella-oxa48-pathway.svg` uses its original colours, in which the brown
+and the red collapse under deuteranopia (RGB distance 14; 36 under
+protanopia). It is **not** being reissued: colour is not load-bearing there,
+since the panels are numbered, titled and ordered left to right, so the figure
+reads correctly in greyscale and under any colour vision. New figures use the
+palette module.
+
 ## Conventions for new figures
 
 1. One script per figure, standard library only where possible, deterministic

@@ -47,6 +47,122 @@ common conjugative plasmids do transfer fast enough for this to happen without
 antibiotic selection [@lopatkin2017persistence]. A review of this model family
 is available [@hernandezbeltran2021models].
 
+## Worked example: a plasmid imposes a 5% growth cost. Does it disappear?
+
+This is the one fully worked example in the repository, and it runs the whole
+cycle described in
+[`../docs/pedagogy-conventions.md`](../docs/pedagogy-conventions.md).
+
+### Predict
+
+A conjugative plasmid costs its host 5% of its growth rate. No antibiotic is
+present. **Over a few hundred generations, does the plasmid disappear from the
+population?**
+
+Commit to yes or no before reading on, and optionally note whether your
+confidence is low, medium or high. Nothing records your answer.
+
+<details>
+<summary>Evidence</summary>
+
+**It depends, and the condition is not about the cost alone.**
+
+Empirically: common conjugative plasmids, including costly ones, are
+maintained in *E. coli* without antibiotic selection — demonstrated across
+nine plasmids from six incompatibility groups [@lopatkin2017persistence].
+So "a costly plasmid is eliminated" is wrong as a general claim.
+
+But the opposite claim is equally wrong. The same literature's starting point
+is that a cost, acting alone, does remove a plasmid
+[@stewart1977population]. Both outcomes are reachable.
+
+</details>
+
+### Diagnose
+
+If you predicted extinction, the assumption that did the work was almost
+certainly that **plasmid-bearing cells only come from other plasmid-bearing
+cells.** Under vertical inheritance alone that prediction is right: a 5% cost
+compounds every generation and segregational loss only adds to it.
+
+The omitted term is horizontal transmission. Plasmid-bearing cells are also
+produced *from plasmid-free ones*, and that is the only term in the balance
+with the opposite sign.
+
+If you predicted persistence, check whether you assumed it rather than derived
+it — the conditions below are what it actually requires.
+
+### Reconstruct
+
+Three processes, two of which remove the plasmid:
+
+| Process | Direction | Parameter |
+| --- | --- | --- |
+| Growth difference (the cost) | removes | *c* |
+| Segregational loss | removes | *τ* |
+| Conjugative transfer | adds | *γ* |
+
+**`MODEL`** — what follows is derived, not measured. In a resource-limited
+continuous culture with mass-action transfer and per-unit-time segregational
+loss, a rare plasmid increases when
+
+> **γ·n\* > c·ψ + τ**
+
+where *n\** is the density of plasmid-free cells, *ψ* the steady-state growth
+rate, *c* the fractional cost and *τ* the segregational loss rate. Transfer
+has to outpace cost **plus** loss, and it is the *product* γ·n\* that competes
+with the cost, so the same plasmid flips outcome with host density.
+
+<details>
+<summary>Where this comes from, and what it assumes</summary>
+
+The plasmid-free equilibrium of the resource-explicit chemostat model is
+isolated, its Jacobian there is upper triangular, and the eigenvalue governing
+a rare plasmid-bearing class is γ·n\* − c·ψ − τ. Derived symbolically and
+checked numerically: the cell balance cancels conjugation and segregation
+exactly, and the sign of that expression predicted invasion in 59 of 59
+simulated parameter sets outside a 5% band around the threshold.
+
+It assumes mass-action transfer, which is itself a modelling choice that
+fails above roughly 10⁶ cells·mL⁻¹ in liquid, where transfer saturates; a
+well-mixed habitat, so no spatial structure; per-unit-time segregation, which
+is a convention — the threshold has to be re-derived if you switch to
+per-division; transconjugants that transfer like donors; and a constant cost.
+
+It is an **invasion** condition, not a displacement condition. It says a rare
+plasmid increases, not that it sweeps to fixation.
+
+</details>
+
+### Contrast
+
+Hold the 5% cost fixed and lower the transfer rate. With a plasmid-free
+density of 10⁸ cells·mL⁻¹, a growth rate of 0.5 h⁻¹ and segregational loss of
+10⁻⁴ h⁻¹, the cost-plus-loss side of the balance is about 0.025 h⁻¹. A
+transfer rate of 10⁻⁹ mL·cell⁻¹·h⁻¹ gives γ·n\* ≈ 0.1 h⁻¹ and the plasmid
+invades; 10⁻¹¹ gives 0.001 h⁻¹ and it is lost. Same cost, same host, opposite
+fate, from a parameter the cost measurement never touched. **`MODEL`** — these
+are illustrative parameter values, not measurements of any real plasmid.
+
+**Transfer is not the only route to persistence**, and presenting it as the
+answer would be its own overclaim. A costly plasmid can also persist through
+**compensatory evolution** that reduces the cost
+[@sanmillan2017costs; @delafuente2022withinpatient], through **positive
+selection** whenever the cargo pays, and through **spatial structure**, which
+can let a plasmid invade on a surface while the same plasmid fails in liquid
+[@fox2008spatial]. The honest summary is that a cost is one term among
+several.
+
+### Retrieve later
+
+This returns in [`copy-carry-spread.md`](copy-carry-spread.md), where γ·n\* is
+the SPREAD side of the same balance and *c* and *τ* are the CARRY side, and
+again in the pOXA-48 discussion below, where a plasmid's cost turns out to be
+small or even negative in many wild-type hosts — which moves the left-hand
+side of the inequality rather than the right.
+
+---
+
 ## Four reasons a cost measurement under-determines the outcome
 
 **1. The missing terms.** A cost of 3% per generation sounds decisive until

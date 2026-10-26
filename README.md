@@ -42,17 +42,67 @@ to
    simulations, and only when the earlier layer has shown what the later one
    should answer. Every model and figure declares its assumptions, parameters,
    regime, and whether it is illustrative or calibrated.
+5. **Teach inference control and model updating, not merely facts or
+   surprise.** A reader should finish a page reasoning differently about the
+   next case, not just holding one more fact. This is the third layer of
+   provenance: scientific provenance asks where a claim came from,
+   computational provenance asks where a figure came from, and pedagogical
+   provenance asks what observation licenses an interpretation. The
+   conventions that implement it — predict before evidence, diagnose the
+   assumption rather than just correcting the answer, a
+   "how this can be misread" table on important figures, seven distinct
+   evidence states, comparison sufficiency, and never passing a model output
+   off as an observation — are in
+   [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md), with the
+   page-by-page checklist in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Context: the Thai SynBio Challenge 2026
+
+This project grew up alongside the [Thai SynBio Challenge 2026](https://thaisynbiogc.web.app/),
+subtitled "The Arena", organised in collaboration with the Thailand Synthetic
+Biology Consortium, SIAT and Naresuan University. Its design task is unusually
+well matched to this material: teams engineer a 5 kb plasmid carrying a unique
+DNA barcode, all the finalists' plasmids are then grown together in one shared
+*E. coli* BL21(DE3) population, and the plasmid reaching the highest copy
+number — counted by barcode sequencing — wins. A distinctive rule makes it a
+game as well as an experiment: after finalists are announced, strategy videos
+are released to the whole cohort, so teams can revise their designs against
+their rivals' before synthesis. The final is hosted at BMB 2027 in May 2027.
+
+The Arena deliberately makes plasmid copy number the winning criterion under
+a defined experimental regime. That makes it useful to read alongside
+[more copies is not always better](misconceptions/more-copy-is-always-better.md):
+the competition asks which design maximises a specified quantity in a shared
+flask, whereas the concept page asks when higher copy number improves, or
+harms, the longer-term success of a plasmid lineage. Neither question
+invalidates the other; they operate at different scopes.
+
+That is worth sitting with, because the apparent clash is a good test of
+scope discipline. A reader may reasonably object: *this repository says more
+copies is not always better, and the competition says highest copy number
+wins.* Both are true, and the way to see it is to ask the question neither
+statement carries on its face — **better according to which objective, over
+what timescale, in which environment?** An optimisation target defined for a
+scoring regime is not a general criterion of biological fitness, and noticing
+that difference is most of what this repository is trying to teach.
 
 ## Public/private firewall
 
 This repository contains only material derived from published literature,
 public competition rules, organizer-approved public protocol information,
 generic models and independent teaching examples. It contains **nothing**
-derived from Thai SynBio Challenge 2026 participant submissions or pitches: no
-team strategies, no frequencies of approaches, no comparisons between teams,
-and no emphasis chosen because of what teams presented. The test for every
-page is: *could this page have been written by someone who never watched the
-pitches?* If not, it does not belong here.
+derived from Thai SynBio Challenge 2026 participant submissions or
+presentations: no team strategies, no frequencies of approaches, no
+comparisons between teams, and no emphasis chosen because of what teams
+presented. The test for every page is: *could this page have been written by
+someone who never watched the presentations?* If not, it does not belong here.
+
+Participant-derived material is excluded **by default and on every branch**,
+draft and unpublished branches included, and a publicly accessible video is
+not by itself permission to republish an identifiable transcript. What may
+eventually be included, how permission is scoped, and why an omission in a
+presentation is never evidence of absence are all set out in
+[`docs/participant-material-policy.md`](docs/participant-material-policy.md).
 
 ## Contents (v0.1)
 
@@ -66,9 +116,41 @@ pitches?* If not, it does not belong here.
 | [`misconceptions/transfer-is-not-spread.md`](misconceptions/transfer-is-not-spread.md) | A transfer event is not a spreading lineage |
 | [`evidence/`](evidence/) | Bibliography, tracked claims, evidence levels |
 | [`figures/`](figures/) | Figures generated from source; see [`figures/README.md`](figures/README.md) |
+| [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md) | How pages teach inference control and model updating |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Rigour checklist for any new or edited page |
+| [`docs/participant-material-policy.md`](docs/participant-material-policy.md) | What participant-derived material may never enter Git, and on what terms anything could |
 
 Citations in pages use `[@key]`, where `key` is an entry in
 `evidence/references.bib`.
+
+## Reading paths
+
+Light navigation, not a curriculum. Each path is an order to read existing
+pages in; none is a prerequisite for another.
+
+**Start here — about 15 minutes.**
+[The *Shewanella* → OXA-48 case study](case-studies/shewanella-oxa48.md),
+including the prediction prompt at the top and the "how this can be misread"
+table at the bottom. If you read one thing, read this.
+
+**Plasmid fitness → persistence.**
+[Plasmid vs host fitness](concepts/plasmid-vs-host-fitness.md) →
+[fitness vs persistence](concepts/fitness-vs-persistence.md), including the
+worked example "a plasmid imposes a 5% cost: does it disappear?" →
+[more copies is not always better](misconceptions/more-copy-is-always-better.md).
+Why a measured cost does not tell you what happens next.
+
+**Mobility and AMR.**
+[The case study](case-studies/shewanella-oxa48.md) →
+[COPY, CARRY, SPREAD](concepts/copy-carry-spread.md) →
+[transfer is not spread](misconceptions/transfer-is-not-spread.md). How a gene
+becomes a clinical problem without its chemistry changing.
+
+**Dynamical landscapes.** *(Later — not all of the pages this path will
+connect exist yet.)* The terminology discipline in
+[fitness vs persistence](concepts/fitness-vs-persistence.md) is the seed:
+persistence boundaries, what a threshold does and does not license, and why
+"tipping point" is a stronger claim than it looks.
 
 ## Provenance, including of the build
 

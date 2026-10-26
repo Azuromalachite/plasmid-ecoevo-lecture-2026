@@ -1,0 +1,32 @@
+# Participant material must never enter Git, on any branch.
+# Policy: docs/participant-material-policy.md
+#
+# This is a safety net, not the control. The control is the checklist in
+# CONTRIBUTING.md and not putting such files in the working tree at all.
+# It only stops an accident; it cannot stop a deliberate `git add -f`.
+#
+# Patterns are kept TARGETED on purpose. An earlier version matched the bare
+# substring *transcript*, which also blocked a page called
+# transcription-and-burden.md — a lexical net wide enough to catch the
+# accident is wide enough to hide legitimate work on transcription and
+# transcriptomics, and a rule that silently drops wanted files stops being
+# trusted. Directory and format patterns catch the realistic accident, which
+# is a folder of transcripts dropped into the tree.
+
+# Directories that would hold participant material
+transcripts/
+**/transcripts/
+participant-data/
+judging-notes/
+curation-notes/
+submissions/
+
+# Caption and subtitle formats
+*.vtt
+*.srt
+*.sbv
+*.ttml
+
+# Archives dropped into the tree while working
+*.zip
+*.tar.gz
