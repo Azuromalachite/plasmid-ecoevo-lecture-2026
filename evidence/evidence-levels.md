@@ -24,6 +24,13 @@ model*, or as disputed *between* models.
 
 ## `status` — what the evidence says
 
+**Supported means supported at the claim's stated layer and scope.** It is
+not a general endorsement. `model / supported` says the derivation and its
+checks hold under the model's assumptions; it implies no empirical
+validation. `interpretation / supported` says our synthesis follows from the
+cited sources; it is not a directly observed fact. Read the two fields
+together or the word means more than it should.
+
 | Status | Means |
 | --- | --- |
 | `supported` | Evidence directly tests the statement, within its stated scope, and is consistent with it. |
@@ -98,7 +105,8 @@ page read like an evidence dashboard.
 
 | Registry | Rendered on a page as |
 | --- | --- |
-| `layer: interpretation`, `status: unsupported` or `not_tested` | **UNRESOLVED** |
+| an open question, often spanning several registry entries | **UNRESOLVED** |
+| `status: not_tested`, pointing at one specific untested claim | **NOT TESTED** |
 | `layer: model`, any status | **MODEL** |
 | `layer: convention` | *(no badge)* |
 | any layer, `status: contested` | **CONTESTED** |
@@ -108,6 +116,16 @@ page read like an evidence dashboard.
 `ILLUSTRATIVE` and `NOT COMPARABLE` describe a figure or a comparison rather
 than a claim, which is why they have no registry row. Ordinary supported prose
 carries no badge at all.
+
+**UNRESOLVED or NOT TESTED?** Use `NOT TESTED` when the page is pointing at
+one specific claim nobody has tested, because that is the more informative
+label. Use `UNRESOLVED` when the open question is broader than any single
+registry entry — several competing hypotheses, or a mix of untested and
+unestablished. The ancestral-selection question takes `UNRESOLVED`; the
+β-lactam hypothesis on its own would take `NOT TESTED`.
+
+Pages show only the exceptions that matter for teaching. Metadata on every
+sentence trains readers to skip it, which costs more than it buys.
 
 **UNRESOLVED is not a registry status, and is not identical to any one of
 them.** It is the reader-facing label for a question that is open. Internally
@@ -139,6 +157,17 @@ verification:
 
 `own_derivation` is for `layer: model` claims, where what was checked is the
 derivation and its numerical verification rather than someone else's paper.
+
+## The ontology is frozen for v0.2
+
+Five layers, six statuses. **Add nothing unless a real claim cannot be
+represented correctly** — not because a new shade would be tidier. The cost of
+a larger vocabulary is paid by every future reader deciding between two
+near-identical labels, and by every page that then needs re-marking.
+
+`contested` being unused is intended, not a gap. Under scope before status it
+should stay rare: most apparent contradictions in this field are context
+dependence, and a `contested` that fills up has stopped meaning anything.
 
 ## Rules
 

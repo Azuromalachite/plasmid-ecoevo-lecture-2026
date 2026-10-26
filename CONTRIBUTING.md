@@ -23,9 +23,13 @@ nothing alike can both pass it.
 
 **Epistemic state**
 
-- [ ] Anything not plainly supported is marked: `UNRESOLVED`, `MODEL`,
-      `ILLUSTRATIVE`, `NOT TESTED`, `NOT COMPARABLE`. Ordinary supported prose
-      stays plain — marking everything turns the markers into wallpaper.
+- [ ] Anything not plainly supported is marked: `MODEL`, `UNRESOLVED`,
+      `NOT TESTED`, `CONTESTED`, `NOT COMPARABLE`, or `ILLUSTRATIVE` on a
+      figure. Ordinary supported prose stays plain — marking everything turns
+      the markers into wallpaper.
+- [ ] Where a claim ID is cited, remember that **supported means supported at
+      that claim's stated layer and scope**: `model / supported` is not
+      empirical validation.
 - [ ] A marker names a real inference problem. `NOT COMPARABLE` is never
       decoration.
 - [ ] **Scope before status.** Two findings that disagree are only

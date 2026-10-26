@@ -139,10 +139,19 @@ timescale and definition. Context dependence is not disagreement — and in a
 field whose central finding is that context decides, letting `contested`
 absorb biological heterogeneity would empty the label of meaning.
 
+**Supported means supported at the claim's stated layer and scope.**
+`model / supported` implies no empirical validation, and
+`interpretation / supported` is not a directly observed fact.
+
 On the page, a reader sees a small badge vocabulary derived from the two
-fields, not the fields themselves: **UNRESOLVED**, **MODEL**, **CONTESTED**,
-**ILLUSTRATIVE**, **NOT COMPARABLE**. Ordinary supported prose carries no
-badge. The mapping is in `evidence-levels.md`.
+fields rather than equal to them: **MODEL**, **UNRESOLVED**, **NOT TESTED**,
+**CONTESTED**, **NOT COMPARABLE**, and **ILLUSTRATIVE** on figures. Pages show
+only the exceptions that matter for teaching — metadata on every sentence
+trains readers to skip it. Ordinary supported prose carries no badge. The
+mapping is in `evidence-levels.md`.
+
+The vocabulary is **frozen for v0.2**: add no layer or status unless a real
+claim cannot be represented correctly.
 
 ### 5. Deliberate retrieval across reading paths
 
