@@ -37,6 +37,10 @@ claims:
       plasmid-encoded OXA-48. Scope: S. oneidensis is the studied
       representative; the regulatory detail is not shown for every Shewanella
       species carrying a blaOXA-48-like gene.
+    verification:
+      source_checked: true
+      checked_against: full_text
+      note: "Yin 2015 Results, mrcA/lpoA transposon screen; Yin 2014 Results, AmpG/NagZ"
     pages:
       - case-studies/shewanella-oxa48.md
 
@@ -105,6 +109,10 @@ claims:
       defect. The index K. pneumoniae isolate 11978 lacked a ~36 kDa porin
       and also expressed several other beta-lactamases, so that single isolate
       does not isolate the porin's contribution on its own.
+    verification:
+      source_checked: true
+      checked_against: full_text
+      note: "Poirel 2012 review, hydrolysis profile; Poirel 2004 Results, missing ~36 kDa porin"
     pages:
       - case-studies/shewanella-oxa48.md
 
@@ -197,6 +205,10 @@ claims:
       depending less on conjugation) is model-derived within that paper, from
       the measured fitness distribution — treat that half as model, not
       observation.
+    verification:
+      source_checked: true
+      checked_against: full_text
+      note: "Alonso-del Valle 2021, fitness distribution across wild-type isolates"
     pages:
       - concepts/fitness-vs-persistence.md
       - concepts/plasmid-vs-host-fitness.md
@@ -227,3 +239,69 @@ claims:
       Upgrade the wording when the evidence exists, and say what it was.
     pages:
       - concepts/fitness-vs-persistence.md
+
+  - id: claim.shewanella.blaa_is_oxa54
+    statement: >
+      The Shewanella oneidensis chromosomal class D beta-lactamase called BlaA
+      in the regulation literature is the same enzyme called OXA-54 in the
+      carbapenemase literature.
+    layer: source
+    status: supported
+    references:
+      - sher2025shewanella
+      - poirel2004progenitor
+      - yin2015pbp1a
+    verification:
+      source_checked: true
+      checked_against: full_text
+      note: "Sher 2025 sec. 8: 'class D beta-lactamase BlaA (also referred to as OXA-54)'"
+    notes: >
+      Recorded because two literatures describe this gene under two names and
+      the case study depends on treating them as one. Without this claim, the
+      page silently joins a regulation result about blaA to an identity result
+      about OXA-54. The review states the identity directly; it is not an
+      inference of ours.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.environment.natural_carbapenems_exist
+    statement: >
+      Carbapenems occur as natural products of environmental bacteria,
+      independently of clinical antibiotic manufacture.
+    layer: source
+    status: supported
+    references:
+      - kahan1979thienamycin
+      - parker1982sq27860
+    notes: >
+      Thienamycin from Streptomyces cattleya and SQ 27,860 from Serratia and
+      Erwinia species. Needed to keep a tempting line honest: "nobody was
+      dosing sediment with carbapenems" is glib and, read literally, wrong.
+      This claim establishes that natural carbapenems exist. It does NOT
+      establish that they occurred where or when the Shewanella genes were
+      maintained, nor that they were the selective agent. See
+      claim.shewanella.oxa_ancestral_selection, which remains unsupported.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.shewanella.blaa_regulation_not_uniform
+    statement: >
+      Reports of what induces the native Shewanella class D beta-lactamase
+      differ between studies.
+    layer: source
+    status: contested
+    references:
+      - poirel2004progenitor
+      - yin2013blaa
+      - yin2015pbp1a
+      - yin2014recycling
+    notes: >
+      Induction of OXA-54 by imipenem or cefoxitin could not be demonstrated
+      in S. oneidensis MR-1 (Poirel 2004), while blaA is strongly induced by
+      high-dose ampicillin (Yin 2013) and is regulated via PBP1a/LpoA and
+      peptidoglycan recycling (Yin 2015, Yin 2014). These are compatible,
+      since the inducers and assays differ, so this is marked contested rather
+      than refuted: what is contested is the flat summary "the gene is
+      inducible", not any individual result.
+    pages:
+      - case-studies/shewanella-oxa48.md

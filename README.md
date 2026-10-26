@@ -42,6 +42,17 @@ to
    simulations, and only when the earlier layer has shown what the later one
    should answer. Every model and figure declares its assumptions, parameters,
    regime, and whether it is illustrative or calibrated.
+5. **Teach the boundary between observation and inference, not only the
+   biological fact.** A reader should finish a page able to say which
+   sentence was measured and which was inferred. This is the third layer of
+   provenance: scientific provenance asks where a claim came from,
+   computational provenance asks where a figure came from, and pedagogical
+   provenance asks what observation licenses an interpretation. The
+   conventions that implement it — prediction before evidence, a
+   "how this can be misread" table on important figures, five distinct
+   evidence states, comparison sufficiency, and never passing a model output
+   off as an observation — are in
+   [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md).
 
 ## Public/private firewall
 
@@ -66,6 +77,7 @@ pitches?* If not, it does not belong here.
 | [`misconceptions/transfer-is-not-spread.md`](misconceptions/transfer-is-not-spread.md) | A transfer event is not a spreading lineage |
 | [`evidence/`](evidence/) | Bibliography, tracked claims, evidence levels |
 | [`figures/`](figures/) | Figures generated from source; see [`figures/README.md`](figures/README.md) |
+| [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md) | How pages teach the observation/inference boundary |
 
 Citations in pages use `[@key]`, where `key` is an entry in
 `evidence/references.bib`.

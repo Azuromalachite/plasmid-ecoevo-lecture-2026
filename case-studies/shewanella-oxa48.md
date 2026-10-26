@@ -15,6 +15,37 @@ contained in the sequence of the gene.
 
 ---
 
+## Before you read on: commit to an answer
+
+An OXA-like β-lactamase gene sits on the chromosome of a *Shewanella* species
+in river sediment. **What phenotype do you expect that organism to have?**
+
+Decide before opening the answer. A reader who has committed experiences what
+follows as a correction; a reader who has not experiences it as information,
+and only the first changes a model. See
+[`../docs/pedagogy-conventions.md`](../docs/pedagogy-conventions.md).
+
+<details>
+<summary>What the evidence shows</summary>
+
+It is a functioning β-lactamase in its native host: BlaA, the *S. oneidensis*
+class D enzyme also referred to as OXA-54, is described as the key enzyme
+conferring that organism resistance to β-lactams [@sher2025shewanella], and
+its production is reported as giving natural resistance to many β-lactams
+[@yin2015pbp1a].
+
+So the common first answer — "no resistance phenotype, it is just an
+ancestral gene" — is wrong. But so is "carbapenem resistance like a clinical
+OXA-48 producer". OXA-48-like enzymes hydrolyse carbapenems only weakly, and
+the clinical phenotype also needs reduced outer-membrane permeability
+[@poirel2012phantom]. The native organism has a real β-lactam resistance
+phenotype that is **not** the clinical one.
+
+The useful correction is that "resistance gene" is a context-dependent label,
+not a property of the sequence.
+
+</details>
+
 ## 1. Environmental physiology
 
 *Shewanella* species are Gram-negative bacteria of aquatic sediments and water
@@ -199,3 +230,29 @@ the routes by which that fate is decided.
 ![From Shewanella chromosome to clinical spread](../figures/output/shewanella-oxa48-pathway.svg)
 
 Rebuild instructions: [`../figures/README.md`](../figures/README.md).
+
+## How this can be misread
+
+The figure and the narrative above both compress, and compression invites
+inferences the evidence does not support. Status vocabulary:
+[`../docs/pedagogy-conventions.md`](../docs/pedagogy-conventions.md).
+
+| Tempting reading | Status | Better interpretation |
+| --- | --- | --- |
+| "OXA-48 evolved in *Shewanella* to resist carbapenems." | **False as stated; the underlying question is unresolved** | *Clinical* carbapenem use cannot explain an ancestral environmental history. But natural carbapenems do exist — thienamycin from *Streptomyces cattleya* [@kahan1979thienamycin] and SQ 27,860 from *Serratia* and *Erwinia* species [@parker1982sq27860] — so "there were no carbapenems in the environment" would also be wrong. Whether any β-lactam was the selective agent for these genes is not established (`claim.shewanella.oxa_ancestral_selection`). |
+| "Native OXA-like genes are therefore not really resistance genes." | **False** | They do confer β-lactam resistance in their native hosts [@sher2025shewanella; @yin2015pbp1a]. The point is narrower: the *clinical* meaning depends on host context, not that the native gene is inert. |
+| "Mobilization only moved the gene to a new location." | **Misleading** | IS*1999* supplies the outward-directed promoter from which the β-lactamase is read [@aubert2006is1999], so the expression context changed too, not only the address. |
+| "The Tn*1999* insertion into *tir* and the original capture of the gene were one observed historical event." | **Unsupported** | The present configuration is known: Tn*1999* carrying *bla*<sub>OXA-48</sub> sits within *tir*, and plasmids in that configuration transfer at higher frequency [@potron2014derepressed; @poirel2012genetic]. The order and timing are reconstructed, not observed. |
+| "The same enzyme gives the same phenotype in any host." | **False** | Host physiology decides. High-level carbapenem resistance needs the enzyme plus reduced outer-membrane permeability [@poirel2012phantom; @poirel2004emergence]. |
+| "The chromosome → transposon → plasmid → clinic arrows are a measured lineage." | **Illustrative** | The figure orders *contexts*, not a reconstructed descent. No arrow is a dated transition, and the panel shows a subset of the gene neighbourhood. |
+
+### A note the figure cannot carry
+
+The regulation of the native gene is not uniform across studies. Induction of
+OXA-54 by imipenem or cefoxitin could not be demonstrated in *S. oneidensis*
+MR-1 [@poirel2004progenitor], while *blaA* is strongly induced by high-dose
+ampicillin [@yin2013blaa] and is regulated through PBP1a/LpoA and
+peptidoglycan-recycling enzymes [@yin2015pbp1a; @yin2014recycling]. These are
+compatible — different inducers, different assays — but "the gene is
+inducible" is too flat a summary to be worth teaching
+(`claim.shewanella.blaa_regulation_not_uniform`, status: contested).
