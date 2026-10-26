@@ -109,6 +109,23 @@ page read like an evidence dashboard.
 than a claim, which is why they have no registry row. Ordinary supported prose
 carries no badge at all.
 
+**UNRESOLVED is not a registry status, and is not identical to any one of
+them.** It is the reader-facing label for a question that is open. Internally
+that can arise in more than one way: a claim nobody has tested, a claim where
+the evidence does not establish the conclusion, or a cluster of competing
+hypotheses that are individually untested or weakly supported. The badge says
+"the answer is not settled"; the registry says which of those situations
+produced it. The *Shewanella* ancestral-selection question reads as UNRESOLVED
+on the page and is carried by two registry entries with different statuses —
+`unsupported` for "the agent is known", `not_tested` for the specific
+β-lactam hypothesis.
+
+`model-derived` and `illustrative` are **provenance and type markers**, not
+verdicts, which is why they sit on the `layer` axis (or on a figure) rather
+than in `status`. A model result then still gets a real evidence state:
+the invasion condition displays **MODEL** on the page, and its derivation and
+numerical checks make it `supported` *within the model's stated assumptions*.
+
 ## Verification blocks
 
 Load-bearing claims carry a light record that a human checked the source:
