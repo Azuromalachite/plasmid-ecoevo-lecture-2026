@@ -77,4 +77,9 @@ reference are welcome.
 
 ## Licence and citation
 
-See [`LICENSE`](LICENSE) and [`CITATION.cff`](CITATION.cff).
+Content (prose, figures, `evidence/`) is under
+[CC BY 4.0](LICENSES/CC-BY-4.0.txt); code (including `figures/source/`) is
+under the [MIT licence](LICENSES/MIT.txt). What falls under which, and how to
+attribute, is set out in [`LICENSE`](LICENSE).
+
+To cite the project, see [`CITATION.cff`](CITATION.cff).
