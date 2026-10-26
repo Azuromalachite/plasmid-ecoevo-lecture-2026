@@ -23,8 +23,6 @@ over evolutionary time, end up in the chromosome rather than on a plasmid
 
 ## Three ways the two come apart
 
-### 1. Horizontal transmission gives the plasmid a second route
-
 **Predict first.** Two strains grow together. Plasmid-bearing cells grow 5%
 more slowly than plasmid-free ones, but the plasmid transfers efficiently into
 plasmid-free cells.
@@ -32,6 +30,8 @@ plasmid-free cells.
 > **Is the plasmid necessarily becoming less fit?**
 
 Commit to an answer before opening the reveal. Nothing records it.
+
+### 1. Horizontal transmission gives the plasmid a second route
 
 <details>
 <summary>Evidence</summary>
@@ -75,7 +75,7 @@ instinct and not yet an understanding.
 
 **Reconstruct.** The two accountings differ in what counts as a descendant:
 
-| | Counts toward its success |
+| | Route that can contribute |
 | --- | --- |
 | **Host** | daughter cells |
 | **Plasmid** | vertical descendants, **plus** lineages it colonises horizontally, **plus** its representation among copies inside a cell |

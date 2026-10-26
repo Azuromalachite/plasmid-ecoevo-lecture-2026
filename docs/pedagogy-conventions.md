@@ -91,8 +91,36 @@ Traps worth covering where they apply:
 - threshold ≠ automatically a tipping point;
 - one host ≠ host robustness.
 
-Current example: the table in
-[`../case-studies/shewanella-oxa48.md`](../case-studies/shewanella-oxa48.md).
+#### The status column
+
+**These statuses grade the READING, not the claim.** The middle column says
+what is wrong with the tempting interpretation, not what the evidence says
+about the biology. `Unsupported` and `Illustrative` also exist as a registry
+status and a page badge, where they mean something else entirely — a reader
+who has learned those meanings will otherwise take the table as a verdict on
+the science. That collision is the reason this column is defined here.
+
+| Status | The reading is... |
+| --- | --- |
+| **False** | contradicted by the evidence or model in scope |
+| **Misleading** | containing some truth, but licensing the wrong inference |
+| **Unsupported** | stronger than the available evidence |
+| **Overgeneralised** | valid in a narrower scope, not generally |
+| **Illustrative** | treating a representation or compression as a measured claim |
+
+Five values, matching what the live tables use. Do not add a sixth without a
+reading that none of these describes.
+
+A status **may carry a short qualifying clause** where the bare word would
+mislead — "False as stated; the underlying question is unresolved" is in use,
+because plain `False` would let a skimmer read the underlying question as
+settled, which is the error this repository works hardest to avoid. Qualify
+only for that reason, not for emphasis, and keep it to one clause.
+
+Current examples: the tables in
+[`../case-studies/shewanella-oxa48.md`](../case-studies/shewanella-oxa48.md)
+and
+[`../concepts/plasmid-vs-host-fitness.md`](../concepts/plasmid-vs-host-fitness.md).
 
 ### 3. A visible context warning wherever quantities are not comparable
 
