@@ -73,6 +73,11 @@ not teaching the boundary.** The 5% cost prompt qualifies because both
 confident answers — "yes, it disappears" and "no, plasmids persist" — are
 wrong as stated, and the diagnosis is the same either way: a missing term.
 
+When retrofitting the cycle into an existing page, expect it to displace
+exposition: move or remove prose that now reveals the answer too early or
+merely repeats what the learner has just derived. The test is duplication of
+function, not line count — exposition that still does a different job stays.
+
 ### 2. Important figures and models carry a "How this can be misread" table
 
 Three columns: **tempting reading**, **status**, **better interpretation**.
