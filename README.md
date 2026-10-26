@@ -56,6 +56,28 @@ to
    [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md), with the
    page-by-page checklist in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
+## Context: the Thai SynBio Challenge 2026
+
+This project grew up alongside the [Thai SynBio Challenge 2026](https://thaisynbiogc.web.app/),
+subtitled "The Arena", organised in collaboration with the Thailand Synthetic
+Biology Consortium, SIAT and Naresuan University. Its design task is unusually
+well matched to this material: teams engineer a 5 kb plasmid carrying a unique
+DNA barcode, all the finalists' plasmids are then grown together in one shared
+*E. coli* BL21(DE3) population, and the plasmid reaching the highest copy
+number — counted by barcode sequencing — wins. A distinctive rule makes it a
+game as well as an experiment: after finalists are announced, strategy videos
+are released to the whole cohort, so teams can revise their designs against
+their rivals' before synthesis. The final is hosted at BMB 2027 in May 2027.
+
+The competition is useful context here because its win condition is copy
+number, and one of this repository's pages argues at length that copy number
+is a trade-off variable rather than a measure of evolutionary success — see
+[more copies is not always better](misconceptions/more-copy-is-always-better.md).
+That tension is a good reason to read the two together, and a bad reason to
+assume either settles the other: the Arena scores a defined quantity under
+defined conditions, which is not the same question as what makes a plasmid
+lineage persist in nature.
+
 ## Public/private firewall
 
 This repository contains only material derived from published literature,
