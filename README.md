@@ -104,7 +104,7 @@ eventually be included, how permission is scoped, and why an omission in a
 presentation is never evidence of absence are all set out in
 [`docs/participant-material-policy.md`](docs/participant-material-policy.md).
 
-## Contents (v0.1)
+## Contents
 
 | Path | What it is |
 | --- | --- |
@@ -173,7 +173,7 @@ software here become research outputs in their own right.
 
 ## Status
 
-v0.1, under development. No website, CI or DOI yet. Corrections with a
+Latest tagged release: v0.2. No website, CI or DOI yet. Corrections with a
 reference are welcome.
 
 ## Licence and citation
