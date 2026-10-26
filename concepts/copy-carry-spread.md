@@ -29,10 +29,11 @@ variants with different alleles can coexist in one cell
 [@rodriguezbeltran2018tradeoffs].
 
 **Burden of more copies.** Replication and expression consume resources.
-Plasmid fitness cost arises across the whole plasmid life cycle — replication,
-transcription, translation, and interference with host regulation — and is the
-main constraint on both vertical and horizontal replication
-[@sanmillan2017costs].
+Cost may arise anywhere across the plasmid life cycle; San Millán and
+MacLean survey the candidate effects while stating that the molecular
+mechanisms underlying plasmid fitness cost remain poorly understood. What
+their review does assert is that the initial cost of carriage is the main
+constraint on both vertical and horizontal replication [@sanmillan2017costs].
 
 **Segregation.** Copies are distributed to daughter cells at division. For
 multicopy plasmids without active partition, that distribution is a random
@@ -40,7 +41,10 @@ sample, which has two consequences. A cell can receive zero copies
 (segregational loss). And alleles within a heterogeneous plasmid population
 drift: *segregational drift* means the evolutionary rate of a multicopy
 plasmid does **not** rise in proportion to its copy number, because new
-variants are lost or take longer to fix [@ilhan2019segregational].
+variants are lost or take longer to fix [@ilhan2019segregational]. Multicopy
+carriage makes a plasmid effectively polyploid, so its genes are governed by
+genetic dominance, heteroplasmy and segregational drift rather than by the
+rules applying to chromosomal genes [@rodriguezbeltran2021beyond].
 Low-copy plasmids counter loss with active partition and post-segregational
 killing systems [@nordstrom1989segregation].
 
@@ -83,7 +87,8 @@ the rarer event.
   been observed within patients for pOXA-48 [@delafuente2022withinpatient].
 - **Host state and host identity.** The *same* plasmid has different costs in
   different hosts. For pOXA-48_K8 in wild-type gut enterobacteria the effect
-  was usually small and sometimes beneficial, and it tracked host phylogeny
+  was an overall reduction in fitness that was nonetheless small in most
+  hosts and beneficial in several, and it tracked host phylogeny
   [@alonsodelvalle2021variability].
 
 > **CARRY is where cost is paid, every generation, and where it is
@@ -104,13 +109,17 @@ CONTACT → TRANSFER → ESTABLISHMENT → PERSISTENCE → SECONDARY SPREAD
    daily nutrient replenishment, but not in liquid culture
    [@fox2008spatial].
 2. **TRANSFER.** The conjugative machinery must work and the recipient must be
-   receptive. Transfer rates vary over orders of magnitude and are a property
-   of plasmid *and* host pair, measured as a rate constant rather than a count
-   [@simonsen1990endpoint]. Transfer can also be derepressed by genetic
+   receptive. Transfer should be measured as a rate constant rather than as a
+   count of transconjugants [@simonsen1990endpoint] — that paper validated the
+   end-point estimator for plasmid R1 in *E. coli* K12 and makes no claim
+   about how widely rates vary. That rates differ by orders of magnitude
+   between plasmid and host pairs is **not sourced here**. Transfer can also be derepressed by genetic
    accident: the Tn*1999* insertion into *tir* raised pOXA-48a transfer
    frequency [@potron2014derepressed].
 3. **ESTABLISHMENT.** The arriving plasmid must survive in the new cell:
-   restriction and CRISPR defences, replication in an unfamiliar host, and
+   restriction and CRISPR defences (widely described, but **not separately
+   sourced in this repository** -- see
+   `claim.transfer_is_not_spread`), replication in an unfamiliar host, and
    incompatibility with a resident plasmid sharing its replication control
    [@novick1987incompatibility]. Entry exclusion systems in the recipient
    actively reduce redundant transfer from identical backbones

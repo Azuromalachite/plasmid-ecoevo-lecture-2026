@@ -103,6 +103,12 @@ python figures/source/palette.py
 python figures/source/shewanella_oxa48_pathway.py && git status --porcelain
 ```
 
+`check_claim_ids.py` also verifies that every `pages:` path exists and that
+any `status:` or `layer:` written in a content page matches the registry.
+Known unfixed defects are listed in
+[`docs/open-findings.md`](docs/open-findings.md); add one there in the same
+commit that discovers it.
+
 The third should leave the working tree clean: a figure that changes without
 its script changing means something is wrong.
 

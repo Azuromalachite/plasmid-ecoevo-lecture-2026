@@ -181,8 +181,10 @@ exactly the mechanisms that let plasmid reproduction bypass host reproduction.
 
 That there is no single resolution of this tension is itself a live research
 question — the "plasmid paradox", for which several explanations have been
-proposed and none is clearly sufficient [@carroll2018persistence;
-@rodriguezbeltran2021beyond].
+proposed and none is clearly sufficient [@carroll2018persistence]. (The
+Rodríguez-Beltrán review previously cited here does not raise the paradox; it
+covers plasmid polyploidy, genetic dominance and segregational drift, and has
+been removed from this sentence rather than re-purposed.)
 
 ## How this can be misread
 

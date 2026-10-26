@@ -13,10 +13,13 @@ for high copy number precisely to get more DNA and more product.
 
 ## Why it fails
 
-**1. Copies cost.** Replication and expression of every copy consume
-precursors, polymerase and ribosomes. Fitness cost arises throughout the
-plasmid life cycle and is the main constraint on plasmid replication, both
-vertical and horizontal [@sanmillan2017costs]. A dosage benefit is bought with
+**1. Copies cost.** Replication and expression of every copy draw on the
+host's resources, though San Millán and MacLean's review of the field states
+that "the molecular mechanisms underlying plasmid fitness cost remain poorly
+understood" and examines *potential* effects across the plasmid life cycle.
+What that review does assert is that the initial cost of carriage is the main
+constraint on the vertical and horizontal replication of plasmids
+[@sanmillan2017costs]. A dosage benefit is bought with
 a growth cost, and whether the trade is favourable depends on whether the
 environment is paying for the dosage.
 
@@ -29,15 +32,20 @@ experimental evolution of low- and high-copy plasmids in *E. coli*, the
 evolutionary rate of the multicopy plasmid did **not** reflect the increased
 mutational supply expected from its copy number [@ilhan2019segregational].
 
-What multicopy carriage does give is something different and genuinely useful:
-*heterozygosity*. Different alleles can coexist in one cell, which allows
-escape from fitness trade-offs during evolutionary innovation
-[@rodriguezbeltran2018tradeoffs], and multicopy plasmids can potentiate the
-evolution of resistance [@sanmillan2016multicopy]. "Faster" and "able to hold
-two alleles at once" are not the same advantage.
+What multicopy carriage does give is something different and genuinely
+useful, and the two experiments give two different mechanisms. Rodríguez-Beltrán
+et al. show *heterozygosity*: different alleles can coexist in one cell, which
+allows escape from fitness trade-offs during evolutionary innovation
+[@rodriguezbeltran2018tradeoffs]. San Millán et al. report a distinct dual
+effect — a multicopy plasmid raised the rate at which novel *bla*<sub>TEM-1</sub>
+mutations appeared, then amplified them through increased gene dosage, and
+they state that this dual effect "was necessary and sufficient" for clinically
+relevant resistance [@sanmillan2016multicopy]. Neither is the same advantage
+as "faster".
 
 **3. Selection inside the cell is not aligned with the cell.** Copy number
-control is under selection at two levels: a copy that over-replicates wins
+control is, on Paulsson's analysis, under selection at two levels — he frames
+this as a hypothesis rather than a result — so that a copy that over-replicates wins
 against its cell-mates, while the cell loses against other cells
 [@paulsson2002multileveled]. The copy number a plasmid settles at is a product
 of that conflict, not an optimum for the host.
@@ -45,7 +53,10 @@ of that conflict, not an optimum for the host.
 **4. Copy number has side effects beyond dosage.** Elevated copy number can
 raise conjugative transfer rate as well: evolved *copA* variants of plasmid R1
 had higher copy number, up to 1000-fold higher transfer, *and* higher
-resistance, at a cost to the host [@dimitriu2021copy]. Copy number is coupled
+resistance, at a cost to the host [@dimitriu2021copy]. Two plasmids were
+tested and only one behaved this way: plasmid RP4 did not evolve detectably
+under the same manipulations, so this is a demonstrated route rather than a
+general tendency of multicopy plasmids. Copy number is coupled
 to spread, not only to dosage. Whether that is "better" depends on whose
 fitness you are asking about.
 

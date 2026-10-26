@@ -141,7 +141,7 @@ that can arise in more than one way: a claim nobody has tested, a claim where
 the evidence does not establish the conclusion, or a cluster of competing
 hypotheses that are individually untested or weakly supported. The badge says
 "the answer is not settled"; the registry says which of those situations
-produced it. The *Shewanella* ancestral-selection question reads as UNRESOLVED
+produced it. The *Shewanella* ancestral-selection question is badged UNRESOLVED
 on the page and is carried by two registry entries with different statuses —
 `unsupported` for "the agent is known", `not_tested` for the specific
 β-lactam hypothesis.

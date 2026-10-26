@@ -41,7 +41,8 @@ conjugative plasmids [@garcillan2008entry].
 transconjugant lineage faces the full CARRY balance: fitness cost and
 segregational loss, in a host that may never have carried this plasmid before.
 The cost of the same plasmid varies substantially between wild-type hosts and
-is sometimes beneficial, sometimes not [@alonsodelvalle2021variability]. A
+is an overall reduction that is small in most hosts and beneficial in
+several [@alonsodelvalle2021variability]. A
 transfer into a host where the plasmid is costly and poorly retained is a dead
 end.
 
@@ -94,10 +95,13 @@ repeatedly and at two different levels at once. Combining epidemiological data
 from over 9,000 patients with 250 enterobacterial genomes over two years
 showed frequent between-patient transmission of plasmid-carrying clones
 *and* within-patient horizontal transfer of the plasmid occurring in
-essentially every colonised patient's gut [@leonsampedro2021pervasive]. What
+essentially every colonised patient's gut — an inference the authors draw
+from their sequence analysis and models, phrased as "suggesting that", rather
+than a direct observation [@leonsampedro2021pervasive]. What
 makes this spread rather than transfer is that the later links hold too: the
-plasmid's fitness effects in wild-type gut enterobacteria are mostly small or
-beneficial [@alonsodelvalle2021variability], and its cost is compensated
+plasmid's fitness effects in wild-type gut enterobacteria are an overall
+reduction that is nonetheless small in most hosts and beneficial in several
+[@alonsodelvalle2021variability], and its cost is compensated
 within patients over time [@delafuente2022withinpatient]. Note also that the
 transfer link itself was raised by a genetic accident — the Tn*1999* insertion
 into the transfer-inhibition gene *tir* [@potron2014derepressed]. Several
