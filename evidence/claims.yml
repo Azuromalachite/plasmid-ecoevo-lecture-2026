@@ -453,3 +453,36 @@ claims:
       not tested outside this setting.
     pages:
       - case-studies/shewanella-oxa48.md
+  - id: claim.fitness.conditional_alignment
+    statement: >
+      Plasmid and host interests coincide to the degree that the plasmid's
+      reproduction is routed through the host's reproduction, and diverge to
+      the degree that it is not. Horizontal transfer, intracellular
+      replication competition and post-segregational killing are the
+      mechanisms that route it elsewhere.
+    layer: interpretation
+    status: supported
+    references:
+      - stewart1977population
+      - bergstrom2000natural
+      - paulsson2002multileveled
+      - nordstrom1989segregation
+      - sanmillan2017costs
+      - harrison2012coevolutionary
+      - alonsodelvalle2021variability
+      - carroll2018persistence
+    notes: >
+      Our synthesis across sources, not a claim any one paper makes in this
+      form, which is why the layer is interpretation rather than source. Each
+      limb is independently evidenced: the existence condition for costly
+      conjugative plasmids (Stewart and Levin), multilevel selection on
+      replication control (Paulsson), post-segregational killing
+      (Nordstrom and Austin), and the three forces that narrow the gap, namely
+      compensatory evolution (San Millan and MacLean), paying cargo, and
+      host-plasmid coevolution (Harrison and Brockhurst). Scope: this frames
+      how to read the divergence; it is NOT a quantitative rule and predicts
+      no particular outcome. The framing also does not resolve the plasmid
+      paradox, which stays open (Carroll and Wong). Added in v0.2 as a test of
+      the frozen ontology: it needed no new layer and no new status.
+    pages:
+      - concepts/plasmid-vs-host-fitness.md

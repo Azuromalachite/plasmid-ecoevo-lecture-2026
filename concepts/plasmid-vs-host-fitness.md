@@ -25,13 +25,26 @@ over evolutionary time, end up in the chromosome rather than on a plasmid
 
 ### 1. Horizontal transmission gives the plasmid a second route
 
+**Predict first.** Two strains grow together. Plasmid-bearing cells grow 5%
+more slowly than plasmid-free ones, but the plasmid transfers efficiently into
+plasmid-free cells.
+
+> **Is the plasmid necessarily becoming less fit?**
+
+Commit to an answer before opening the reveal. Nothing records it.
+
+<details>
+<summary>Evidence</summary>
+
+**No — and the word "necessarily" is where the question turns.**
+
 A plasmid that can conjugate has a way to reproduce that does not require its
 host to reproduce. It can therefore be maintained while imposing a cost that
 pure vertical transmission would eliminate. This is the classical existence
 condition: a conjugative plasmid can persist in a population even when
 plasmid-bearing cells grow substantially more slowly than plasmid-free ones,
-provided transfer is frequent enough relative to that cost and to segregational
-loss [@stewart1977population].
+provided transfer is frequent enough relative to that cost and to
+segregational loss [@stewart1977population].
 
 Empirically, common conjugative plasmids do transfer fast enough to be
 maintained without antibiotic selection despite being costly, across nine
@@ -39,9 +52,71 @@ plasmids from six incompatibility groups [@lopatkin2017persistence]. The
 implication the authors draw is uncomfortable and important: reducing
 antibiotic use alone need not reverse resistance.
 
-The deeper point: **a trait that reduces host growth can still increase in
-frequency if it raises transmission enough.** That is the logic of a
-parasite, and it applies whether or not the plasmid is parasitic on balance.
+Note what the evidence does *not* say. It does not say the cost is irrelevant,
+and it does not say this plasmid is increasing. It says host growth rate alone
+does not settle the question.
+
+</details>
+
+**Diagnose.** If you answered yes, the assumption that did the work was almost
+certainly this one:
+
+> *I treated plasmid reproduction as if it occurred only through host
+> reproduction.*
+
+That assumption is not silly — it is exactly right for a chromosome, and for a
+non-mobilisable plasmid. It fails here because conjugation gives the plasmid a
+second route, and the question gave you that route in the same sentence as the
+cost.
+
+If you answered no, check whether you concluded it from the mechanism or
+merely distrusted a question that looked like a trick. The second is a useful
+instinct and not yet an understanding.
+
+**Reconstruct.** The two accountings differ in what counts as a descendant:
+
+| | Counts toward its success |
+| --- | --- |
+| **Host** | daughter cells |
+| **Plasmid** | vertical descendants, **plus** lineages it colonises horizontally, **plus** its representation among copies inside a cell |
+
+This is an accounting sketch, not a formula, and deliberately so. "Plasmid
+fitness" has no single universal definition: which currency is right depends
+on the question — invasion from rare, long-run frequency, or allele
+representation within a cell — and each has its own formalisation. One of
+them is worked through on the next page, where the invasion condition
+γ·n\* > c·ψ + τ makes the same three terms explicit under stated assumptions
+(`claim.model.plasmid_invasion_threshold`, **`MODEL`**). Read the table as
+naming the routes, not as summing them.
+
+**Transfer.** Change one variable and re-answer:
+
+> Same 5% host cost, but the plasmid is **non-mobilisable** — no horizontal
+> transfer at all. Does your answer change?
+
+<details>
+<summary>Why this one is different</summary>
+
+Yes. With transfer removed, the plasmid's only route to future cells runs
+through its host's division, so a sustained growth disadvantage plus any
+segregational loss removes it. In the threshold on the next page, setting
+γ = 0 makes the left side zero while cost and loss stay positive, so the
+condition cannot be met at any host density.
+
+The general relation, which is the thing worth keeping: **a host-level cost is
+decisive exactly to the extent that the plasmid's reproduction is routed
+through the host's.** The 5% was never the deciding number on its own.
+
+Two honest caveats. Removing conjugation does not remove every route to
+persistence — cargo that pays under selection, and compensatory evolution that
+erodes the cost, both still apply, and are discussed below. And a
+non-mobilisable plasmid is not an inert one: copy-number competition inside
+the cell, route 2 below, does not need conjugation.
+
+</details>
+
+That is the logic of a parasite, and it applies whether or not the plasmid is
+parasitic on balance — a question the last section returns to.
 
 ### 2. Intracellular competition gives the plasmid a third route
 
@@ -108,6 +183,23 @@ That there is no single resolution of this tension is itself a live research
 question — the "plasmid paradox", for which several explanations have been
 proposed and none is clearly sufficient [@carroll2018persistence;
 @rodriguezbeltran2021beyond].
+
+## How this can be misread
+
+Status vocabulary:
+[`../docs/pedagogy-conventions.md`](../docs/pedagogy-conventions.md).
+
+| Tempting reading | Status | Better model |
+| --- | --- | --- |
+| A plasmid that slows its host has low plasmid fitness. | **Misleading** | Host and plasmid reproductive accounting can diverge. A cost is decisive only to the extent the plasmid's reproduction runs through the host's [@stewart1977population; @lopatkin2017persistence]. |
+| Horizontal transfer makes host cost irrelevant. | **False** | The cost still enters every generation of carriage. Transfer adds a route; it does not delete a term, and it has to outpace cost *plus* segregational loss [@sanmillan2017costs]. |
+| Addiction systems benefit plasmids because they benefit their hosts. | **False** | They stabilise carriage by making plasmid *loss* costly to the host: cells that segregate the plasmid away are killed [@nordstrom1989segregation]. Population-level retention, cell-level harm. |
+| Plasmids are therefore parasites. | **Overgeneralised** | Alignment is conditional. Cargo that pays, compensatory evolution and host–plasmid coevolution all realign interests, and transfer rates are often too low for plasmids to persist as parasites alone [@alonsodelvalle2021variability; @bergstrom2000natural; @harrison2012coevolutionary]. |
+
+The first and last rows fail in opposite directions, which is the useful
+thing about seeing them together: one under-reads the gap between the two
+accountings, the other over-reads it. The page is about the conditions that
+set its width (`claim.fitness.conditional_alignment`).
 
 ---
 
