@@ -70,6 +70,25 @@ pitches?* If not, it does not belong here.
 Citations in pages use `[@key]`, where `key` is an entry in
 `evidence/references.bib`.
 
+## Provenance, including of the build
+
+Principle 2 asks where a *claim* came from. The same question applies to the
+artefacts: a figure whose provenance cannot be checked is as weak as a
+sentence without a citation. Supply-chain provenance is the computational
+counterpart of the claims-and-evidence system.
+
+What holds today: every figure is generated from a committed script, with no
+network access and no non-standard-library dependency, and the output is
+byte-identical on rebuild — verifiable from a fresh clone with the recipe in
+[`figures/README.md`](figures/README.md).
+
+On the roadmap, each step only when the project actually reaches it: build
+attestations ([GitHub Artifact Attestations](https://docs.github.com/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds),
+SLSA v1 provenance via Sigstore) once there is a release workflow to attest;
+a reusable build-and-attest workflow if this becomes a regularly released
+resource; SBOMs, pinned Actions and Zenodo archiving only if datasets or
+software here become research outputs in their own right.
+
 ## Status
 
 v0.1, under development. No website, CI or DOI yet. Corrections with a

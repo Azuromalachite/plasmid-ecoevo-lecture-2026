@@ -21,6 +21,37 @@ always corresponds to a diff in `source/`.
 On Windows, if a script ever prints non-ASCII to the console, set
 `PYTHONUTF8=1` first.
 
+## What makes the output byte-identical
+
+Two things, and both are load-bearing:
+
+1. **The scripts write `newline="\n"` explicitly.** Python's text mode would
+   otherwise translate newlines to CRLF on Windows, so the same script would
+   emit different bytes on different platforms.
+2. **`.gitattributes` enforces LF** for text, SVG and Python files, so a
+   checkout cannot reintroduce CRLF.
+
+Without the first, git's own normalisation *hides* the problem: the working
+tree still looks clean after a rebuild even though the bytes on disk changed.
+Give any new figure script the same explicit newline.
+
+## Verifying it yourself
+
+The claim above is checkable from a clean machine, and does not depend on
+trusting this file:
+
+```bash
+git clone https://github.com/Azuromalachite/plasmid-ecoevo-lecture-2026
+cd plasmid-ecoevo-lecture-2026
+md5sum figures/output/shewanella-oxa48-pathway.svg
+python figures/source/shewanella_oxa48_pathway.py
+md5sum figures/output/shewanella-oxa48-pathway.svg   # same digest
+git status --porcelain                               # no output
+```
+
+Last checked at commit `e85bb22` on Windows: both digests
+`01b91795f4084009ecebf59ce3237c95`, working tree clean.
+
 ## Figures
 
 ### `shewanella-oxa48-pathway.svg`
