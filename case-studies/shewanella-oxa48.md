@@ -281,7 +281,7 @@ inferences the evidence does not support. Status vocabulary:
 | "Native OXA-like genes are therefore not really resistance genes." | **False** | They do confer β-lactam resistance in their native hosts [@sher2025shewanella; @yin2015pbp1a]. The point is narrower: the *clinical* meaning depends on host context, not that the native gene is inert. |
 | "Mobilization only moved the gene to a new location." | **Misleading** | IS*1999* supplies the outward-directed promoter from which the β-lactamase is read [@aubert2006is1999], so the expression context changed too, not only the address. |
 | "The Tn*1999* insertion into *tir* and the original capture of the gene were one observed historical event." | **Unsupported** | The present configuration is known: Tn*1999* carrying *bla*<sub>OXA-48</sub> sits within *tir*, and plasmids in that configuration transfer at higher frequency [@potron2014derepressed; @poirel2012genetic]. The order and timing are reconstructed, not observed. |
-| "The same enzyme gives the same phenotype in any host." | **False** | Host physiology decides. High-level carbapenem resistance needs the enzyme plus reduced outer-membrane permeability [@poirel2012phantom; @poirel2004emergence]. |
+| "The identical enzyme gives the same phenotype in every host." | **False** | Host physiology decides. High-level carbapenem resistance needs the enzyme plus reduced outer-membrane permeability [@poirel2012phantom; @poirel2004emergence]. |
 | "The chromosome → transposon → plasmid → clinic arrows are a measured lineage." | **Illustrative** | The figure orders *contexts*, not a reconstructed descent. No arrow is a dated transition, and the panel shows a subset of the gene neighbourhood. |
 
 ### A note the figure cannot carry
