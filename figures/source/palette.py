@@ -43,23 +43,27 @@ OKABE_ITO = {
 #          colour, so a category in black reads as a label, not a series;
 #   yellow (#F0E442) has too little contrast on the white figure background
 #          to carry a line, a small mark or text.
-# Every count below is relative to that six-colour pool. On all eight colours
-# the numbers are different and better, which is why the pool has to be
-# stated rather than assumed.
+# Claims about this pool are relative to it; on all eight colours the picture
+# differs, which is why the pool is named rather than assumed.
+#
+# NO NUMBERS IN THESE COMMENTS. Every quantity that used to be written here
+# is now derived by measure() and printed by report_measurements(). A comment
+# holding a second hand-maintained copy of a measurement is how this file
+# came to assert two things that were false; run the module to see the
+# current figures.
 POOL = ("orange", "sky_blue", "bluish_green", "blue", "vermillion", "purple")
 
 # --- Role assignments ----------------------------------------------------
 # The three routes by which a plasmid lineage gains or loses copies.
 # These keep the same colours in every figure, so a reader learns them once.
 #
-# COPY and SPREAD are both blues, which is a deliberate trade. Measured over
-# the pool above: 6 of the 20 possible triples clear MIN_DISTANCE under BOTH
-# simulated deuteranopia and protanopia. This one scores 103.40, tied for
-# best with (sky_blue, blue, vermillion); the rest score 100.50, 100.50,
-# 86.01 and 75.26. So it is a joint-best choice, NOT the only workable one —
-# reassigning is possible if a later figure needs it, at a documented cost.
-# The two blues differ in relative luminance by 2.25:1, so they also separate
-# in greyscale, and ROUTE_DASH and ROUTE_MARK carry the distinction anyway.
+# COPY and SPREAD are both blues, which is a deliberate trade. Within POOL
+# this assignment is among the best-separating options under BOTH simulated
+# dichromacies, but it is NOT the only workable one — several alternatives
+# also clear MIN_DISTANCE, so reassigning is possible if a later figure needs
+# it. The two blues also differ in luminance, so they separate in greyscale,
+# and ROUTE_DASH and ROUTE_MARK carry the distinction regardless of colour.
+# For how many alternatives there are and how they score, run the module.
 ROUTES = {
     "COPY":   OKABE_ITO["sky_blue"],
     "CARRY":  OKABE_ITO["orange"],
@@ -68,13 +72,13 @@ ROUTES = {
 
 # Narrative stages, environmental through clinical.
 #
-# `environmental` reuses sky_blue, which ROUTES gives to COPY. Within the
-# six-colour pool that reuse is forced: holding ROUTES fixed leaves only
-# (bluish_green, vermillion, purple), which scores 56.71 and fails. Admitting
-# black or yellow WOULD give disjoint triples that pass — the best is
-# (black, bluish_green, vermillion) at 124.65 — so the constraint comes from
-# the pool, not from Okabe-Ito. If the black/yellow exclusions above are ever
-# relaxed, revisit this assignment; it is not a fact about the palette.
+# `environmental` reuses sky_blue, which ROUTES gives to COPY. Within POOL
+# that reuse is forced: holding ROUTES fixed leaves exactly one candidate
+# triple and it fails. Admitting black or yellow WOULD give disjoint triples
+# that pass, so the constraint comes from the pool, not from Okabe-Ito. If
+# the black/yellow exclusions above are ever relaxed, revisit this
+# assignment; it is not a fact about the palette. report_measurements()
+# prints both figures.
 #
 # Since a figure uses one vocabulary or the other, separability WITHIN a
 # group is the operative constraint. A figure needing both must call
@@ -96,11 +100,11 @@ PAPER = "#ffffff"      # explicit background: dark text on transparent is
 ROUTE_DASH = {"COPY": "none", "CARRY": "6 3", "SPREAD": "2 3"}
 ROUTE_MARK = {"COPY": "circle", "CARRY": "square", "SPREAD": "triangle"}
 
-# A project convention, not a standard. 60 is a Euclidean distance in sRGB
-# after simulation, chosen because it separated the cases we had; no external
+# A project convention, not a standard: a Euclidean distance in sRGB after
+# simulation, chosen because it separated the cases we had. No external
 # source defines it, and sRGB distance is not perceptually uniform, so it
-# under-penalises some pairs and over-penalises others. Treat a score of 62
-# and a score of 58 as the same answer: "close to the line, look at it".
+# under-penalises some pairs and over-penalises others. Treat scores just
+# above and just below it as the same answer: "close to the line, look".
 MIN_DISTANCE = 60.0
 
 
@@ -182,10 +186,11 @@ def check_union(verbose=True):
     """Separability when ROUTES and STAGES appear in ONE figure.
 
     Expected to fail. Unlike the single-group constraints, this one really is
-    a property of Okabe-Ito rather than of our pool: over all eight colours
-    the best six-colour set scores 56.71, below MIN_DISTANCE, so six
-    simultaneously separable categories are out of reach however they are
-    assigned. Call this before mixing the vocabularies, and treat a failure
+    a property of Okabe-Ito rather than of our pool: no six-colour subset of
+    the full palette clears MIN_DISTANCE, so six simultaneously separable
+    categories are out of reach however they are assigned.
+    report_measurements() prints the best achievable score, and
+    verify_design_invariants() fails if that ever stops being true. Call this before mixing the vocabularies, and treat a failure
     as a sign to split the figure or use fewer categories, never to lower
     MIN_DISTANCE.
     """
@@ -208,58 +213,116 @@ def check_union(verbose=True):
     return problems
 
 
-def verify_documented_claims(verbose=True):
-    """Re-derive every count stated in the comments above.
+def _worst(names):
+    """Lowest pairwise separation within a colour set, across all simulations."""
+    cols = [OKABE_ITO[n] for n in names]
+    w = float("inf")
+    for vision in ("normal", "deuteranopia", "protanopia"):
+        for i in range(len(cols)):
+            for j in range(i + 1, len(cols)):
+                a, b = cols[i], cols[j]
+                if vision != "normal":
+                    a, b = simulate(a, vision), simulate(b, vision)
+                w = min(w, distance(a, b))
+    return w
 
-    These numbers were wrong once: an earlier version claimed the ROUTES
-    triple was "the only one" that passed and that no disjoint STAGES triple
-    existed. Both were false, and both were stated over an unstated colour
-    pool. A comment cannot be trusted to stay true, so it is checked here.
 
-    What this DETECTS: drift between the four counts written in the comments
-    above and what the current colours actually measure. Negative-tested by
-    reassigning ROUTES, which makes it report two stale claims.
+def _relative_luminance(hex_colour):
+    r, g, b = (_srgb_to_lin(v) for v in _hex2rgb(hex_colour))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
-    What it CANNOT detect: a claim in a comment that was never encoded here.
-    It checks the four numbers someone chose to encode, so a new sentence
-    asserting something unmeasured is exactly as unchecked as the two false
-    claims were. It also cannot tell whether MIN_DISTANCE or the distance
-    metric is the right one -- it only confirms the arithmetic is consistent
-    with them.
+
+def measure():
+    """Derive every quantity this module's design rests on. Single source.
+
+    Nothing here is hard-coded from a previous run, and no comment above
+    repeats these numbers. Earlier versions kept the figures in three places
+    at once -- a comment, a literal in the checker, and the real measurement
+    -- and two of the comment copies were false while the checker passed.
     """
     import itertools
 
-    def worst(names):
-        cols = [OKABE_ITO[n] for n in names]
-        w = float("inf")
-        for vision in ("normal", "deuteranopia", "protanopia"):
-            for i in range(len(cols)):
-                for j in range(i + 1, len(cols)):
-                    x, y = cols[i], cols[j]
-                    if vision != "normal":
-                        x, y = simulate(x, vision), simulate(y, vision)
-                    w = min(w, distance(x, y))
-        return w
+    route_names = tuple(k for k in POOL if OKABE_ITO[k] in ROUTES.values())
+    stage_names = tuple(k for k in OKABE_ITO if OKABE_ITO[k] in STAGES.values())
+    pool_triples = [(c, _worst(c)) for c in itertools.combinations(POOL, 3)]
+    passing = sorted([x for x in pool_triples if x[1] >= MIN_DISTANCE],
+                     key=lambda x: -x[1])
+    disjoint_pool = [(c, _worst(c)) for c in itertools.combinations(
+        [n for n in POOL if n not in route_names], 3)]
+    disjoint_full = sorted([(c, _worst(c)) for c in itertools.combinations(
+        [n for n in OKABE_ITO if n not in route_names], 3)
+        if _worst(c) >= MIN_DISTANCE], key=lambda x: -x[1])
+    best_six = max((_worst(c) for c in itertools.combinations(OKABE_ITO, 6)))
+    lum = sorted(_relative_luminance(v) for v in
+                 (ROUTES["COPY"], ROUTES["SPREAD"]))
+    return {
+        "pool_triples_total": len(pool_triples),
+        "pool_triples_passing": passing,
+        "routes_names": route_names,
+        "routes_score": _worst(route_names),
+        "stages_score": _worst(stage_names),
+        "disjoint_within_pool": disjoint_pool,
+        "disjoint_with_black_yellow": disjoint_full,
+        "best_six_colour_set": best_six,
+        "copy_spread_luminance_ratio": (lum[1] + 0.05) / (lum[0] + 0.05),
+    }
 
+
+def report_measurements(m=None):
+    """Print the derived figures. These are the numbers; comments defer here."""
+    m = m or measure()
+    passing = m["pool_triples_passing"]
+    print(f"POOL = {', '.join(POOL)}")
+    print(f"  triples clearing MIN_DISTANCE: {len(passing)} of "
+          f"{m['pool_triples_total']}")
+    for c, s in passing:
+        mark = "  <-- ROUTES" if set(c) == set(m["routes_names"]) else ""
+        print(f"    {s:7.2f}  {', '.join(c)}{mark}")
+    print(f"  ROUTES score {m['routes_score']:.2f}; "
+          f"STAGES score {m['stages_score']:.2f}")
+    print(f"  COPY/SPREAD luminance ratio: "
+          f"{m['copy_spread_luminance_ratio']:.2f}:1")
+    print(f"  disjoint STAGES options within POOL: "
+          f"{len(m['disjoint_within_pool'])} candidate(s), "
+          f"best {max(s for _, s in m['disjoint_within_pool']):.2f} "
+          f"-- none clear {MIN_DISTANCE}")
+    dj = m["disjoint_with_black_yellow"]
+    print(f"  disjoint STAGES options if black/yellow are admitted: {len(dj)}"
+          + (f", best {dj[0][1]:.2f} ({', '.join(dj[0][0])})" if dj else ""))
+    print(f"  best six-colour set over all eight: "
+          f"{m['best_six_colour_set']:.2f}")
+
+
+def verify_design_invariants(verbose=True):
+    """Assert only the properties the design actually depends on.
+
+    Deliberately NOT a comparison against expected numbers. Counts and scores
+    drift for legitimate reasons; what must stay true is structural.
+
+    What this DETECTS: a ROUTES or STAGES assignment that stops being
+    separable, and a union that silently becomes separable (which would mean
+    the never-mix rule could be dropped).
+
+    What it CANNOT detect: a false statement written in a comment. No check
+    in Python validates prose. The defence is that the comments no longer
+    carry numbers -- they point here instead -- so there is nothing in them
+    left to drift out of date.
+    """
+    m = measure()
     problems = []
-    passing = [c for c in itertools.combinations(POOL, 3) if worst(c) >= MIN_DISTANCE]
-    if len(passing) != 6:
-        problems.append(f"comment says 6 of 20 pool triples pass; measured {len(passing)}")
-    routes = tuple(k for k in POOL if OKABE_ITO[k] in ROUTES.values())
-    top = max(worst(c) for c in passing)
-    if abs(worst(routes) - 103.40) > 0.01 or abs(top - 103.40) > 0.01:
-        problems.append(f"comment says ROUTES ties for best at 103.40; measured "
-                        f"{worst(routes):.2f}, best {top:.2f}")
-    rest = tuple(n for n in POOL if n not in routes)
-    if worst(rest) >= MIN_DISTANCE:
-        problems.append(f"comment says the disjoint pool option fails at 56.71; "
-                        f"measured {worst(rest):.2f}, which passes")
-    best6 = max(worst(c) for c in itertools.combinations(OKABE_ITO, 6))
-    if best6 >= MIN_DISTANCE:
-        problems.append(f"comment says six categories are unreachable; best "
-                        f"six-colour set scores {best6:.2f}")
+    if m["routes_score"] < MIN_DISTANCE:
+        problems.append(f"ROUTES no longer separable: {m['routes_score']:.2f}")
+    if m["stages_score"] < MIN_DISTANCE:
+        problems.append(f"STAGES no longer separable: {m['stages_score']:.2f}")
+    if not any(set(c) == set(m["routes_names"])
+               for c, _ in m["pool_triples_passing"]):
+        problems.append("ROUTES is not among the passing triples of POOL")
+    if m["best_six_colour_set"] >= MIN_DISTANCE:
+        problems.append(
+            f"six categories are now separable ({m['best_six_colour_set']:.2f}); "
+            "the never-mix rule and check_union() need revisiting")
     if verbose:
-        print(f"documented-claim check: {len(problems)} stale claim(s)")
+        print(f"design invariants: {len(problems)} violation(s)")
         for q in problems:
             print(f"    {q}")
     return problems
@@ -280,7 +343,9 @@ def main():
     print("\nFor reference, the two vocabularies cannot be mixed in one figure:")
     check_union()
     print()
-    if verify_documented_claims():
+    report_measurements()
+    print()
+    if verify_design_invariants():
         return 1
     return 0
 

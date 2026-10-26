@@ -58,11 +58,17 @@ relative to the intuition the label creates.
 report that *S. oneidensis* MR-1 was "susceptible to all β-lactams" across a
 14-drug panel [@poirel2004progenitor], which reads as a flat contradiction of
 the MICs above. Before calling it one, apply scope before status: different
-laboratories, different drug panels, different media, and crucially different
-interpretive criteria — an ampicillin MIC of 16 µg/ml is at or below the
-intermediate range under enterobacterial breakpoints, and no breakpoints are
-defined for *Shewanella* at all. The measured MIC shift caused by *blaA* is
-not in dispute; what counts as "resistant" is.
+laboratories, different drug panels, different media, and no agreed criterion
+for what counts as resistance in this organism. Clinical breakpoints are
+defined for named pathogens, not for *Shewanella*, and they differ between
+standards, so "susceptible" and "resistant" are not fixed properties of a
+number here.
+
+Stay with what was measured. Deleting *blaA* drops the ampicillin, penicillin
+and carbenicillin MICs from 16, 32 and 64 µg/ml to below 1, and at low
+ampicillin concentrations the wild type lyses while the drug persists. Those
+are the observations. The disagreement is about the word applied to them, and
+that word is not something the primary data settles.
 
 </details>
 

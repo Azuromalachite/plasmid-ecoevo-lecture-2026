@@ -397,8 +397,9 @@ claims:
       BlaA raises the minimum inhibitory concentration of three penicillins
       in Shewanella oneidensis (ampicillin 16, penicillin 32, carbenicillin
       64 micrograms per millilitre in the wild type, below 1 in a blaA
-      deletion mutant). Whether that constitutes "resistance" depends on the
-      breakpoint applied, and no breakpoints are defined for Shewanella.
+      deletion mutant). Whether that constitutes "resistance" is a question
+      about which interpretive criterion is applied, not about the
+      measurement.
     layer: source
     status: supported
     references:
@@ -416,10 +417,16 @@ claims:
       rather than from data; the measured panel is three penicillins, and
       Sher 2025 says "some". NOT COMPARABLE rather than contested: Poirel
       2004 reports MR-1 as susceptible across a 14-drug panel, which looks
-      like a flat contradiction, but the laboratories, panels, media and
-      interpretive criteria differ, and an ampicillin MIC of 16 sits at or
-      below the intermediate range under enterobacterial breakpoints. The
-      MIC shift attributable to blaA is not in dispute; the label is.
+      like a flat contradiction, but the laboratories, panels and media
+      differ and there is no agreed criterion for resistance in this
+      organism. DELIBERATELY NOT ARGUED FROM A BREAKPOINT: an earlier version
+      of this note said an ampicillin MIC of 16 sits at or below the
+      intermediate range under enterobacterial breakpoints. That is
+      standard-dependent -- true under CLSI, false under EUCAST, where the
+      resistance boundary is lower -- and it was stated flatly with no
+      standard, organism context or version cited. The MIC shift attributable
+      to blaA is not in dispute; the label is, and the primary data does not
+      settle the label.
     pages:
       - case-studies/shewanella-oxa48.md
 
