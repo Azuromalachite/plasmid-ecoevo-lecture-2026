@@ -64,17 +64,23 @@ def gene_arrow(x, y, w, h, fill, stroke, label, label_size=11, italic=False):
                    "middle", "normal", style))
 
 
-def arrow(x1, y1, x2, y2, colour=INK, width=2.0, head=9):
-    """Straight arrow with a filled triangular head (horizontal or vertical)."""
+def arrow(x1, y1, x2, y2, colour=INK, width=2.0, head=9, dashed=False):
+    """Straight arrow with a filled triangular head (horizontal or vertical).
+
+    dashed=True marks an arrow that orders CONTEXTS rather than asserting a
+    reconstructed descent, so the visual grammar matches the caveat in the
+    footer and in the case study's misreading table.
+    """
     parts = []
+    dash = ' stroke-dasharray="7 4"' if dashed else ""
     if y1 == y2:
         parts.append(f'<line x1="{x1}" y1="{y1}" x2="{x2 - head}" y2="{y2}" '
-                     f'stroke="{colour}" stroke-width="{width}"/>')
+                     f'stroke="{colour}" stroke-width="{width}"{dash}/>')
         parts.append(f'<polygon points="{x2},{y2} {x2 - head},{y2 - head * 0.6} '
                      f'{x2 - head},{y2 + head * 0.6}" fill="{colour}"/>')
     else:
         parts.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2 - head}" '
-                     f'stroke="{colour}" stroke-width="{width}"/>')
+                     f'stroke="{colour}" stroke-width="{width}"{dash}/>')
         parts.append(f'<polygon points="{x2},{y2} {x2 - head * 0.6},{y2 - head} '
                      f'{x2 + head * 0.6},{y2 - head}" fill="{colour}"/>')
     return "".join(parts)
@@ -87,8 +93,8 @@ def build():
 
     o.append(text(40, 44, "From an environmental chromosome to a clinical plasmid",
                   21, INK, "start", "bold"))
-    o.append(text(40, 68, "blaOXA-48-like genes: the same enzyme in three genetic "
-                          "contexts", 14, MUTED))
+    o.append(text(40, 68, "blaOXA-48-like genes: one enzyme family in three "
+                          "genetic contexts", 14, MUTED))
 
     # ---------------------------------------------------------------- panel 1
     o.append(box(40, 96, 310, 196, ENV, ENV_FILL))
@@ -104,7 +110,7 @@ def build():
     o.append(gene_arrow(178, 170, 72, 32, "#cfe3ec", ENV, "blaOXA", 10, True))
     o.append(gene_arrow(256, 170, 54, 32, "#ffffff", ENV, "lysR", 10, True))
 
-    o.append(text(58, 228, "Single copy, vertically inherited.", 12, INK))
+    o.append(text(58, 228, "Chromosomal; inherited with the host lineage.", 12, INK))
     o.append(text(58, 246, "Expression wired into envelope physiology", 12, INK))
     o.append(text(58, 262, "(peptidoglycan recycling, PBP1a/LpoA).", 12, INK))
     o.append(text(58, 282, "Ancestral selective agent: unresolved.", 12, CLIN,
@@ -124,7 +130,7 @@ def build():
     o.append(text(423, 232, "IS1999 supplies the outward promoter Pout:", 12, INK))
     o.append(text(423, 248, "the gene is now read from the element's own", 12, INK))
     o.append(text(423, 264, "promoter, not its native one.", 12, INK))
-    o.append(text(423, 284, "Cargo and vehicle change together.", 12, MOB,
+    o.append(text(423, 284, "Location and expression context change together.", 12, MOB,
                  "start", "bold"))
 
     # ---------------------------------------------------------------- panel 3
@@ -154,9 +160,9 @@ def build():
                  "start", "bold"))
 
     # ------------------------------------------------------- arrows 1 -> 2 -> 3
-    o.append(arrow(352, 194, 403, 194, MOB))
+    o.append(arrow(352, 194, 403, 194, MOB, dashed=True))
     o.append(text(377, 180, "mobilization", 11, MOB, "middle"))
-    o.append(arrow(717, 194, 768, 194, CLIN))
+    o.append(arrow(717, 194, 768, 194, CLIN, dashed=True))
     o.append(text(742, 180, "transposition", 11, CLIN, "middle"))
 
     # ---------------------------------------------------------------- panel 4
@@ -184,15 +190,16 @@ def build():
     o.append(text(782, 440, "resistance level rises, with a trade-off.", 12, INK))
 
     # ------------------------------------------------------------- the message
-    o.append(text(40, 506, "Same enzyme.  Different cell.  Different meaning.",
+    o.append(text(40, 506, "Same enzyme family.  Different cell.  Different meaning.",
                  17, INK, "start", "bold"))
 
     # ------------------------------------------------------------------ footer
     o.append(f'<line x1="40" y1="528" x2="1080" y2="528" stroke="#e2e2e2" '
              f'stroke-width="1"/>')
     o.append(text(40, 550, "Illustrative diagram — not to scale, no calibrated "
-                           "quantities. Relative order of the genes shown in "
-                           "panel 1 follows Zong (2012); other neighbours omitted.",
+                           "quantities. Dashed arrows order contexts, not a dated "
+                           "lineage. Panel 1 shows a subset of the neighbourhood, "
+                           "order after Zong (2012).",
                  11, MUTED))
     o.append(text(40, 568, "Sources: potron2011oxa181 · zong2012oxa199 · "
                            "yin2014recycling · yin2015pbp1a · poirel2004progenitor "

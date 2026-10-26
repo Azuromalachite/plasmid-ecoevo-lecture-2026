@@ -40,15 +40,19 @@ claims:
     references:
       - yin2014recycling
       - yin2015pbp1a
-      - poirel2004progenitor
     notes: >
       Demonstrated in S. oneidensis for blaA. Loss of AmpG or NagZ strongly
       changes beta-lactam resistance, and inactivation of mrcA or lpoA
-      drastically raises blaA expression without beta-lactam exposure. The
-      OXA-54 enzyme of S. oneidensis shares 92% amino acid identity with
-      plasmid-encoded OXA-48. Scope: S. oneidensis is the studied
-      representative; the regulatory detail is not shown for every Shewanella
-      species carrying a blaOXA-48-like gene.
+      drastically raises blaA expression without beta-lactam exposure. Scope:
+      S. oneidensis is the studied representative; the regulatory detail is
+      not shown for every Shewanella species carrying a blaOXA-48-like gene.
+      CORRECTION (v0.2): poirel2004progenitor was listed here as a supporting
+      reference. It is not one for this claim. That paper reports that
+      S. oneidensis MR-1 was "susceptible to all beta-lactams" and that
+      induction of OXA-54 could not be demonstrated in MR-1, so on the
+      regulation question it points the other way. It remains the right
+      citation for the 92% identity between OXA-54 and OXA-48, which is a
+      separate claim and is made where it belongs.
     verification:
       source_checked: true
       checked_against: full_text
@@ -387,3 +391,65 @@ claims:
       equilibria, and its numerical check failed on 11 of 60 samples.
     pages:
       - concepts/fitness-vs-persistence.md
+
+  - id: claim.shewanella.blaa_phenotype_scope
+    statement: >
+      BlaA raises the minimum inhibitory concentration of three penicillins
+      in Shewanella oneidensis (ampicillin 16, penicillin 32, carbenicillin
+      64 micrograms per millilitre in the wild type, below 1 in a blaA
+      deletion mutant). Whether that constitutes "resistance" is a question
+      about which interpretive criterion is applied, not about the
+      measurement.
+    layer: source
+    status: supported
+    references:
+      - yin2013blaa
+      - poirel2004progenitor
+      - sher2025shewanella
+      - yin2015pbp1a
+    verification:
+      source_checked: true
+      checked_against: full_text
+      note: "Yin 2013 Table 2 (MICs); Poirel 2004 text (14-drug panel)"
+    notes: >
+      Replaces an earlier page claim of "natural resistance to many
+      beta-lactams". That phrasing came from Yin 2015's Introduction prose
+      rather than from data; the measured panel is three penicillins, and
+      Sher 2025 says "some". NOT COMPARABLE rather than contested: Poirel
+      2004 reports MR-1 as susceptible across a 14-drug panel, which looks
+      like a flat contradiction, but the laboratories, panels and media
+      differ and there is no agreed criterion for resistance in this
+      organism. DELIBERATELY NOT ARGUED FROM A BREAKPOINT: an earlier version
+      of this note said an ampicillin MIC of 16 sits at or below the
+      intermediate range under enterobacterial breakpoints. That is
+      standard-dependent -- true under CLSI, false under EUCAST, where the
+      resistance boundary is lower -- and it was stated flatly with no
+      standard, organism context or version cited. The MIC shift attributable
+      to blaA is not in dispute; the label is, and the primary data does not
+      settle the label.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.shewanella.blaa_dose_gated_lysis
+    statement: >
+      Ampicillin lyses Shewanella oneidensis at 0.49 to 6.25 micrograms per
+      millilitre but not at 50, because blaA induction is dose-dependent: a
+      high dose induces strongly and clears the drug, a low dose induces
+      weakly and the drug persists.
+    layer: source
+    status: supported
+    references:
+      - yin2013blaa
+    verification:
+      source_checked: true
+      checked_against: full_text
+      note: "Yin 2013, lysis concentrations and the slow-removal explanation"
+    notes: >
+      The headline finding of the paper, and a better answer to the case
+      study's prediction prompt than the phenotype statement it replaced: the
+      native organism is killed by a low dose and survives a high one. Scope:
+      one species, one drug, one laboratory. Do not generalise the inverted
+      dose-response to other beta-lactams or other Shewanella species; it is
+      not tested outside this setting.
+    pages:
+      - case-studies/shewanella-oxa48.md

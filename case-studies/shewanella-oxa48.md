@@ -28,21 +28,47 @@ and only the first changes a model. See
 <details>
 <summary>What the evidence shows</summary>
 
-It is a functioning β-lactamase in its native host: BlaA, the *S. oneidensis*
-class D enzyme also referred to as OXA-54, is described as the key enzyme
-conferring that organism resistance to β-lactams [@sher2025shewanella], and
-its production is reported as giving natural resistance to many β-lactams
-[@yin2015pbp1a].
+**Almost certainly not what you predicted, in either direction.**
 
-So the common first answer — "no resistance phenotype, it is just an
-ancestral gene" — is wrong. But so is "carbapenem resistance like a clinical
-OXA-48 producer". OXA-48-like enzymes hydrolyse carbapenems only weakly, and
-the clinical phenotype also needs reduced outer-membrane permeability
-[@poirel2012phantom]. The native organism has a real β-lactam resistance
-phenotype that is **not** the clinical one.
+The gene is functional. BlaA — the *S. oneidensis* class D enzyme also called
+OXA-54 [@sher2025shewanella] — raises the minimum inhibitory concentration for
+three **penicillins**: ampicillin 16, penicillin 32 and carbenicillin 64
+µg/ml in the wild type, against <1 for each in a *blaA* deletion mutant
+(Yin 2013, Table 2) [@yin2013blaa]. So "no phenotype, just an ancestral gene"
+is wrong.
 
-The useful correction is that "resistance gene" is a context-dependent label,
-not a property of the sequence.
+But "carbapenem resistance, like a clinical OXA-48 producer" is also wrong.
+OXA-48-like enzymes hydrolyse carbapenems only weakly, and the clinical
+phenotype additionally requires reduced outer-membrane permeability
+[@poirel2012phantom].
+
+**And the strangest part is one almost nobody predicts.** Ampicillin *lyses*
+*S. oneidensis* at 0.49–6.25 µg/ml but **not** at 50 µg/ml [@yin2013blaa].
+The organism dies at a low dose and survives a high one. The mechanism is
+that induction is dose-gated: a high dose strongly induces *blaA*, which
+clears the drug quickly, while a low dose induces it only weakly, so the
+drug persists and the cells lyse. The authors attribute the lysis to slow
+removal of the agent.
+
+That is the answer worth keeping. A gene we would label "antibiotic
+resistance" produces, in its native host, a dose–response that runs backwards
+relative to the intuition the label creates.
+
+**`NOT COMPARABLE` — a phenotype discrepancy worth seeing.** Poirel et al.
+report that *S. oneidensis* MR-1 was "susceptible to all β-lactams" across a
+14-drug panel [@poirel2004progenitor], which reads as a flat contradiction of
+the MICs above. Before calling it one, apply scope before status: different
+laboratories, different drug panels, different media, and no agreed criterion
+for what counts as resistance in this organism. Clinical breakpoints are
+defined for named pathogens, not for *Shewanella*, and they differ between
+standards, so "susceptible" and "resistant" are not fixed properties of a
+number here.
+
+Stay with what was measured. Deleting *blaA* drops the ampicillin, penicillin
+and carbenicillin MICs from 16, 32 and 64 µg/ml to below 1, and at low
+ampicillin concentrations the wild type lyses while the drug persists. Those
+are the observations. The disagreement is about the word applied to them, and
+that word is not something the primary data settles.
 
 </details>
 
@@ -66,8 +92,16 @@ variants [@tacao2017culture].
 ## 2. Native molecular capability
 
 The ancestor of OXA-48 is a chromosomal class D β-lactamase of *Shewanella*.
-In *S. oneidensis*, the chromosomal class D β-lactamase BlaA confers natural
-resistance to many β-lactams, and its expression is genuinely regulated: not
+Two species do different evidential jobs on this page and should not be fused
+into one organism: **physiology and regulation come from *S. oneidensis***,
+whose chromosomal class D β-lactamase BlaA is also called OXA-54, while
+**genomic context comes from *S. xiamenensis***, where the
+*bla*<sub>OXA-48</sub>-like genes and their neighbours were characterised.
+
+In *S. oneidensis*, BlaA raises the MIC for three **penicillins** —
+ampicillin, penicillin and carbenicillin — by at least an order of magnitude
+against a deletion mutant [@yin2013blaa], and its expression is genuinely
+regulated: not
 through the canonical AmpR/AmpC paradigm, which *Shewanella* lacks, but
 through peptidoglycan-recycling enzymes (AmpG, NagZ) and through PBP1a and its
 cofactor LpoA [@yin2014recycling; @yin2015pbp1a].
@@ -167,7 +201,7 @@ enzyme production is combined with a permeability defect
 [@poirel2012phantom]. Strain 11978 indeed lacked a ~36 kDa porin
 [@poirel2004emergence].
 
-> **Same enzyme. Different cell. Different meaning.**
+> **Same enzyme family. Different cell. Different meaning.**
 
 An enzyme embedded in *Shewanella* envelope physiology becomes, in an
 enterobacterium with reduced outer-membrane permeability and a high-expression
@@ -198,12 +232,16 @@ fitness [@delafuente2022withinpatient].
 1. **Resistance predates therapeutic antibiotics.** The chemistry was already
    there, in environmental organisms, before clinical use [@dcosta2011ancient;
    @martinez2008natural; @potron2011oxa181].
-2. **An "ARG" label may not capture the ancestral role.** In *Shewanella*, the
-   enzyme is regulated by cell-wall metabolism [@yin2014recycling;
-   @yin2015pbp1a]. Calling it a resistance gene describes what it does *for
-   us*, not what it did *there*.
-3. **Same enzyme, different host phenotype.** Clinical carbapenem resistance
-   requires enzyme plus permeability context [@poirel2012phantom].
+2. **The "ARG" label is phenotypically valid but historically incomplete.**
+   BlaA really does protect its native host against penicillins
+   [@yin2013blaa], so calling it a resistance gene is not simply a projection.
+   What the label does not carry is *why the gene was retained*: its
+   expression is wired into cell-wall metabolism [@yin2014recycling;
+   @yin2015pbp1a], and the ancestral selective reason is unresolved.
+3. **Same enzyme family, different host phenotype.** OXA-54 and OXA-48 share
+   92% amino-acid identity: relatives, not the same protein. Clinical
+   carbapenem resistance requires the enzyme plus a permeability context
+   [@poirel2012phantom].
 4. **Mobilization changes cargo and vehicle.** IS*1999* supplies the promoter
    [@aubert2006is1999]; the Tn*1999* insertion into *tir* raises transfer
    frequency [@potron2014derepressed].
@@ -219,7 +257,7 @@ identity, not observed.
 **Where this generalises.** This case states the specific version of a claim
 that the concept pages state generally:
 
-> Same enzyme. Different cell. Different meaning.
+> Same enzyme family. Different cell. Different meaning.
 > → **Same plasmid. Different context. Different fate.**
 
 See [`../concepts/copy-carry-spread.md`](../concepts/copy-carry-spread.md) for
@@ -243,7 +281,7 @@ inferences the evidence does not support. Status vocabulary:
 | "Native OXA-like genes are therefore not really resistance genes." | **False** | They do confer β-lactam resistance in their native hosts [@sher2025shewanella; @yin2015pbp1a]. The point is narrower: the *clinical* meaning depends on host context, not that the native gene is inert. |
 | "Mobilization only moved the gene to a new location." | **Misleading** | IS*1999* supplies the outward-directed promoter from which the β-lactamase is read [@aubert2006is1999], so the expression context changed too, not only the address. |
 | "The Tn*1999* insertion into *tir* and the original capture of the gene were one observed historical event." | **Unsupported** | The present configuration is known: Tn*1999* carrying *bla*<sub>OXA-48</sub> sits within *tir*, and plasmids in that configuration transfer at higher frequency [@potron2014derepressed; @poirel2012genetic]. The order and timing are reconstructed, not observed. |
-| "The same enzyme gives the same phenotype in any host." | **False** | Host physiology decides. High-level carbapenem resistance needs the enzyme plus reduced outer-membrane permeability [@poirel2012phantom; @poirel2004emergence]. |
+| "The identical enzyme gives the same phenotype in every host." | **False** | Host physiology decides. High-level carbapenem resistance needs the enzyme plus reduced outer-membrane permeability [@poirel2012phantom; @poirel2004emergence]. |
 | "The chromosome → transposon → plasmid → clinic arrows are a measured lineage." | **Illustrative** | The figure orders *contexts*, not a reconstructed descent. No arrow is a dated transition, and the panel shows a subset of the gene neighbourhood. |
 
 ### A note the figure cannot carry
@@ -255,4 +293,6 @@ ampicillin [@yin2013blaa] and is regulated through PBP1a/LpoA and
 peptidoglycan-recycling enzymes [@yin2015pbp1a; @yin2014recycling]. These are
 compatible — different inducers, different assays — but "the gene is
 inducible" is too flat a summary to be worth teaching
-(`claim.shewanella.blaa_regulation_not_uniform`, status: contested).
+(`claim.shewanella.blaa_regulation_not_uniform`: `layer: interpretation`,
+`status: supported` — the reports are not comparable, so they do not
+establish a disagreement).
