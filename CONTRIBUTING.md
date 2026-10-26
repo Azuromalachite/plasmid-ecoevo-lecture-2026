@@ -82,9 +82,18 @@ nothing alike can both pass it.
 
 **Public/private firewall**
 
-- [ ] Nothing derives from Thai SynBio Challenge 2026 participant submissions
-      or pitches. Could this page have been written by someone who never
-      watched the pitches?
+- [ ] Nothing derives from Thai SynBio Challenge 2026 participant
+      submissions or presentations. Could this page have been written by
+      someone who never watched them?
+- [ ] Nothing on the never-commit list is in the change, **on any branch**:
+      transcripts, participant names, channel or contact data, identifying
+      affiliations, internal transcription or judging notes, unpublished
+      submissions, or verbatim participant speech. A public video is not
+      permission to republish an identifiable transcript. Full policy:
+      [`docs/participant-material-policy.md`](docs/participant-material-policy.md).
+- [ ] No omission is written as a negative claim. "Not described in the
+      presentation" and "not observable from the available source" are the
+      available wordings; "the team did not consider X" is not.
 
 ## Running the checks
 

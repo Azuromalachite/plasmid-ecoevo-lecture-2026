@@ -61,11 +61,18 @@ to
 This repository contains only material derived from published literature,
 public competition rules, organizer-approved public protocol information,
 generic models and independent teaching examples. It contains **nothing**
-derived from Thai SynBio Challenge 2026 participant submissions or pitches: no
-team strategies, no frequencies of approaches, no comparisons between teams,
-and no emphasis chosen because of what teams presented. The test for every
-page is: *could this page have been written by someone who never watched the
-pitches?* If not, it does not belong here.
+derived from Thai SynBio Challenge 2026 participant submissions or
+presentations: no team strategies, no frequencies of approaches, no
+comparisons between teams, and no emphasis chosen because of what teams
+presented. The test for every page is: *could this page have been written by
+someone who never watched the presentations?* If not, it does not belong here.
+
+Participant-derived material is excluded **by default and on every branch**,
+draft and unpublished branches included, and a publicly accessible video is
+not by itself permission to republish an identifiable transcript. What may
+eventually be included, how permission is scoped, and why an omission in a
+presentation is never evidence of absence are all set out in
+[`docs/participant-material-policy.md`](docs/participant-material-policy.md).
 
 ## Contents (v0.1)
 
@@ -81,6 +88,7 @@ pitches?* If not, it does not belong here.
 | [`figures/`](figures/) | Figures generated from source; see [`figures/README.md`](figures/README.md) |
 | [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md) | How pages teach inference control and model updating |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Rigour checklist for any new or edited page |
+| [`docs/participant-material-policy.md`](docs/participant-material-policy.md) | What participant-derived material may never enter Git, and on what terms anything could |
 
 Citations in pages use `[@key]`, where `key` is an entry in
 `evidence/references.bib`.
