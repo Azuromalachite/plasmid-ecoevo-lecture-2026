@@ -7,6 +7,17 @@ in the file, rather than in the tone of a sentence.
 
 ## Status vocabulary
 
+> **Open question.** v0.2 fixes seven learner-facing evidence states:
+> supported, unresolved, unsupported, refuted, not tested, model-derived,
+> illustrative (see
+> [`../docs/pedagogy-conventions.md`](../docs/pedagogy-conventions.md)).
+> This registry additionally uses `contested` and `definitional`, and
+> currently lacks `not tested` and `illustrative`. Whether `contested` should
+> map onto `unresolved` or become an eighth state, and whether `definitional`
+> belongs on an evidence scale at all, is **awaiting a decision**; until then
+> the two claims using them are left as they are. The states below are what
+> the registry accepts today.
+
 | Status | Meaning | Required to assign it |
 | --- | --- | --- |
 | `supported` | Published primary evidence directly tests the statement and is consistent with it. | At least one primary reference whose reported results bear on the statement as written. |
@@ -54,3 +65,21 @@ It does not rank journals, weigh sample sizes, or grade study designs. It is a
 bookkeeping convention for keeping interpretation visibly distinct from
 evidence in a teaching repository — not an evidence-appraisal framework of the
 kind used in clinical systematic review.
+
+## Pending reconciliation
+
+| v0.2 learner-facing state | In this registry today |
+| --- | --- |
+| supported | yes |
+| unresolved | no — the nearest entry is `unsupported`, which means something narrower |
+| unsupported | yes |
+| refuted | yes |
+| not tested | **missing** — currently indistinguishable from `unsupported`, which is exactly the distinction convention 4 says to preserve |
+| model-derived | yes |
+| illustrative | **missing** — used on figures in prose, but not as a claim status |
+| — | `contested`: evidence on more than one side. Not in the v0.2 list |
+| — | `definitional`: a project convention, arguably not an evidence state at all |
+
+Adding `not tested` is the one change with a correctness argument behind it
+rather than a tidiness argument: collapsing "nobody looked" into "nothing
+establishes it" is the failure mode convention 4 exists to prevent.

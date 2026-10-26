@@ -42,17 +42,19 @@ to
    simulations, and only when the earlier layer has shown what the later one
    should answer. Every model and figure declares its assumptions, parameters,
    regime, and whether it is illustrative or calibrated.
-5. **Teach the boundary between observation and inference, not only the
-   biological fact.** A reader should finish a page able to say which
-   sentence was measured and which was inferred. This is the third layer of
+5. **Teach inference control and model updating, not merely facts or
+   surprise.** A reader should finish a page reasoning differently about the
+   next case, not just holding one more fact. This is the third layer of
    provenance: scientific provenance asks where a claim came from,
    computational provenance asks where a figure came from, and pedagogical
    provenance asks what observation licenses an interpretation. The
-   conventions that implement it — prediction before evidence, a
-   "how this can be misread" table on important figures, five distinct
+   conventions that implement it — predict before evidence, diagnose the
+   assumption rather than just correcting the answer, a
+   "how this can be misread" table on important figures, seven distinct
    evidence states, comparison sufficiency, and never passing a model output
    off as an observation — are in
-   [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md).
+   [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md), with the
+   page-by-page checklist in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Public/private firewall
 
@@ -77,10 +79,40 @@ pitches?* If not, it does not belong here.
 | [`misconceptions/transfer-is-not-spread.md`](misconceptions/transfer-is-not-spread.md) | A transfer event is not a spreading lineage |
 | [`evidence/`](evidence/) | Bibliography, tracked claims, evidence levels |
 | [`figures/`](figures/) | Figures generated from source; see [`figures/README.md`](figures/README.md) |
-| [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md) | How pages teach the observation/inference boundary |
+| [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md) | How pages teach inference control and model updating |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Rigour checklist for any new or edited page |
 
 Citations in pages use `[@key]`, where `key` is an entry in
 `evidence/references.bib`.
+
+## Reading paths
+
+Light navigation, not a curriculum. Each path is an order to read existing
+pages in; none is a prerequisite for another.
+
+**Start here — about 15 minutes.**
+[The *Shewanella* → OXA-48 case study](case-studies/shewanella-oxa48.md),
+including the prediction prompt at the top and the "how this can be misread"
+table at the bottom. If you read one thing, read this.
+
+**Plasmid fitness → persistence.**
+[Plasmid vs host fitness](concepts/plasmid-vs-host-fitness.md) →
+[fitness vs persistence](concepts/fitness-vs-persistence.md), including the
+worked example "a plasmid imposes a 5% cost: does it disappear?" →
+[more copies is not always better](misconceptions/more-copy-is-always-better.md).
+Why a measured cost does not tell you what happens next.
+
+**Mobility and AMR.**
+[The case study](case-studies/shewanella-oxa48.md) →
+[COPY, CARRY, SPREAD](concepts/copy-carry-spread.md) →
+[transfer is not spread](misconceptions/transfer-is-not-spread.md). How a gene
+becomes a clinical problem without its chemistry changing.
+
+**Dynamical landscapes.** *(Later — not all of the pages this path will
+connect exist yet.)* The terminology discipline in
+[fitness vs persistence](concepts/fitness-vs-persistence.md) is the seed:
+persistence boundaries, what a threshold does and does not license, and why
+"tipping point" is a stronger claim than it looks.
 
 ## Provenance, including of the build
 
