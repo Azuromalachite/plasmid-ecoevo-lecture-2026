@@ -115,9 +115,8 @@ the cell, route 2 below, does not need conjugation.
 
 </details>
 
-The deeper point: **a trait that reduces host growth can still increase in
-frequency if it raises transmission enough.** That is the logic of a
-parasite, and it applies whether or not the plasmid is parasitic on balance.
+That is the logic of a parasite, and it applies whether or not the plasmid is
+parasitic on balance — a question the last section returns to.
 
 ### 2. Intracellular competition gives the plasmid a third route
 
