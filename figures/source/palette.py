@@ -36,13 +36,28 @@ OKABE_ITO = {
     "purple":       "#CC79A7",
 }
 
+# --- The working pool ----------------------------------------------------
+# Categorical roles below are drawn from SIX of the eight Okabe-Ito colours.
+# Excluded, and this exclusion is a design choice rather than a measurement:
+#   black  (#000000) is visually indistinguishable from INK, the body-text
+#          colour, so a category in black reads as a label, not a series;
+#   yellow (#F0E442) has too little contrast on the white figure background
+#          to carry a line, a small mark or text.
+# Every count below is relative to that six-colour pool. On all eight colours
+# the numbers are different and better, which is why the pool has to be
+# stated rather than assumed.
+POOL = ("orange", "sky_blue", "bluish_green", "blue", "vermillion", "purple")
+
 # --- Role assignments ----------------------------------------------------
 # The three routes by which a plasmid lineage gains or loses copies.
 # These keep the same colours in every figure, so a reader learns them once.
-# COPY and SPREAD are both blues. That is a measured trade, not an oversight:
-# of every assignment of Okabe-Ito colours to these three roles, this is the
-# only one whose worst-case separation stays above MIN_DISTANCE under BOTH
-# simulated deuteranopia and protanopia (103.4; the runners-up fail at 38-55).
+#
+# COPY and SPREAD are both blues, which is a deliberate trade. Measured over
+# the pool above: 6 of the 20 possible triples clear MIN_DISTANCE under BOTH
+# simulated deuteranopia and protanopia. This one scores 103.40, tied for
+# best with (sky_blue, blue, vermillion); the rest score 100.50, 100.50,
+# 86.01 and 75.26. So it is a joint-best choice, NOT the only workable one —
+# reassigning is possible if a later figure needs it, at a documented cost.
 # The two blues differ in relative luminance by 2.25:1, so they also separate
 # in greyscale, and ROUTE_DASH and ROUTE_MARK carry the distinction anyway.
 ROUTES = {
@@ -53,11 +68,17 @@ ROUTES = {
 
 # Narrative stages, environmental through clinical.
 #
-# `environmental` deliberately reuses sky_blue, which ROUTES gives to COPY.
-# Six Okabe-Ito colours cannot supply two fully disjoint separable triples:
-# the best disjoint pair tops out at 56.7, below MIN_DISTANCE. Since a figure
-# uses one vocabulary or the other, separability WITHIN a group is the real
-# constraint. A figure that needs both must call check_union(), which fails.
+# `environmental` reuses sky_blue, which ROUTES gives to COPY. Within the
+# six-colour pool that reuse is forced: holding ROUTES fixed leaves only
+# (bluish_green, vermillion, purple), which scores 56.71 and fails. Admitting
+# black or yellow WOULD give disjoint triples that pass — the best is
+# (black, bluish_green, vermillion) at 124.65 — so the constraint comes from
+# the pool, not from Okabe-Ito. If the black/yellow exclusions above are ever
+# relaxed, revisit this assignment; it is not a fact about the palette.
+#
+# Since a figure uses one vocabulary or the other, separability WITHIN a
+# group is the operative constraint. A figure needing both must call
+# check_union(), which fails.
 STAGES = {
     "environmental": OKABE_ITO["sky_blue"],
     "mobile":        OKABE_ITO["purple"],
@@ -139,10 +160,13 @@ def check(verbose=True):
 def check_union(verbose=True):
     """Separability when ROUTES and STAGES appear in ONE figure.
 
-    Expected to fail: the two groups share a colour and the palette cannot
-    support six simultaneously separable categories. Call it before mixing
-    the vocabularies, and treat a failure as a sign to split the figure or
-    drop to fewer categories rather than to lower MIN_DISTANCE.
+    Expected to fail. Unlike the single-group constraints, this one really is
+    a property of Okabe-Ito rather than of our pool: over all eight colours
+    the best six-colour set scores 56.71, below MIN_DISTANCE, so six
+    simultaneously separable categories are out of reach however they are
+    assigned. Call this before mixing the vocabularies, and treat a failure
+    as a sign to split the figure or use fewer categories, never to lower
+    MIN_DISTANCE.
     """
     merged = {f"ROUTE:{k}": v for k, v in ROUTES.items()}
     merged.update({f"STAGE:{k}": v for k, v in STAGES.items()})
@@ -163,6 +187,52 @@ def check_union(verbose=True):
     return problems
 
 
+def verify_documented_claims(verbose=True):
+    """Re-derive every count stated in the comments above.
+
+    These numbers were wrong once: an earlier version claimed the ROUTES
+    triple was "the only one" that passed and that no disjoint STAGES triple
+    existed. Both were false, and both were stated over an unstated colour
+    pool. A comment cannot be trusted to stay true, so it is checked here.
+    """
+    import itertools
+
+    def worst(names):
+        cols = [OKABE_ITO[n] for n in names]
+        w = float("inf")
+        for vision in ("normal", "deuteranopia", "protanopia"):
+            for i in range(len(cols)):
+                for j in range(i + 1, len(cols)):
+                    x, y = cols[i], cols[j]
+                    if vision != "normal":
+                        x, y = simulate(x, vision), simulate(y, vision)
+                    w = min(w, distance(x, y))
+        return w
+
+    problems = []
+    passing = [c for c in itertools.combinations(POOL, 3) if worst(c) >= MIN_DISTANCE]
+    if len(passing) != 6:
+        problems.append(f"comment says 6 of 20 pool triples pass; measured {len(passing)}")
+    routes = tuple(k for k in POOL if OKABE_ITO[k] in ROUTES.values())
+    top = max(worst(c) for c in passing)
+    if abs(worst(routes) - 103.40) > 0.01 or abs(top - 103.40) > 0.01:
+        problems.append(f"comment says ROUTES ties for best at 103.40; measured "
+                        f"{worst(routes):.2f}, best {top:.2f}")
+    rest = tuple(n for n in POOL if n not in routes)
+    if worst(rest) >= MIN_DISTANCE:
+        problems.append(f"comment says the disjoint pool option fails at 56.71; "
+                        f"measured {worst(rest):.2f}, which passes")
+    best6 = max(worst(c) for c in itertools.combinations(OKABE_ITO, 6))
+    if best6 >= MIN_DISTANCE:
+        problems.append(f"comment says six categories are unreachable; best "
+                        f"six-colour set scores {best6:.2f}")
+    if verbose:
+        print(f"documented-claim check: {len(problems)} stale claim(s)")
+        for q in problems:
+            print(f"    {q}")
+    return problems
+
+
 def main():
     print("Palette accessibility self-test")
     print(f"minimum acceptable RGB distance: {MIN_DISTANCE}\n")
@@ -177,6 +247,9 @@ def main():
           "ROUTE_DASH, ROUTE_MARK, a label or position.")
     print("\nFor reference, the two vocabularies cannot be mixed in one figure:")
     check_union()
+    print()
+    if verify_documented_claims():
+        return 1
     return 0
 
 
