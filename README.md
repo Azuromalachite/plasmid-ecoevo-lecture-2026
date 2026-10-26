@@ -118,6 +118,7 @@ presentation is never evidence of absence are all set out in
 | [`figures/`](figures/) | Figures generated from source; see [`figures/README.md`](figures/README.md) |
 | [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md) | How pages teach inference control and model updating |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Rigour checklist for any new or edited page |
+| [`models/copy-number-burden/`](models/copy-number-burden/) | Executable copy-number/burden model; the Battle Royale scenario |
 | [`docs/participant-material-policy.md`](docs/participant-material-policy.md) | What participant-derived material may never enter Git, and on what terms anything could |
 
 Citations in pages use `[@key]`, where `key` is an entry in
