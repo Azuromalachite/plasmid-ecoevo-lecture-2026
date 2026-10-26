@@ -213,7 +213,11 @@ def build():
 def main():
     out = Path(__file__).resolve().parents[1] / "output" / "shewanella-oxa48-pathway.svg"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(build(), encoding="utf-8")
+    # newline="\n" explicitly: text-mode writes would otherwise translate to
+    # CRLF on Windows, so the same script would emit different bytes on
+    # different platforms and the output would no longer be reproducible.
+    with open(out, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(build())
     print(f"wrote {out}")
 
 
