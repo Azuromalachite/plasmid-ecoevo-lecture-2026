@@ -96,8 +96,12 @@ PAPER = "#ffffff"      # explicit background: dark text on transparent is
 ROUTE_DASH = {"COPY": "none", "CARRY": "6 3", "SPREAD": "2 3"}
 ROUTE_MARK = {"COPY": "circle", "CARRY": "square", "SPREAD": "triangle"}
 
-MIN_DISTANCE = 60.0    # RGB distance under simulation; below this, two
-                       # colours are not reliably separable.
+# A project convention, not a standard. 60 is a Euclidean distance in sRGB
+# after simulation, chosen because it separated the cases we had; no external
+# source defines it, and sRGB distance is not perceptually uniform, so it
+# under-penalises some pairs and over-penalises others. Treat a score of 62
+# and a score of 58 as the same answer: "close to the line, look at it".
+MIN_DISTANCE = 60.0
 
 
 # --- colour-vision simulation -------------------------------------------
@@ -135,7 +139,24 @@ def distance(a, b):
 
 
 def check(verbose=True):
-    """Every pair within a palette group stays separable. Returns a problem list."""
+    """Every pair within a palette group stays separable. Returns a problem list.
+
+    What this DETECTS: two colours in the same group that collapse toward each
+    other under a standard simulation of dichromacy, judged by a threshold we
+    chose.
+
+    What it CANNOT detect, and what therefore still needs a human:
+      * whether colour is the only thing encoding a distinction. Rule 2 above
+        is the stronger rule and nothing here enforces it -- a figure can pass
+        this check and still be unreadable in greyscale;
+      * anomalous trichromacy (mild red-green deficiency), which is far more
+        common than the dichromacies simulated here, and monochromacy, which
+        is not simulated at all;
+      * whether the colours are legible against the background they are drawn
+        on, or at the size and stroke width actually used;
+      * whether a passing score means the pair looks different to a reader.
+        sRGB distance is not perceptual, so it is a screen, not a verdict.
+    """
     problems = []
     for name, group in (("ROUTES", ROUTES), ("STAGES", STAGES)):
         keys = list(group)
@@ -194,6 +215,17 @@ def verify_documented_claims(verbose=True):
     triple was "the only one" that passed and that no disjoint STAGES triple
     existed. Both were false, and both were stated over an unstated colour
     pool. A comment cannot be trusted to stay true, so it is checked here.
+
+    What this DETECTS: drift between the four counts written in the comments
+    above and what the current colours actually measure. Negative-tested by
+    reassigning ROUTES, which makes it report two stale claims.
+
+    What it CANNOT detect: a claim in a comment that was never encoded here.
+    It checks the four numbers someone chose to encode, so a new sentence
+    asserting something unmeasured is exactly as unchecked as the two false
+    claims were. It also cannot tell whether MIN_DISTANCE or the distance
+    metric is the right one -- it only confirms the arithmetic is consistent
+    with them.
     """
     import itertools
 
