@@ -83,7 +83,7 @@ appears, or if the status itself is retired.
 | B3 | Heterozygosity attributed to San Millán 2016, whose abstract never uses the word | Attributed to Rodríguez-Beltrán 2018; San Millán's own dual mechanism (mutational supply then gene dosage, "necessary and sufficient") stated separately. Ilhan reconciled by scope, using the paper's own "depending on the selection pressure on newly emerging variants" |
 | B4 | Cost mechanism given as "precursors, polymerase and ribosomes", citing a review whose abstract says the mechanisms "remain poorly understood" | Mechanism clause replaced with the review's own position; its supported claim — cost as the main constraint on vertical and horizontal replication — kept. Two sites |
 | B5 | "Functional β-lactam, tetracycline and glycopeptide resistance determinants" from permafrost | Genes for three classes *identified*; structure and function shown for **VanA only**. Two sites |
-| B6 | Alonso-del Valle's "overall reduction in bacterial fitness" clause dropped | Restored at **seven** sites, enumerated rather than listed. "overall reduction" previously appeared zero times in the repo |
+| B6 | Alonso-del Valle's "overall reduction in bacterial fitness" clause dropped | Restored at **seven** content sites, enumerated rather than listed. "overall reduction" previously appeared zero times in the repo. Five landed in the changeset as written; the two parasitism rebuttals in `plasmid-vs-host-fitness.md` were added at merge — see OF-5 |
 | B7 | The registry asserted each of five spread steps is independently evidenced | False for two. Note now names which four are evidenced and which two are not; the uncited restriction/CRISPR mechanism is marked unsourced in prose |
 | B8 | Eleven source-scope defects | All eleven corrected: Zong (two ORFs split, IS*Shes2* downstream, WCJ25 clinical), Tacão (PCR clone libraries, authors decline the attribution), AmpR vs AmpC, sufficiency→necessity at three sites, Aubert (which promoter, not how much), Dimitriu (RP4 did not evolve), León-Sampedro ("suggesting", not observed), Simonsen (estimator only; the variation claim flagged unsourced), Paulsson (hedged to match the other page), Rodríguez-Beltrán 2021 (removed from the paradox sentence), Kahan (class-name provenance) |
 | B9 | "Mass action fails above roughly 10⁶ cells·mL⁻¹" with no citation anywhere | Sourced to [@rodriguezgrande2025encounter], verified: *"T/D ratios saturated at cell densities >10⁶ cells/ml"* — plasmid R64 in LB broth, supplementary figure. Scope carried; figure kept as an order of magnitude, not a boundary |
@@ -91,3 +91,31 @@ appears, or if the status itself is retired.
 | A2 | `pages:` and prose status/layer strings validated in neither direction, which is how a `status: contested` desync survived every check | `check_claim_ids.py` now verifies that every `pages:` path exists and that status/layer strings in content prose match the registry. Negative-tested on a copy **outside** the repo against both defect types |
 | A3 | `UNRESOLVED`, `NOT TESTED` and `ILLUSTRATIVE` defined but never used; `evidence-levels.md` claimed the ancestral-selection question "reads as UNRESOLVED on the page" when no page carried the badge | All three given real sites; the claim about the page is now true. `CONTESTED` remains unused — see OF-4 |
 | A4 | Misreading status column undefined | Closed before this changeset, in `docs/pedagogy-conventions.md` |
+
+### OF-5 — B6 was recorded as closed at seven sites while it was closed at five
+
+The changeset restored Alonso-del Valle's net-direction clause at five sites
+and its own entry claimed seven. The two it missed were the places where the
+paper is used to rebut *"plasmids are genetic parasites"*: a bullet and a
+misreading-table row in `plasmid-vs-host-fitness.md`. Both stated something
+true — the effect is neutral or positive in several wild-type hosts — while
+omitting that the overall effect was a reduction. That is the worst place to
+drop it, because there the omission is doing the argumentative work. Both now
+carry the net direction, and the table row no longer cites the paper for
+Bergström's low-transfer-rate claim.
+
+Two things are worth keeping from how this was found.
+
+**The entry was checked against a count, and the count was wrong twice.**
+`grep -c` and `grep -oh | wc -l` are line-based, and the clause wraps across a
+line break at two of the seven sites, so both instruments reported fewer sites
+than exist. The count that settled it normalises whitespace before matching.
+A fix verified by an instrument that cannot see part of its domain is the
+defect class this repository keeps rediscovering; this time it appeared inside
+the document that exists to track it.
+
+**A tracking entry is a claim and needs the same discipline as a page.** "Seven
+sites" was written from the enumeration made while planning the fix, not from
+the repository after it. A count in a findings table is a number in prose: an
+unversioned copy of a computation, and it drifted from the thing it described
+in the same commit that introduced it.
