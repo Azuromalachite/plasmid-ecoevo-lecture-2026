@@ -63,6 +63,14 @@ carries a worked pair:
 "We don't know the answer" and "this particular answer is untested" are
 different facts, and the registry can now record both.
 
+**A source limitation is not an evidence state.** "The paper does not mention
+it", "not observable from the available material", "not assessed from this
+source" describe what we could see, not what is true of the claim. None of
+them licenses `not_tested`, which asserts something about the world: that
+nobody has tested it. An author who did not mention a control may still have
+run it. Record source limitations in words, and leave the status to evidence
+about the claim itself.
+
 ## Scope before status
 
 **Before marking anything `contested`, check that the findings make the same

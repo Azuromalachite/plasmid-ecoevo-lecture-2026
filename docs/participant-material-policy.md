@@ -83,18 +83,34 @@ Never convert an omission into a negative claim. Write:
 - "not observable from the available source";
 - "not assessed from this material".
 
-This is the same discipline the evidence registry applies to the literature,
-and the same vocabulary serves it. An absence in a source is **`not_tested`**
-territory — nobody asked — not `unsupported`, and certainly not `refuted`. See
+**Absence from a presentation is a limitation of the available source, not an
+evidence state of the underlying scientific claim.** "Not mentioned", "not
+observable from the available material" and "not assessed" must not be
+converted automatically into `not_tested`, `unsupported` or `refuted`.
+
+These are different questions, and collapsing them would reintroduce the
+error the registry exists to prevent:
+
+| Source limitation | Evidence state |
+| --- | --- |
+| "the presentation did not mention X" | "X has not been tested" |
+
+From silence we usually know only that something was **not observed in this
+source**. The team may well have tested it and not mentioned it — time,
+emphasis, or an assumption about the audience. Silence is evidence about the
+presentation, not about the work.
+
+So a source limitation gets recorded as what it is, in words, and does not
+receive a registry status at all. See
 [`../evidence/evidence-levels.md`](../evidence/evidence-levels.md).
 
-Likewise, differences between teams are marked **`NOT COMPARABLE`** wherever
-presentation format, experimental context, measurement or available evidence
-differ enough to invalidate the comparison. Two teams described at different
-levels of detail have not been shown to differ in design; they have been shown
-to differ in what they said. The scope-before-status rule applies here exactly
-as it does to conflicting papers: apparent disagreement that comes from
-unmatched conditions is not disagreement.
+**`NOT COMPARABLE`** is likewise used where the available presentations
+*genuinely prevent* a comparison — different experimental context,
+measurement, or evidence — and **not** automatically wherever presentation
+detail happens to differ. Two teams described at different levels of detail
+have not been shown to differ in design; they have been shown to differ in
+what they said, and whether that blocks a particular comparison is a judgement
+to make and state, not a default.
 
 ## The firewall
 
