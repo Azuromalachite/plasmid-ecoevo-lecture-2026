@@ -17,7 +17,9 @@ nothing alike can both pass it.
       paraphrase preserves the claim's **scope**, **uncertainty** and
       **evidence state**. Word-for-word matching is neither required nor
       wanted. This one is a human check; no script can do it.
-- [ ] `python evidence/check_claim_ids.py` passes.
+- [ ] `python evidence/check_claim_ids.py` passes. It checks that cited claim
+      IDs exist and that every `layer` and `status` is in vocabulary; it does
+      not and cannot check that a paraphrase is faithful.
 
 **Epistemic state**
 
@@ -26,6 +28,10 @@ nothing alike can both pass it.
       stays plain — marking everything turns the markers into wallpaper.
 - [ ] A marker names a real inference problem. `NOT COMPARABLE` is never
       decoration.
+- [ ] **Scope before status.** Two findings that disagree are only
+      `contested` if they make the same claim under comparable host,
+      environment, assay, estimator, timescale and definition. Otherwise it is
+      context dependence, and the comparison is what needs marking.
 - [ ] Absence of evidence is not written as evidence of absence. "Not tested"
       never reads as negative, and "unresolved" is never narrated as false.
 - [ ] No model output is presented as an observation. If a number comes from a

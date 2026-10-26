@@ -6,14 +6,26 @@
 # Fields:
 #   id          stable identifier, never reused or renumbered
 #   statement   the claim, as precisely as it can be stated
-#   layer       source | interpretation | model | observation
-#   status      supported | contested | unsupported | refuted
-#               | model-derived | definitional
+#   layer       what sort of statement this is:
+#               source | interpretation | model | observation | convention
+#   status      what the evidence currently says about it:
+#               supported | contested | unsupported | refuted | not_tested
+#               | not_applicable
+#
+# The two are independent axes. 'model-derived' and 'definitional' used to sit
+# in status; they describe the KIND of statement, so they moved to layer as
+# 'model' and 'convention'. A model result can then carry a real status:
+# supported within the model, or contested between models.
+#
+# Before marking anything 'contested', apply SCOPE BEFORE STATUS: check the
+# findings make the same claim under comparable host, environment, assay,
+# estimator, timescale and definition. Context dependence is not disagreement.
+# See evidence-levels.md.
 #   references  BibTeX keys in references.bib
 #   notes       caveats, scope, and what IS established if the claim is not
 #   pages       repository pages that depend on this claim
 
-version: 0.1
+version: 0.2
 
 claims:
   - id: claim.shewanella.oxa_native_context
@@ -220,8 +232,8 @@ claims:
       dependence, this project says 'persistence boundary' and 'stability
       landscape' rather than 'tipping point', 'bifurcation', 'bistability' or
       'hysteresis'.
-    layer: interpretation
-    status: definitional
+    layer: convention
+    status: not_applicable
     references:
       - ashwin2012tipping
     notes: >
@@ -286,22 +298,92 @@ claims:
 
   - id: claim.shewanella.blaa_regulation_not_uniform
     statement: >
-      Reports of what induces the native Shewanella class D beta-lactamase
-      differ between studies.
-    layer: source
-    status: contested
+      The differing reports of what induces the native Shewanella class D
+      beta-lactamase were obtained with different inducers and assays, so they
+      do not establish a disagreement; "the gene is inducible" is too flat a
+      summary either way.
+    layer: interpretation
+    status: supported
     references:
       - poirel2004progenitor
       - yin2013blaa
       - yin2015pbp1a
       - yin2014recycling
     notes: >
-      Induction of OXA-54 by imipenem or cefoxitin could not be demonstrated
-      in S. oneidensis MR-1 (Poirel 2004), while blaA is strongly induced by
-      high-dose ampicillin (Yin 2013) and is regulated via PBP1a/LpoA and
-      peptidoglycan recycling (Yin 2015, Yin 2014). These are compatible,
-      since the inducers and assays differ, so this is marked contested rather
-      than refuted: what is contested is the flat summary "the gene is
-      inducible", not any individual result.
+      RECLASSIFIED in v0.2, and a good test of the new rule. This was status
+      'contested'. Applying scope before status: induction of OXA-54 by
+      imipenem or cefoxitin could not be demonstrated in S. oneidensis MR-1
+      (Poirel 2004), while blaA is strongly induced by high-dose ampicillin
+      (Yin 2013) and is regulated through PBP1a/LpoA and peptidoglycan
+      recycling (Yin 2015, Yin 2014). Different inducers, different assays:
+      the findings are not comparable, so the apparent contradiction is
+      condition dependence, not a controversy. Marking it 'contested' would
+      have made that label a dumping ground for biological heterogeneity,
+      which the narrow definition forbids. What IS supported is the statement
+      as now written. Whether a genuine disagreement exists under matched
+      conditions is not tested.
     pages:
       - case-studies/shewanella-oxa48.md
+
+  - id: claim.shewanella.oxa_betalactam_hypothesis
+    statement: >
+      Environmental beta-lactams produced by competing organisms were the
+      historical selective agent maintaining chromosomal blaOXA-48-like genes
+      in Shewanella.
+    layer: interpretation
+    status: not_tested
+    references:
+      - kahan1979thienamycin
+      - parker1982sq27860
+      - dcosta2011ancient
+    notes: >
+      Distinct from claim.shewanella.oxa_ancestral_selection, and the pair
+      shows why not_tested and unsupported are different states. That claim
+      says "the agent is known" and is UNSUPPORTED: evidence has been examined
+      and does not establish it. This one is a specific hypothesis that no
+      identified study tests discriminatingly, so it is NOT_TESTED: nobody has
+      asked this question in a way that could separate it from the
+      alternatives. Natural carbapenems do exist
+      (claim.environment.natural_carbapenems_exist), which makes the
+      hypothesis coherent rather than idle, but the existence of the compounds
+      is not evidence that they acted as the selective agent here.
+    pages:
+      - case-studies/shewanella-oxa48.md
+
+  - id: claim.model.plasmid_invasion_threshold
+    statement: >
+      Under a resource-explicit, well-mixed continuous-culture model with
+      mass-action transfer and per-unit-time segregational loss, a rare
+      plasmid-bearing class increases when gamma*n_star > c*psi + tau, where
+      n_star is the plasmid-free density at the plasmid-free equilibrium.
+    layer: model
+    status: supported
+    references:
+      - stewart1977population
+      - bergstrom2000natural
+      - hernandezbeltran2021models
+    verification:
+      source_checked: true
+      checked_against: own_derivation
+      note: >
+        Derived in this project, not quoted. Cell balance cancels conjugation
+        and segregation exactly (symbolic residual 0); the plasmid-free
+        equilibrium is isolated and its Jacobian upper triangular there; the
+        invasion eigenvalue is gamma*n_star - c*psi - tau; its sign predicted
+        invasion in 59 of 59 numerical samples outside a 5% band around the
+        threshold.
+    notes: >
+      'supported' here means supported WITHIN the stated model: the derivation
+      and the numerical checks agree. layer 'model' is what stops this being
+      read as an empirical law. An experiment that disagreed would most likely
+      show that an assumption fails, not that the algebra is wrong.
+      Assumptions that bound it: mass-action transfer, which breaks above
+      roughly 1e6 cells/mL in liquid where transfer saturates; a well-mixed
+      habitat; per-unit-time segregation, so the threshold must be re-derived
+      under a per-division convention; transconjugants transferring like
+      donors; and a constant cost. It is an invasion condition, not a
+      displacement condition. An earlier two-class formulation was discarded:
+      with psi equal to the dilution rate its plasmid-free state is a line of
+      equilibria, and its numerical check failed on 11 of 60 samples.
+    pages:
+      - concepts/fitness-vs-persistence.md

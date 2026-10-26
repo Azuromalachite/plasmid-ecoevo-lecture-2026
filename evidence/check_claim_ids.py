@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that every claim ID cited in the pages exists in claims.yml.
+"""Check that cited claim IDs exist, and that layer/status are in vocabulary.
 
 This checks EXISTENCE ONLY. It cannot tell whether a paraphrase preserved a
 claim's scope, uncertainty or evidence state, and it does not try: a check
@@ -15,6 +15,7 @@ Usage (from the repository root):
 Exit status is 1 if anything is wrong, so this can gate a commit later.
 """
 
+import collections
 import re
 import sys
 from pathlib import Path
@@ -26,6 +27,12 @@ except ImportError:
 
 CLAIM_RE = re.compile(r"\bclaim\.[a-z0-9_]+(?:\.[a-z0-9_]+)+")
 SKIP_DIRS = {".git", "__pycache__"}
+
+# The two axes. See evidence/evidence-levels.md.
+LAYERS = {"source", "interpretation", "model", "observation", "convention"}
+STATUSES = {"supported", "contested", "unsupported", "refuted",
+            "not_tested", "not_applicable"}
+CHECKED_AGAINST = {"full_text", "abstract", "own_derivation"}
 
 
 def main():
@@ -50,6 +57,19 @@ def main():
                         f"(in {', '.join(sorted(cited[cid]))})")
 
     for claim in data["claims"]:
+        cid = claim["id"]
+        if claim.get("layer") not in LAYERS:
+            problems.append(f"{cid}: layer {claim.get('layer')!r} not in vocabulary")
+        if claim.get("status") not in STATUSES:
+            problems.append(f"{cid}: status {claim.get('status')!r} not in vocabulary")
+        # A convention is a house rule, so no evidential status applies to it.
+        if claim.get("layer") == "convention" and claim.get("status") != "not_applicable":
+            problems.append(f"{cid}: layer 'convention' should carry status "
+                            f"'not_applicable', not {claim.get('status')!r}")
+        v = claim.get("verification")
+        if v and v.get("checked_against") not in CHECKED_AGAINST:
+            problems.append(f"{cid}: verification.checked_against "
+                            f"{v.get('checked_against')!r} not in vocabulary")
         for page in claim.get("pages") or []:
             if not (root / page).exists():
                 problems.append(f"{claim['id']}: pages names a missing file: {page}")
@@ -61,7 +81,11 @@ def main():
     orphaned = sorted(cid for cid in defined - set(cited)
                       if not next(c for c in data["claims"] if c["id"] == cid).get("pages"))
 
+    by_layer = collections.Counter(c.get("layer") for c in data["claims"])
+    by_status = collections.Counter(c.get("status") for c in data["claims"])
     print(f"claims defined: {len(defined)}")
+    print(f"  layer : {dict(by_layer)}")
+    print(f"  status: {dict(by_status)}")
     print(f"claim IDs cited inline: {len(set(cited) & defined)}")
     print(f"claims linked to a page: "
           f"{sum(1 for c in data['claims'] if c.get('pages'))}")

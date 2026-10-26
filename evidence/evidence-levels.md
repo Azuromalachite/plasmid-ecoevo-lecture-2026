@@ -1,85 +1,146 @@
 # Evidence levels
 
-Every tracked claim in [`claims.yml`](claims.yml) carries a `status` from the
-vocabulary below. The point of the vocabulary is to make the difference
-between "we have evidence for this" and "this is a reasonable story" visible
-in the file, rather than in the tone of a sentence.
+Every tracked claim in [`claims.yml`](claims.yml) carries two fields on two
+**independent axes**:
 
-## Status vocabulary
+- **`layer`** — what sort of statement this is.
+- **`status`** — what the evidence currently says about it.
 
-> **Open question.** v0.2 fixes seven learner-facing evidence states:
-> supported, unresolved, unsupported, refuted, not tested, model-derived,
-> illustrative (see
-> [`../docs/pedagogy-conventions.md`](../docs/pedagogy-conventions.md)).
-> This registry additionally uses `contested` and `definitional`, and
-> currently lacks `not tested` and `illustrative`. Whether `contested` should
-> map onto `unresolved` or become an eighth state, and whether `definitional`
-> belongs on an evidence scale at all, is **awaiting a decision**; until then
-> the two claims using them are left as they are. The states below are what
-> the registry accepts today.
+Keeping them apart is the whole point. The earlier vocabulary mixed them:
+`model-derived` and `definitional` sat in `status` alongside `supported` and
+`refuted`, which answer a different question. A model result was then stuck at
+"model-derived" and could never be recorded as well-established *within its
+model*, or as disputed *between* models.
 
-| Status | Meaning | Required to assign it |
-| --- | --- | --- |
-| `supported` | Published primary evidence directly tests the statement and is consistent with it. | At least one primary reference whose reported results bear on the statement as written. |
-| `contested` | Published evidence exists on both sides, or authoritative sources disagree. | References on more than one side, named in `notes`. |
-| `unsupported` | The statement is plausible but no cited evidence establishes it. This is **not** "false" — it marks a gap. | The gap stated explicitly in `notes`. |
-| `refuted` | Published evidence is inconsistent with the statement. | A primary reference whose results contradict it. |
-| `model-derived` | Follows from a stated model under stated assumptions; not an empirical observation. | The model, its assumptions and its regime named in `notes`. |
-| `definitional` | A terminological or framing convention this project adopts, not a factual claim. | The convention stated; no empirical backing claimed. |
+## `layer` — what sort of statement
 
-## Layer vocabulary
+| Layer | Means |
+| --- | --- |
+| `source` | What a publication reports. |
+| `interpretation` | Our synthesis across sources. Can be wrong even when every source is right. |
+| `model` | Follows from a stated model under stated assumptions. |
+| `observation` | Data that tests a prediction. |
+| `convention` | A house rule this project adopts, not a claim about nature. |
 
-Separate from status, each claim records which of the project's four layers it
-belongs to (see the principles in the [README](../README.md)):
+## `status` — what the evidence says
 
-- `source` — what a publication reports.
-- `interpretation` — our synthesis across sources. Can be wrong even when
-  every source is right.
-- `model` — an implication of a stated model under stated assumptions.
-- `observation` — data that tests a prediction.
+| Status | Means |
+| --- | --- |
+| `supported` | Evidence directly tests the statement, within its stated scope, and is consistent with it. |
+| `contested` | Credible evidence or interpretations both support and challenge the same scoped claim under comparable conditions. |
+| `unsupported` | Relevant evidence exists or has been examined, but does not establish the claim. **Not** "false". |
+| `refuted` | Evidence gives affirmative reason to reject the claim within its stated scope. |
+| `not_tested` | The claim has not been directly tested; no identified evidence bears on it discriminatingly. |
+| `not_applicable` | No evidential status applies — the normal case for `layer: convention`. |
 
-A claim's layer and its status are independent: an `interpretation` can be
-`supported`, and a `source`-layer claim can be `contested`.
+### The three that are easy to collapse
+
+```
+not_tested    "We haven't asked."
+unsupported   "We've looked, and this conclusion isn't established."
+refuted       "We have evidence against it."
+```
+
+These are scientifically different, and collapsing the first two produces
+exactly the inference error this repository exists to teach. The registry
+carries a worked pair:
+
+- `claim.shewanella.oxa_ancestral_selection` — "the historical selective agent
+  is known" → **unsupported**. Evidence has been examined (ancient resistance,
+  native regulation, environmental reservoirs) and none of it establishes the
+  agent.
+- `claim.shewanella.oxa_betalactam_hypothesis` — "environmental β-lactams were
+  the agent" → **not_tested**. A specific hypothesis that no identified study
+  tests discriminatingly.
+
+"We don't know the answer" and "this particular answer is untested" are
+different facts, and the registry can now record both.
+
+## Scope before status
+
+**Before marking anything `contested`, check that the findings make the same
+claim under comparable conditions.** Context dependence is not disagreement.
+
+```
+apparent contradiction
+        ↓
+same host / environment / assay / estimator / timescale / definition?
+        ↓
+       NO  →  scope or context mismatch; mark the comparison NOT COMPARABLE
+        ↓
+       YES
+        ↓
+credible evidence genuinely disagrees?
+        ↓
+       YES →  contested
+```
+
+Plasmid X costly in host A and beneficial in host B is **host dependence**.
+High conjugation on a filter and low conjugation in liquid is **ecological
+context dependence**. Neither is a controversy, and filing them as `contested`
+would turn that label into a dumping ground for biological heterogeneity —
+which, in a field whose central finding is that context decides, would empty
+it of meaning.
+
+The rule has already changed a classification.
+`claim.shewanella.blaa_regulation_not_uniform` was `contested`: Poirel could
+not demonstrate induction by imipenem or cefoxitin, while Yin reports strong
+induction by high-dose ampicillin. Different inducers, different assays, so
+not comparable, so not contested. It is now an `interpretation` that is
+`supported` — the reports do not establish a disagreement. Whether one exists
+under matched conditions is itself untested.
+
+## Badges are not statuses
+
+Pages carry a small learner-facing vocabulary, derived from these two fields
+rather than equal to them. The registry can be precise without making every
+page read like an evidence dashboard.
+
+| Registry | Rendered on a page as |
+| --- | --- |
+| `layer: interpretation`, `status: unsupported` or `not_tested` | **UNRESOLVED** |
+| `layer: model`, any status | **MODEL** |
+| `layer: convention` | *(no badge)* |
+| any layer, `status: contested` | **CONTESTED** |
+| a figure or value chosen for legibility | **ILLUSTRATIVE** |
+| quantities not comparable across host, assay, estimator, medium, timescale or spatial regime | **NOT COMPARABLE** |
+
+`ILLUSTRATIVE` and `NOT COMPARABLE` describe a figure or a comparison rather
+than a claim, which is why they have no registry row. Ordinary supported prose
+carries no badge at all.
+
+## Verification blocks
+
+Load-bearing claims carry a light record that a human checked the source:
+
+```yaml
+verification:
+  source_checked: true
+  checked_against: full_text   # or: abstract, own_derivation
+  note: "Fig. 3 / Results"
+```
+
+`own_derivation` is for `layer: model` claims, where what was checked is the
+derivation and its numerical verification rather than someone else's paper.
 
 ## Rules
 
-1. **Only reusable claims get tracked.** A statement that appears on one page
-   and is cited there does not need an ID. Claims enter `claims.yml` when they
-   are load-bearing across pages, when their status is likely to change, or
-   when getting them wrong would propagate.
-2. **A `supported` status needs a primary reference, not a review.** Reviews
-   may be listed in addition, for context.
-3. **Absence of evidence is `unsupported`, not `refuted`.** These are
-   different situations and conflating them is how speculation becomes
-   received wisdom.
+1. **Only reusable claims get tracked.** A statement cited on one page does
+   not need an ID. Claims enter the registry when they are load-bearing across
+   pages, when their status is likely to change, or when getting them wrong
+   would propagate.
+2. **`supported` needs a primary reference**, not a review — except for
+   `layer: model`, where it means supported *within* the model, and the
+   derivation plus its verification is the evidence.
+3. **Absence of evidence is `not_tested` or `unsupported`, never `refuted`.**
 4. **`notes` carries the caveat**, including what *is* established when the
-   claim as written is not. The entry for
-   `claim.shewanella.oxa_ancestral_selection` is the model: the native
-   physiological context is supported; the historical selective agent is not.
-5. **A status downgrade is normal.** Changing `supported` to `contested` when
-   new work appears is maintenance, not failure.
+   claim as written is not.
+5. **A status change is normal.** Reclassifying as new work appears, or as a
+   rule like scope-before-status is applied, is maintenance, not failure.
 
 ## What this file does not do
 
-It does not rank journals, weigh sample sizes, or grade study designs. It is a
+It does not rank journals, weigh sample sizes or grade study designs. It is a
 bookkeeping convention for keeping interpretation visibly distinct from
 evidence in a teaching repository — not an evidence-appraisal framework of the
 kind used in clinical systematic review.
-
-## Pending reconciliation
-
-| v0.2 learner-facing state | In this registry today |
-| --- | --- |
-| supported | yes |
-| unresolved | no — the nearest entry is `unsupported`, which means something narrower |
-| unsupported | yes |
-| refuted | yes |
-| not tested | **missing** — currently indistinguishable from `unsupported`, which is exactly the distinction convention 4 says to preserve |
-| model-derived | yes |
-| illustrative | **missing** — used on figures in prose, but not as a claim status |
-| — | `contested`: evidence on more than one side. Not in the v0.2 list |
-| — | `definitional`: a project convention, arguably not an evidence state at all |
-
-Adding `not tested` is the one change with a correctness argument behind it
-rather than a tidiness argument: collapsing "nobody looked" into "nothing
-establishes it" is the failure mode convention 4 exists to prevent.

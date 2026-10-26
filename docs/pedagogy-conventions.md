@@ -108,25 +108,41 @@ Three specific insufficiencies:
 These are about *sufficiency*, not validity: a single-host study is good
 evidence about that host.
 
-### 4. Seven distinct evidence states
+### 4. Two axes in the registry, a small badge vocabulary on the page
 
-| State | Means |
-| --- | --- |
-| **Supported** | Primary evidence directly tests the statement and is consistent with it |
-| **Unresolved** | The question is open; no cited evidence settles it |
-| **Unsupported** | Plausible, but nothing cited establishes it |
-| **Refuted** | Evidence is inconsistent with it |
-| **Not tested** | Nobody has looked, as far as we know |
-| **Model-derived** | Follows from a stated model under stated assumptions; not an observation |
-| **Illustrative** | Chosen for legibility; carries no calibrated quantity |
+The registry records two independent things: **`layer`** (what sort of
+statement this is: source, interpretation, model, observation, convention) and
+**`status`** (what the evidence says: supported, contested, unsupported,
+refuted, not_tested, not_applicable). Full definitions in
+[`../evidence/evidence-levels.md`](../evidence/evidence-levels.md).
+
+Separating them is what lets a derived result be recorded honestly. The
+invasion threshold in the worked example is `layer: model`, `status:
+supported` — the derivation and its numerical checks hold *within* the model —
+and the layer is what stops anyone reading it as an empirical law.
+
+Three states are easy to collapse and must not be:
+
+```
+not_tested    "We haven't asked."
+unsupported   "We've looked, and this conclusion isn't established."
+refuted       "We have evidence against it."
+```
 
 **"Not tested" never looks negative, and "unresolved" is never narrated as
-false.** These are the two failure modes that make a page wrong while every
+false.** These are the failure modes that make a page wrong while every
 sentence in it stays individually defensible.
 
-The registry's vocabulary is in
-[`../evidence/evidence-levels.md`](../evidence/evidence-levels.md), which
-records where it currently differs from this list and why that is unresolved.
+**Scope before status.** Before calling anything contested, check the findings
+make the same claim under comparable host, environment, assay, estimator,
+timescale and definition. Context dependence is not disagreement — and in a
+field whose central finding is that context decides, letting `contested`
+absorb biological heterogeneity would empty the label of meaning.
+
+On the page, a reader sees a small badge vocabulary derived from the two
+fields, not the fields themselves: **UNRESOLVED**, **MODEL**, **CONTESTED**,
+**ILLUSTRATIVE**, **NOT COMPARABLE**. Ordinary supported prose carries no
+badge. The mapping is in `evidence-levels.md`.
 
 ### 5. Deliberate retrieval across reading paths
 
