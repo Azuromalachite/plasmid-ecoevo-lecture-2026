@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that cited claim IDs exist, and that layer/status are in vocabulary.
+"""Check cited claim IDs, the layer/status vocabulary, and registry<->page sync.
 
 This checks EXISTENCE ONLY. It cannot tell whether a paraphrase preserved a
 claim's scope, uncertainty or evidence state, and it does not try: a check
@@ -55,6 +55,45 @@ def main():
     for cid in sorted(set(cited) - defined):
         problems.append(f"cited but not defined: {cid}  "
                         f"(in {', '.join(sorted(cited[cid]))})")
+
+    # A2: the registry<->page link is hand-maintained and was unvalidated in
+    # both directions, which is how a `status: contested` desync survived
+    # every check. These two loops close that.
+    status_re = re.compile(r"`?status:\s*([a-z_]+)`?")
+    layer_re = re.compile(r"`?layer:\s*([a-z_]+)`?")
+    by_id = {c["id"]: c for c in data["claims"]}
+    # Content pages only. evidence/ and docs/ DEFINE the vocabulary, so every
+    # status and layer string appears there legitimately; running the sync
+    # check over them produced a false positive on the badge mapping table,
+    # and a check that fires on its own dictionary gets ignored.
+    content_dirs = {"case-studies", "concepts", "misconceptions", "models"}
+    for path in sorted(root.rglob("*.md")):
+        if set(path.parts) & SKIP_DIRS or not (set(path.parts) & content_dirs):
+            continue
+        text = path.read_text(encoding="utf-8")
+        # Attribute each stated status/layer to the NEAREST claim ID, not to
+        # every ID within a window. A first version used a 400-character
+        # window and fired on a passage that correctly states two claims with
+        # different statuses side by side -- the window overlapped, so each
+        # was checked against the other's registry entry.
+        ids = [(m.start(), m.group(0)) for m in CLAIM_RE.finditer(text)
+               if m.group(0) in by_id]
+        if not ids:
+            continue
+        for rex, field, vocab in ((status_re, "status", STATUSES),
+                                  (layer_re, "layer", LAYERS)):
+            for m in rex.finditer(text):
+                stated = m.group(1)
+                if stated not in vocab:
+                    continue
+                pos, cid = min(ids, key=lambda p: abs(p[0] - m.start()))
+                if abs(pos - m.start()) > 300:
+                    continue
+                if stated != by_id[cid].get(field):
+                    problems.append(
+                        f"{path.relative_to(root).as_posix()}: states "
+                        f"{field} '{stated}' nearest to {cid}, registry says "
+                        f"'{by_id[cid].get(field)}'")
 
     for claim in data["claims"]:
         cid = claim["id"]

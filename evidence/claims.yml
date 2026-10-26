@@ -74,8 +74,12 @@ claims:
     notes: >
       This is a deliberately recorded gap, not a refutation. What IS
       supported: resistance determinants long predate therapeutic antibiotic
-      use (functional beta-lactam, tetracycline and glycopeptide resistance
-      genes recovered from 30,000-year-old permafrost), environmental
+      use (targeted metagenomics of 30,000-year-old permafrost identified
+      genes encoding resistance to beta-lactam, tetracycline and glycopeptide
+      antibiotics, and the vancomycin-resistance element VanA was additionally
+      shown to be structurally and functionally similar to modern variants --
+      function was demonstrated for VanA, not for all three classes),
+      environmental
       resistance genes need not have arisen under therapeutic selection, and
       the native regulatory context of the Shewanella enzyme is cell-wall
       physiology. What is NOT established: whether the agent for this gene in
@@ -148,7 +152,17 @@ claims:
       - alonsodelvalle2021variability
     notes: >
       The decomposition into five steps is this project's framing
-      (interpretation layer); each individual step is independently evidenced.
+      (interpretation layer). CORRECTED in this changeset: this note previously
+      said each individual step is independently evidenced, which was false.
+      Steps 1-4 are: contact and habitat (fox2008spatial), transfer and its
+      estimator (simonsen1990endpoint), establishment via incompatibility and
+      entry exclusion (novick1987incompatibility, garcillan2008entry), and
+      persistence via host-dependent fitness effects
+      (alonsodelvalle2021variability). TWO are not: the restriction and CRISPR
+      defences named under establishment carry no citation in this repository,
+      and step 5, secondary spread, has none. Both are standard in the
+      literature; neither is sourced here, so the decomposition should not be
+      read as five equally evidenced links.
       Strongest single demonstration: plasmid pB10 invades E. coli populations
       from a frequency as low as 1e-7 on filters with nutrient replenishment
       but cannot invade in liquid culture, with the same plasmid and host.
@@ -206,7 +220,9 @@ claims:
   - id: claim.fitness.cost_is_host_dependent
     statement: >
       The fitness effect of a given plasmid varies substantially across
-      wild-type bacterial hosts, is sometimes beneficial, and that variability
+      wild-type bacterial hosts -- an overall reduction in fitness that is
+      nonetheless small in most hosts and beneficial in several -- and that
+      variability
       itself changes the conditions for plasmid persistence.
     layer: source
     status: supported
@@ -382,7 +398,11 @@ claims:
       read as an empirical law. An experiment that disagreed would most likely
       show that an assumption fails, not that the algebra is wrong.
       Assumptions that bound it: mass-action transfer, which breaks above
-      roughly 1e6 cells/mL in liquid where transfer saturates; a well-mixed
+      roughly 1e6 cells/mL in liquid, where transfer becomes limited by
+      engagement time and follows a Holling type II response -- measured for
+      plasmid R64 in LB broth and reported in a supplementary figure
+      (rodriguezgrande2025encounter), so an order of magnitude rather than a
+      boundary; a well-mixed
       habitat; per-unit-time segregation, so the threshold must be re-derived
       under a per-division convention; transconjugants transferring like
       donors; and a constant cost. It is an invasion condition, not a

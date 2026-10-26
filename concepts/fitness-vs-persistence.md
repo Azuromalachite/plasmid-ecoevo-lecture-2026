@@ -123,8 +123,13 @@ checked numerically: the cell balance cancels conjugation and segregation
 exactly, and the sign of that expression predicted invasion in 59 of 59
 simulated parameter sets outside a 5% band around the threshold.
 
-It assumes mass-action transfer, which is itself a modelling choice that
-fails above roughly 10⁶ cells·mL⁻¹ in liquid, where transfer saturates; a
+It assumes mass-action transfer, which is itself a modelling choice. Transfer
+is density-dependent only at low cell concentrations; above them it becomes
+limited by engagement time and follows a Holling type II response. For plasmid
+R64 in LB broth, transconjugants per donor saturated above 10⁶ cells·mL⁻¹
+[@rodriguezgrande2025encounter] — one plasmid in one medium, reported in a
+supplementary figure, so treat the figure as an order of magnitude rather than
+a boundary. It also assumes a
 well-mixed habitat, so no spatial structure; per-unit-time segregation, which
 is a convention — the threshold has to be re-derived if you switch to
 per-division; transconjugants that transfer like donors; and a constant cost.
@@ -141,8 +146,19 @@ density of 10⁸ cells·mL⁻¹, a growth rate of 0.5 h⁻¹ and segregational l
 10⁻⁴ h⁻¹, the cost-plus-loss side of the balance is about 0.025 h⁻¹. A
 transfer rate of 10⁻⁹ mL·cell⁻¹·h⁻¹ gives γ·n\* ≈ 0.1 h⁻¹ and the plasmid
 invades; 10⁻¹¹ gives 0.001 h⁻¹ and it is lost. Same cost, same host, opposite
-fate, from a parameter the cost measurement never touched. **`MODEL`** — these
-are illustrative parameter values, not measurements of any real plasmid.
+fate, from a parameter the cost measurement never touched. **`ILLUSTRATIVE`**
+— these parameter values were chosen for legibility and are not measurements
+of any real plasmid; the threshold they are fed into is **`MODEL`**.
+
+Note where those values sit. A density of 10⁸ cells·mL⁻¹ is two orders of
+magnitude above the concentration at which transfer was observed to saturate,
+so the mass-action term is being used outside the regime it describes and
+overstates transfer there. The arithmetic inside the model is unchanged; what
+changes is what it licenses. Read the contrast as showing that the *balance*
+is what decides the outcome, not as a prediction for a real culture at that
+density — a model can give a clean answer in a regime where one of its own
+assumptions has already failed, and noticing that is the point of stating
+assumptions at all.
 
 **Transfer is not the only route to persistence**, and presenting it as the
 answer would be its own overclaim. A costly plasmid can also persist through
@@ -158,8 +174,9 @@ several.
 This returns in [`copy-carry-spread.md`](copy-carry-spread.md), where γ·n\* is
 the SPREAD side of the same balance and *c* and *τ* are the CARRY side, and
 again in the pOXA-48 discussion below, where a plasmid's cost turns out to be
-small or even negative in many wild-type hosts — which moves the left-hand
-side of the inequality rather than the right.
+an overall reduction that is nonetheless small in most wild-type hosts and
+beneficial in several — which moves the left-hand side of the inequality
+rather than the right.
 
 ---
 
@@ -171,8 +188,9 @@ settles anything.
 
 **2. Context dependence of the cost itself.** Cost is measured in a host, a
 medium and a growth regime. The same plasmid, pOXA-48_K8, measured across
-wild-type enterobacteria from the human gut, showed mostly small effects and
-beneficial effects in several isolates, varying with host phylogeny
+wild-type enterobacteria from the human gut, produced an overall reduction
+in bacterial fitness while showing small effects in most hosts and beneficial
+effects in several isolates, varying with host phylogeny
 [@alonsodelvalle2021variability]. A single-host cost is a single point in a
 distribution.
 

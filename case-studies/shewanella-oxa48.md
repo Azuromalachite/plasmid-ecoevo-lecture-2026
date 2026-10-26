@@ -39,7 +39,8 @@ is wrong.
 
 But "carbapenem resistance, like a clinical OXA-48 producer" is also wrong.
 OXA-48-like enzymes hydrolyse carbapenems only weakly, and the clinical
-phenotype additionally requires reduced outer-membrane permeability
+phenotype is reported when enzyme production is **combined with** reduced
+outer-membrane permeability
 [@poirel2012phantom].
 
 **And the strangest part is one almost nobody predicts.** Ampicillin *lyses*
@@ -84,10 +85,14 @@ genes.
 *bla*<sub>OXA-181</sub> gene by PCR screening of environmental samples
 [@potron2011oxa181]. A chromosomal *bla*<sub>OXA-48</sub>-like variant,
 *bla*<sub>OXA-199</sub>, was later found in *S. xiamenensis*, together with
-*bla*<sub>OXA-48b</sub> in the type strain [@zong2012oxa199]. Culture-independent
-sequencing of river and estuarine water found far more *bla*<sub>OXA-48</sub>-like
-diversity than clinical settings had shown, including 50 previously unreported
-variants [@tacao2017culture].
+*bla*<sub>OXA-48b</sub> in the type strain [@zong2012oxa199]. PCR clone libraries from river and estuarine water
+DNA found far more *bla*<sub>OXA-48</sub>-like sequence diversity than clinical
+settings had shown, including 50 previously unreported variants
+[@tacao2017culture]. The authors assign these sequences to no organism and no
+replicon, and state explicitly that they have no evidence whether the genes
+were carried by the natural heterotrophic flora or entered the water from
+anthropogenic sources — so this is diversity in an environmental DNA pool, not
+a demonstrated *Shewanella* chromosomal reservoir.
 
 ## 2. Native molecular capability
 
@@ -102,7 +107,9 @@ In *S. oneidensis*, BlaA raises the MIC for three **penicillins** —
 ampicillin, penicillin and carbenicillin — by at least an order of magnitude
 against a deletion mutant [@yin2013blaa], and its expression is genuinely
 regulated: not
-through the canonical AmpR/AmpC paradigm, which *Shewanella* lacks, but
+through the canonical AmpR-dependent induction paradigm — *Shewanella* lacks
+an **AmpR** homologue [@yin2015pbp1a], though an AmpC-type enzyme of
+undetermined role is listed for the genus [@sher2025shewanella] — but
 through peptidoglycan-recycling enzymes (AmpG, NagZ) and through PBP1a and its
 cofactor LpoA [@yin2014recycling; @yin2015pbp1a].
 
@@ -117,23 +124,35 @@ selected these chromosomal oxacillinases in environmental *Shewanella*.
 Candidate explanations include environmental β-lactams produced by competing
 organisms, a role in cell-wall turnover or signalling, or neutral retention of
 an ancient gene family. Resistance genes much older than clinical antibiotic
-use are documented — functional β-lactam, tetracycline and glycopeptide
-resistance determinants were recovered from 30,000-year-old permafrost
-[@dcosta2011ancient] — and environmental resistance genes need not have
+use are documented — targeted metagenomics of 30,000-year-old permafrost
+identified genes encoding resistance to β-lactam, tetracycline and
+glycopeptide antibiotics, and the vancomycin-resistance element VanA was
+additionally shown to be structurally and functionally similar to modern
+variants [@dcosta2011ancient] — and environmental resistance genes need not have
 arisen under therapeutic selection [@martinez2008natural]. That establishes
 that *resistance predates therapy*. It does **not** establish what the
 selective agent was for this particular gene in this particular lineage.
-This project records that question as open (see
-`claim.shewanella.oxa_ancestral_selection` in
-[`../evidence/claims.yml`](../evidence/claims.yml)).
+**`UNRESOLVED`** — this project records the question as open
+(`claim.shewanella.oxa_ancestral_selection`, `layer: interpretation`,
+`status: unsupported`: evidence has been examined and does not establish the
+agent). The specific hypothesis that environmental β-lactams were that agent
+is a different state again — **`NOT TESTED`**
+(`claim.shewanella.oxa_betalactam_hypothesis`, `status: not_tested`: no
+identified study discriminates it). Both entries are in
+[`../evidence/claims.yml`](../evidence/claims.yml).
 
 ## 3. Chromosomal context
 
 In *Shewanella*, the gene is chromosomal, single-copy, and flanked by ordinary
 housekeeping neighbours. In *S. xiamenensis* the *bla*<sub>OXA-48</sub>-like
-gene lies next to a peptidase gene, *sprT*, endonuclease I (*endA*) and an rRNA
-methyltransferase upstream, and a LysR-type regulator and an acetyl-CoA
-carboxylase gene downstream [@zong2012oxa199].
+gene lies next to an unnamed ORF encoding a peptidase, a separate gene *sprT*
+of unknown function, endonuclease I (*endA*) and an rRNA methyltransferase
+upstream, and a LysR-type regulator and an acetyl-CoA carboxylase gene
+downstream [@zong2012oxa199]. Two qualifications the arc depends on: in strain
+WCJ25 the insertion sequence IS*Shes2* is inserted **downstream** of the gene,
+so "ordinary housekeeping neighbours" describes the other strain rather than
+both; and WCJ25 is a **clinical** isolate, recovered from post-surgical
+drainage, not an environmental one.
 
 **Interpretation.** In this native chromosomal context, transmission is
 predominantly tied to the host lineage rather than to an autonomous mobile
@@ -149,8 +168,9 @@ gene, and IS*1999*-based composite transposons can transpose onto a conjugative
 plasmid in experiment [@aubert2006is1999].
 
 **Interpretation.** Mobilization changes **two** things at once: it moves the
-gene, and it changes how much of the gene product is made, because the new
-promoter is the insertion sequence's own. The cargo and the vehicle are both
+gene, and it changes **which promoter** transcribes it, because the new
+promoter is the insertion sequence's own. How much product results was not
+measured for *bla*<sub>OXA-48</sub>; see §9. The cargo and the vehicle are both
 altered by the same event.
 
 ## 5. The transposon: Tn*1999*
@@ -240,7 +260,8 @@ fitness [@delafuente2022withinpatient].
    @yin2015pbp1a], and the ancestral selective reason is unresolved.
 3. **Same enzyme family, different host phenotype.** OXA-54 and OXA-48 share
    92% amino-acid identity: relatives, not the same protein. Clinical
-   carbapenem resistance requires the enzyme plus a permeability context
+   carbapenem resistance is reported where the enzyme is combined with a
+   permeability defect
    [@poirel2012phantom].
 4. **Mobilization changes cargo and vehicle.** IS*1999* supplies the promoter
    [@aubert2006is1999]; the Tn*1999* insertion into *tir* raises transfer
@@ -277,11 +298,12 @@ inferences the evidence does not support. Status vocabulary:
 
 | Tempting reading | Status | Better interpretation |
 | --- | --- | --- |
-| "OXA-48 evolved in *Shewanella* to resist carbapenems." | **False as stated; the underlying question is unresolved** | *Clinical* carbapenem use cannot explain an ancestral environmental history. But natural carbapenems do exist — thienamycin from *Streptomyces cattleya* [@kahan1979thienamycin] and SQ 27,860 from *Serratia* and *Erwinia* species [@parker1982sq27860] — so "there were no carbapenems in the environment" would also be wrong. Whether any β-lactam was the selective agent for these genes is not established (`claim.shewanella.oxa_ancestral_selection`). |
+| "OXA-48 evolved in *Shewanella* to resist carbapenems." | **False as stated; the underlying question is unresolved** | *Clinical* carbapenem use cannot explain an ancestral environmental history. But natural carbapenems do exist — thienamycin from *Streptomyces cattleya* [@kahan1979thienamycin], described
+there as a β-lactam because the carbapenem class name postdates it and SQ 27,860 from *Serratia* and *Erwinia* species [@parker1982sq27860] — so "there were no carbapenems in the environment" would also be wrong. Whether any β-lactam was the selective agent for these genes is not established (`claim.shewanella.oxa_ancestral_selection`). |
 | "Native OXA-like genes are therefore not really resistance genes." | **False** | They do confer β-lactam resistance in their native hosts [@sher2025shewanella; @yin2015pbp1a]. The point is narrower: the *clinical* meaning depends on host context, not that the native gene is inert. |
 | "Mobilization only moved the gene to a new location." | **Misleading** | IS*1999* supplies the outward-directed promoter from which the β-lactamase is read [@aubert2006is1999], so the expression context changed too, not only the address. |
 | "The Tn*1999* insertion into *tir* and the original capture of the gene were one observed historical event." | **Unsupported** | The present configuration is known: Tn*1999* carrying *bla*<sub>OXA-48</sub> sits within *tir*, and plasmids in that configuration transfer at higher frequency [@potron2014derepressed; @poirel2012genetic]. The order and timing are reconstructed, not observed. |
-| "The identical enzyme gives the same phenotype in every host." | **False** | Host physiology decides. High-level carbapenem resistance needs the enzyme plus reduced outer-membrane permeability [@poirel2012phantom; @poirel2004emergence]. |
+| "The identical enzyme gives the same phenotype in every host." | **False** | Host physiology decides. High-level carbapenem resistance is reported where the enzyme is combined with reduced outer-membrane permeability [@poirel2012phantom; @poirel2004emergence]. |
 | "The chromosome → transposon → plasmid → clinic arrows are a measured lineage." | **Illustrative** | The figure orders *contexts*, not a reconstructed descent. No arrow is a dated transition, and the panel shows a subset of the gene neighbourhood. |
 
 ### A note the figure cannot carry
