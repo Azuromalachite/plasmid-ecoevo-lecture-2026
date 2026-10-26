@@ -69,14 +69,22 @@ game as well as an experiment: after finalists are announced, strategy videos
 are released to the whole cohort, so teams can revise their designs against
 their rivals' before synthesis. The final is hosted at BMB 2027 in May 2027.
 
-The competition is useful context here because its win condition is copy
-number, and one of this repository's pages argues at length that copy number
-is a trade-off variable rather than a measure of evolutionary success — see
-[more copies is not always better](misconceptions/more-copy-is-always-better.md).
-That tension is a good reason to read the two together, and a bad reason to
-assume either settles the other: the Arena scores a defined quantity under
-defined conditions, which is not the same question as what makes a plasmid
-lineage persist in nature.
+The Arena deliberately makes plasmid copy number the winning criterion under
+a defined experimental regime. That makes it useful to read alongside
+[more copies is not always better](misconceptions/more-copy-is-always-better.md):
+the competition asks which design maximises a specified quantity in a shared
+flask, whereas the concept page asks when higher copy number improves, or
+harms, the longer-term success of a plasmid lineage. Neither question
+invalidates the other; they operate at different scopes.
+
+That is worth sitting with, because the apparent clash is a good test of
+scope discipline. A reader may reasonably object: *this repository says more
+copies is not always better, and the competition says highest copy number
+wins.* Both are true, and the way to see it is to ask the question neither
+statement carries on its face — **better according to which objective, over
+what timescale, in which environment?** An optimisation target defined for a
+scoring regime is not a general criterion of biological fitness, and noticing
+that difference is most of what this repository is trying to teach.
 
 ## Public/private firewall
 
