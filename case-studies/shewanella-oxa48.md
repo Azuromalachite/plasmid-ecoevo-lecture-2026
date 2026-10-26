@@ -1,8 +1,8 @@
 # From *Shewanella* to the clinic: the OXA-48 story
 
-**What this case teaches:** a resistance gene is not born as a resistance
-gene. It acquires that identity when a mobile element moves it into a new
-genomic context, a new cell and a new environment.
+**What this case teaches:** a molecular capability can acquire a new clinical
+meaning when mobility moves it into a new genetic, cellular and ecological
+context. The chemistry does not have to change for the consequence to.
 
 The spine of the case:
 
@@ -70,8 +70,10 @@ gene lies next to a peptidase gene, *sprT*, endonuclease I (*endA*) and an rRNA
 methyltransferase upstream, and a LysR-type regulator and an acetyl-CoA
 carboxylase gene downstream [@zong2012oxa199].
 
-**Interpretation.** Vertical inheritance only. Its distribution is the
-distribution of its host species.
+**Interpretation.** In this native chromosomal context, transmission is
+predominantly tied to the host lineage rather than to an autonomous mobile
+element, so the gene's distribution largely tracks the distribution of its
+host species.
 
 ## 4. Mobilization: the insertion sequence
 
@@ -113,9 +115,12 @@ A detail worth dwelling on: in pOXA-48a, Tn*1999* is inserted into *tir*, the
 gene encoding a transfer inhibition protein, and this insertion raises the
 plasmid's conjugative transfer frequency [@potron2014derepressed].
 
-**Interpretation.** The same insertion event that loaded the cargo also
-disabled a brake on the vehicle. The plasmid that carries the gene is not a
-neutral container; its transfer properties were changed by the acquisition.
+**Interpretation.** The plasmid acquired the OXA-48 cargo in a configuration
+that also disrupted a brake on conjugative transfer. The plasmid carrying the
+gene is not a neutral container: that insertion raises its transfer frequency
+[@potron2014derepressed]. Note what is and is not claimed here — the
+configuration is observed and its effect on transfer was measured, but the
+history is not reconstructed from a directly observed event.
 
 ## 7. New host, new phenotype
 

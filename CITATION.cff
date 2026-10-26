@@ -4,6 +4,12 @@ title: >-
   and mobile DNA
 message: >-
   If you use or adapt this material, please cite it as below.
+# 'dataset' is kept deliberately. CFF 1.2.0 restricts the top-level `type` to
+# exactly {software, dataset} — 'generic' is valid only for entries in
+# `references`, not here, and would make this file fail schema validation and
+# break GitHub's "Cite this repository" panel. Of the two permitted values,
+# 'dataset' is the closer fit for a mixed educational resource; omitting the
+# key defaults it to 'software', which is worse.
 type: dataset
 authors:
   - family-names: Wongsatit

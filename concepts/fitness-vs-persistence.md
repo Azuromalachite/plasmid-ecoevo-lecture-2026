@@ -106,14 +106,26 @@ the following discipline.
 | Term | What it commits you to | Use it when |
 | --- | --- | --- |
 | **threshold** | A value of a parameter above/below which the outcome differs. | Almost always safe. |
-| **tipping point** | A threshold *plus* self-reinforcing change past it — the system keeps moving on its own. | Only with evidence of positive feedback driving the transition. |
+| **tipping point** | A small or gradual change in conditions produces a disproportionately large, abrupt and often hard-to-reverse change in state. | Only with evidence that the response is abrupt and disproportionate — not merely that the outcome differs across a threshold. |
 | **bifurcation** | A qualitative change in the number or stability of equilibria of a specified dynamical system, as a named parameter crosses a value. | Only when you have the model, the parameter and the equilibria. |
 | **bistability** | Two stable states coexist at the *same* parameter values; which one you are in depends on initial conditions. | Only with evidence that both states are stable under identical conditions. |
 | **hysteresis** | Bistability *plus* path dependence: the forward and reverse transitions happen at different parameter values. | Only with evidence from a reversed sweep. |
 
-**Threshold ≠ tipping point.** A threshold says the outcome changes. A tipping
-point says the change becomes self-sustaining. Observing the first does not
-license claiming the second.
+**Threshold ≠ tipping point.** A threshold says the outcome differs on either
+side of some value. A tipping point says the response is abrupt and
+disproportionate to the change that triggered it, and usually hard to reverse.
+Observing the first does not license claiming the second.
+
+A caution about the mechanism, because it is easy to over-specify: tipping is
+*not* defined by positive feedback. The dynamical-systems literature
+distinguishes at least bifurcation-induced, noise-induced and rate-induced
+tipping, and in the rate-induced case a system can tip because conditions
+change too *fast*, even though the equilibrium it was tracking never loses
+stability [@ashwin2012tipping]. So "there must be a self-reinforcing loop" is
+one usage, not the definition. The practical consequence for this project is
+unchanged: do not call a persistence threshold a tipping point without
+evidence of an abrupt, disproportionate response, and do not assert a
+particular mechanism you have not identified.
 
 **Bifurcation ≠ bistability ≠ hysteresis.** A bifurcation is a statement about
 a model's equilibrium structure; not every bifurcation produces bistability,

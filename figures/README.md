@@ -34,8 +34,12 @@ chromosomal context → Tn*1999* → pOXA-48 → new host and clinical spread.
   or frequency in the drawing comes from data. The plasmid circle has an
   arbitrary radius and no scale relationship to the chromosome line; the gene
   blocks are not to scale in either panel.
-- **What *is* taken from sources:** the gene order flanking the chromosomal
-  *bla*<sub>OXA-48</sub>-like gene in panel 1 follows Zong (2012); the
+- **What *is* taken from sources:** the relative order of the genes *shown*
+  flanking the chromosomal *bla*<sub>OXA-48</sub>-like gene in panel 1 follows
+  Zong (2012); other reported neighbours (a peptidase ORF and *sprT*
+  upstream, the acetyl-CoA carboxylase locus downstream) are omitted for
+  legibility, so the panel is a subset of that neighbourhood rather than a
+  complete map of it. The
   two-IS*1999* composite structure, the P<sub>out</sub> promoter, the IncL
   backbone and the Tn*1999* insertion into *tir* follow the references listed
   in the figure footer and cited in the case study.

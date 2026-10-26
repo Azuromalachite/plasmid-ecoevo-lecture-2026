@@ -210,14 +210,20 @@ claims:
       'hysteresis'.
     layer: interpretation
     status: definitional
-    references: []
+    references:
+      - ashwin2012tipping
     notes: >
       A convention of this repository, not a claim about plasmids. Each of the
       stronger terms carries a commitment a persistence study rarely tests:
-      a tipping point needs positive feedback past the threshold; a
-      bifurcation needs a specified model, parameter and equilibrium
-      structure; bistability needs two stable states at identical parameters;
-      hysteresis additionally needs a reversed sweep. Upgrade the wording when
-      the evidence exists, and say what it was.
+      a tipping point needs an abrupt, disproportionate and usually
+      hard-to-reverse response, not merely a threshold; a bifurcation needs a
+      specified model, parameter and equilibrium structure; bistability needs
+      two stable states at identical parameters; hysteresis additionally needs
+      a reversed sweep. Deliberately NOT part of the definition: positive
+      feedback. Tipping is classified by mechanism into bifurcation-induced,
+      noise-induced and rate-induced cases, and rate-induced tipping occurs
+      without the tracked equilibrium losing stability, so requiring a
+      self-reinforcing loop would be one usage presented as the definition.
+      Upgrade the wording when the evidence exists, and say what it was.
     pages:
       - concepts/fitness-vs-persistence.md

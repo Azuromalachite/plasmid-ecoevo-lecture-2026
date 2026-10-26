@@ -191,7 +191,8 @@ def build():
     o.append(f'<line x1="40" y1="528" x2="1080" y2="528" stroke="#e2e2e2" '
              f'stroke-width="1"/>')
     o.append(text(40, 550, "Illustrative diagram — not to scale, no calibrated "
-                           "quantities. Gene order in panel 1 after Zong (2012).",
+                           "quantities. Relative order of the genes shown in "
+                           "panel 1 follows Zong (2012); other neighbours omitted.",
                  11, MUTED))
     o.append(text(40, 568, "Sources: potron2011oxa181 · zong2012oxa199 · "
                            "yin2014recycling · yin2015pbp1a · poirel2004progenitor "
