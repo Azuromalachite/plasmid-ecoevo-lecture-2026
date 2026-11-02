@@ -125,6 +125,15 @@ Both checkers need PyYAML, so from a bare machine:
 `check_claim_ids.py` also verifies that every `pages:` path exists and that
 any `status:` or `layer:` written in a content page matches the registry.
 
+**Read the exit status directly.** If you wrap a run in a loop that formats its
+own output, check that the status you print is the checker's and not the
+formatter's. A changeset in this repository was committed with "all checkers
+exit 0" in its message while one mutation test exited 1, because the reporting
+line evaluated `$?` after a command substitution had already reset it. A
+verification harness that cannot report a failure is the same defect as a
+checker that cannot fail, one level up, and it is harder to see because its
+output looks like success.
+
 Each checker states the file types it reads and refuses to pass when a file
 type appears that nobody has ruled on. If you add a format — `.tex`, `.qmd`,
 `.json` — `check_references.py` will fail until you decide whether it can

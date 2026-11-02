@@ -24,6 +24,7 @@ Usage (from the repository root):
 Exit status is 1 if any mutation goes unnoticed.
 """
 
+import re
 import shutil
 import subprocess
 import sys
@@ -32,6 +33,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CHECKER = "evidence/check_participant_firewall.py"
+
+# The policy's countable ratio line, matched by SHAPE and never by its digits.
+# See mutate_ratio_unparseable for why that distinction cost a release.
+RATIO_RE = re.compile(r"\*\*\d+ checked, \d+ checkable, \d+ attested\.\*\*")
 
 
 def commit(root, message, *paths):
@@ -137,10 +142,29 @@ def mutate_ratio_drift(root):
 
 
 def mutate_ratio_unparseable(root):
-    """The countable form of the ratio is reworded away."""
-    replace_once(root / "docs" / "participant-material-policy.md",
-                 "**6 checked, 2 checkable, 8 attested.**",
-                 "six checked, two checkable, eight attested.")
+    """The countable form of the ratio is reworded away.
+
+    The target is found by its SHAPE, not by its digits. The first version of
+    this case wrote the numbers out -- "**6 checked, 2 checkable, 8
+    attested.**" -- and the first change to the ratio, OF-10's clause split
+    moving it to nine, made `replace_once` raise. The raise aborts the whole
+    run, so a stale literal here does not fail one case: it takes the other ten
+    with it, including every history check.
+
+    A mutation case that names the value it mutates has exactly the defect the
+    checker exists to police -- an unversioned copy of a number that lives in
+    another file -- and it had it inside the test written to catch that defect.
+    Matching the shape means the next ratio change cannot break this case,
+    which is the same fix the policy itself received.
+    """
+    path = root / "docs" / "participant-material-policy.md"
+    text = path.read_text(encoding="utf-8")
+    match = RATIO_RE.search(text)
+    if not match:
+        raise RuntimeError("no countable ratio line in the policy to reword")
+    path.write_text(
+        text.replace(match.group(0), "the marks are counted in the table above.", 1),
+        encoding="utf-8")
 
 
 def mutate_no_git(root):

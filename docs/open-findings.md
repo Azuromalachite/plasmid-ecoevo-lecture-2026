@@ -614,3 +614,64 @@ every directory falls on one side of each. A new top-level directory is
 material to one and invisible to the other, silently. Not filed as a finding
 because no such directory exists and inventing a third mechanism to watch two
 sets would cost more than it protects — but it is the shape of the next one.
+
+---
+
+## Closed: the ratio mutation carried a copy of the number it was testing
+
+Found on `main` after merging #5 and #6, by running the suite and reading the
+exit codes correctly for the first time in that cycle.
+
+### What broke
+
+`mutate_ratio_unparseable` in `evidence/test_check_participant_firewall.py`
+named its target in full: `**6 checked, 2 checkable, 8 attested.**`. OF-10's
+clause split moved the ratio to nine, and `replace_once` raised. That raise is
+not contained to one case — it aborts the run, so **ten other cases stopped
+executing**, including every history check. The firewall mutation test on
+`main` was not failing one assertion; it was not testing anything.
+
+This is the seventh instance of the defect recorded under OF-5, F1, OF-1, F5,
+G1 and OF-11: a number living in prose, copied from somewhere else, drifting
+when the original moved. It is the first instance **inside the apparatus built
+to catch it**. The test that exists because the policy's ratio had already
+drifted once kept its own copy of that ratio.
+
+**Fixed** by matching the shape (`RATIO_RE`) rather than the digits, so a
+future ratio change cannot break the case. That is the same correction the
+policy received under G1, applied one level up.
+
+### The verification claim in #5 was false
+
+`[M]` The commit message and pull-request body for #5 both state that all four
+checkers and both mutation tests exit 0. Measured at `5d3c1d1`, the branch tip
+that was merged: `test_check_participant_firewall.py` **exits 1**. The claim
+was untrue when it was written.
+
+The cause was not the checker. The verification loop printed its result with
+
+```bash
+echo "$(printf '%-50s' "$s") exit $?"
+```
+
+where `$?` is evaluated **after** the command substitution, so it reports the
+status of `printf` — always 0 — and never the checker's. Every line of that
+run read `exit 0` because no other value could be produced. The later runs in
+the same cycle used `printf "... exit %s\n" "$s" "$?"`, where the status is
+expanded as an argument before `printf` runs, and those were correct; that is
+why the merge caught it.
+
+Nothing else in #5 or #6 was wrong: re-run correctly on `main`, the other six
+scripts exit 0 and the figure digest is unchanged.
+
+**Recorded rather than quietly corrected**, for the same reason the F5 "four
+keys" error was annotated in place rather than edited away. A repository whose
+subject is checks that cannot fail should keep the instance where its own
+verification could not fail, especially when the instance is its author's.
+
+**Left behind:** the suite is still run by hand, so nothing prevents the next
+harness from having the same shape. `CONTRIBUTING.md` now warns about it, which
+is an instruction, not a check — in this file's own vocabulary, an attestation.
+A committed runner that reports each status itself would make it CHECKED. Not
+filed as an open finding because the remedy is a build step this repository has
+deliberately not taken, but it is the shape of the next one.
