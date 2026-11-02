@@ -18,6 +18,31 @@ Usage (from the repository root):
 
 from pathlib import Path
 
+# The footer's source list, declared rather than typed into the footer string.
+# figures/README.md states that footer keys are BibTeX keys from
+# evidence/references.bib; that was an assertion nothing checked, so a typo
+# would have shipped a dead reference inside the SVG. Declaring them here lets
+# evidence/check_references.py read the list and the footer be built from it,
+# which is what stops the printed footer and the checked list from disagreeing.
+# Order is the order they appear in the figure. The split below is a line
+# break, not a grouping.
+SOURCE_KEYS = [
+    "potron2011oxa181",
+    "zong2012oxa199",
+    "yin2014recycling",
+    "yin2015pbp1a",
+    "poirel2004progenitor",
+    "aubert2006is1999",
+    "poirel2004emergence",
+    "poirel2012genetic",
+    "poirel2012phantom",
+    "carattoli2015incl",
+    "potron2014derepressed",
+    "leonsampedro2021pervasive",
+    "delafuente2022withinpatient",
+]
+SOURCE_KEYS_FIRST_LINE = 7
+
 W, H = 1120, 620
 
 # Colours chosen to stay legible on white and in greyscale print; the
@@ -201,13 +226,11 @@ def build():
                            "lineage. Panel 1 shows a subset of the neighbourhood, "
                            "order after Zong (2012).",
                  11, MUTED))
-    o.append(text(40, 568, "Sources: potron2011oxa181 · zong2012oxa199 · "
-                           "yin2014recycling · yin2015pbp1a · poirel2004progenitor "
-                           "· aubert2006is1999 · poirel2004emergence",
+    o.append(text(40, 568, "Sources: "
+                 + " · ".join(SOURCE_KEYS[:SOURCE_KEYS_FIRST_LINE]),
                  11, MUTED))
-    o.append(text(40, 584, "poirel2012genetic · poirel2012phantom · "
-                           "carattoli2015incl · potron2014derepressed · "
-                           "leonsampedro2021pervasive · delafuente2022withinpatient",
+    o.append(text(40, 584,
+                 " · ".join(SOURCE_KEYS[SOURCE_KEYS_FIRST_LINE:]),
                  11, MUTED))
     o.append(text(40, 604, "The ancestral selective agent for chromosomal "
                            "blaOXA-48-like genes is not established "

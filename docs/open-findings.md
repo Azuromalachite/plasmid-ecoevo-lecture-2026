@@ -15,19 +15,6 @@ finding.
 
 ## Open
 
-### OF-2 — no committed bibliography-key checker
-
-**Severity:** minor
-**Location:** repository-wide
-
-Citation keys are cross-checked only by an uncommitted scratch tool.
-
-**Correction:** commit one. It **must enumerate the file types it reads and
-fail visibly on types it does not**: during the v0.2 cycle a scratch checker
-silently reported three real citations as orphans because it did not open
-`.ipynb`, and a committed checker with the same blind spot would have
-reported clean on a file it never read.
-
 ### OF-3 — the participant policy does not distinguish checks from attestations
 
 **Severity:** minor
@@ -192,9 +179,23 @@ committed filters on `.md`, `.yml`, `.py` and says nothing about what it
 skipped. `models/copy-number-burden/battle-royale.ipynb` is 3,010 lines inside
 a directory the sync check's own `content_dirs` set includes, and is invisible
 to it. The notebook carries no claim IDs or status strings today, so nothing is
-currently missed — but four bibliography keys are cited *only* there
-(`jahn2016copynumber`, `jambor2025checklist`, `midway2020visualization`,
-`wong2010datafigures`). OF-2 recorded three; the blind spot has grown.
+currently missed — but three bibliography keys are cited *only* there
+(`jambor2025checklist`, `midway2020visualization`, `wong2010datafigures`).
+
+**CORRECTED while closing OF-2.** This entry, and the review finding behind it,
+said **four** keys and added `jahn2016copynumber`, concluding that "OF-2
+recorded three; the blind spot has grown". That was wrong twice over.
+`jahn2016copynumber` is also cited in `models/copy-number-burden/README.md`,
+inside the grouped citation `[@shao2021singlecell; @jahn2016copynumber]`, and
+the count was taken with a `grep` that matches `[@` and therefore reads a
+group as a single citation, silently dropping every key after the first. OF-2's
+original three was right, and the blind spot had not grown.
+
+The instrument that produced the wrong number was the one being criticised for
+having a blind spot, used without checking whether it had one. The committed
+checker does read grouped citations, and `test_check_references.py` carries a
+case for the second position of a group specifically because that is where
+this was lost.
 
 **Done:** every run now opens with the number of files read and the types it
 read them as, followed by a tally of what it skipped, by extension — currently
@@ -320,3 +321,75 @@ a resolution that sits at the bottom of its own ε ladder, because that number
 would be the instrument's floor and not the system's. This fired once during
 development, at *P*₀/*n*\* = 1e-12, and the ladder was deepened until the row
 had headroom. The guard is the durable part; the current depth is not.
+
+---
+
+## Closed: OF-2 — no committed bibliography-key checker
+
+**Was:** citation keys were cross-checked only by an uncommitted scratch tool.
+The correction required that a committed checker **enumerate the file types it
+reads and fail visibly on types it does not** — during the v0.2 cycle a scratch
+checker silently reported three real citations as orphans because it did not
+open `.ipynb`, and a committed checker with the same blind spot would have
+reported clean on a file it never read.
+
+**Done:** [`../evidence/check_references.py`](../evidence/check_references.py),
+with a mutation test beside it,
+[`../evidence/test_check_references.py`](../evidence/test_check_references.py).
+
+### The domain is stated, and an unruled type is a failure
+
+`READ_SUFFIXES` is what the checker opens — `.md`, `.yml`, `.py`, `.ipynb` —
+and every run prints it with a count. `UNCITED_SUFFIXES` is the decision that
+the bibliography, the citation file, licences and figure output carry no
+citations, written down rather than implied by omission. **A suffix in neither
+set fails the run.** That is the "fail visibly" half: a file type nobody has
+ruled on has appeared, and the response is to rule on it, not to walk past it.
+Adding a `.tex` draft to the tree turns the checker red until someone decides
+whether it can carry citations.
+
+### Three citation syntaxes, each reporting its own count
+
+A checker that knew only the obvious one would have reported the other two as
+orphans:
+
+| Syntax | Where | Distinct keys |
+| --- | --- | --- |
+| `[@key]` and `[@a; @b]`, including groups wrapping across lines | prose, the notebook | 51 |
+| bare keys in `references:` lists | `claims.yml` | 33 |
+| `SOURCE_KEYS` | figure scripts | 13 |
+
+Each extractor prints its own count, so one that silently stops matching shows
+up as a zero rather than as an absence.
+
+The third of those needed a change to the figure. `figures/README.md` states
+that footer keys are BibTeX keys from `references.bib`, and nothing checked it:
+a typo would have shipped a dead reference inside an SVG. The footer is now
+built from a module-level `SOURCE_KEYS` list that the checker reads by parsing
+the script, so the printed footer and the checked list cannot disagree. The
+refactor is output-neutral — the SVG rebuilds to the same digest it had before.
+
+### What it does not do
+
+It does not resolve DOIs and does not check metadata against publishers. Both
+need the network, and a check that is sometimes skipped because a machine is
+offline is a check whose domain moves without anyone deciding. It verifies that
+a `doi` field is present and shaped like a DOI. "Every reference has a resolving
+DOI whose metadata has been checked", as `README.md` and `CITATION.cff` put it,
+stays a human claim about work done by hand, and the script says so in its own
+output rather than leaving the reader to assume.
+
+### The checker is known to go red, and for what
+
+It reported clean the first time it ran, which is also what a checker with a
+blind spot does. So twelve mutations are applied to a temporary copy, one at a
+time, and each must be caught: a clean control, OF-2's own defect reproduced by
+narrowing the domain, misspelt keys in prose, in the second position of a
+group, in `claims.yml`, in a figure footer and in the notebook, an orphan entry,
+a duplicate entry, a missing `doi`, a malformed `doi`, and an unruled file type.
+The mutation helpers assemble citations at run time rather than containing them,
+so the test does not become part of the corpus — excluding it would have been
+the other option, and excluding a file is how a check stops seeing things.
+
+**Residue.** Twelve cases is a measured domain of sensitivity, not a proof that
+no blind spot remains. It says these defects are not among them.
