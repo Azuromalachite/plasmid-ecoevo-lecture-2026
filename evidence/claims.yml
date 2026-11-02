@@ -386,12 +386,33 @@ claims:
       source_checked: true
       checked_against: own_derivation
       note: >
-        Derived in this project, not quoted. Cell balance cancels conjugation
-        and segregation exactly (symbolic residual 0); the plasmid-free
-        equilibrium is isolated and its Jacobian upper triangular there; the
-        invasion eigenvalue is gamma*n_star - c*psi - tau; its sign predicted
-        invasion in 59 of 59 numerical samples outside a 5% band around the
-        threshold.
+        Derived in this project, not quoted, and checked by a committed script:
+        models/invasion-threshold/check_invasion_threshold.py. Symbolically,
+        the cell balance cancels conjugation and segregation exactly (residual
+        0), the plasmid row of the Jacobian at the plasmid-free equilibrium is
+        [0, 0] off the diagonal, so the invasion eigenvalue is
+        gamma*n_star - c*psi - tau exactly rather than to leading order.
+        Numerically, cases are CONSTRUCTED at signed distances eps from the
+        boundary (gamma = gamma_crit*(1+eps), so lambda_pred = eps*(c*D+tau))
+        and the full nonlinear system is integrated in ln P.
+        SENSITIVITY DOMAIN, which replaces the superseded pass count: the
+        predicted rate is recovered to better than 6e-6 relative error for
+        |eps| <= 1, and the sign of the expression is recovered down to
+        |eps| ~ 10 * P0/n_star -- measured at 1e-5, 1e-7, 1e-9, 1e-11 and
+        1e-13 for inocula of 1e-4, 1e-6, 1e-8, 1e-10 and 1e-12 of n_star. The
+        lower edge therefore tracks the inoculum across eight orders of
+        magnitude and is set by the finite perturbation, not by the solver:
+        the eigenvalue describes a vanishing plasmid-bearing class, and a
+        finite one displaces the resident state by order P0/n_star. Above
+        |eps| ~ 10 the linearisation stops describing the system, as it
+        should: the realised rate departs by 93% at eps = 10.
+        CORRECTED (OF-1): this note previously reported that the sign
+        predicted invasion in 59 of 59 sampled parameter sets outside a 5%
+        band. Parameter sets drawn independently land far from the boundary
+        almost surely -- the script measures the old design and finds a median
+        |eps| of 1.0 with 14% of draws beyond |eps| = 10 -- so the test could
+        hardly have failed, and the count described the sampler rather than
+        the threshold.
     notes: >
       'supported' here means supported WITHIN the stated model: the derivation
       and the numerical checks agree. layer 'model' is what stops this being

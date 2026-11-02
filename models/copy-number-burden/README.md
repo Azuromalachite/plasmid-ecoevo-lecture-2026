@@ -149,7 +149,15 @@ sensitivity is not legible can pass for the wrong reason.
 ## Running it
 
 Open [`battle-royale.ipynb`](battle-royale.ipynb) in Jupyter or Colab and run
-top to bottom. It needs NumPy, SciPy, pandas and Matplotlib.
+top to bottom. It needs **NumPy ≥ 2.0**, SciPy, pandas and Matplotlib.
+
+The NumPy floor is not cosmetic: two cells integrate with `np.trapezoid`, which
+was added in NumPy 2.0 and is spelled `np.trapz` in 1.x. On a 1.x kernel —
+which a hosted notebook may still be running — the failure used to surface as
+an `AttributeError` midway through the shared-flask section, thirty cells
+before the assertion that names the requirement. That assertion now lives in
+the configuration cell, so the environment is checked before anything depends
+on it.
 
 Outputs are stripped in version control and `SAVE_FIGURES` defaults to
 `False`, so running it does not write files into the repository. Notebook

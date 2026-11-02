@@ -118,10 +118,23 @@ with the cost, so the same plasmid flips outcome with host density.
 
 The plasmid-free equilibrium of the resource-explicit chemostat model is
 isolated, its Jacobian there is upper triangular, and the eigenvalue governing
-a rare plasmid-bearing class is γ·n\* − c·ψ − τ. Derived symbolically and
-checked numerically: the cell balance cancels conjugation and segregation
-exactly, and the sign of that expression predicted invasion in 59 of 59
-simulated parameter sets outside a 5% band around the threshold.
+a rare plasmid-bearing class is γ·n\* − c·ψ − τ. Both halves are checked by
+[`../models/invasion-threshold/`](../models/invasion-threshold/): symbolically,
+the cell balance cancels conjugation and segregation exactly and the
+off-diagonal entries of the plasmid row are zero, so the eigenvalue is that
+expression *exactly* and not to leading order; numerically, test cases are
+built at known signed distances from the boundary rather than sampled near it
+by chance.
+
+What that reports is a **domain** rather than a pass count. The predicted
+growth rate is recovered to better than one part in 10⁵ for distances up to
+the threshold's own size, and the *sign* — which is what the condition
+actually asserts — is recovered down to about ten times the relative size of
+the plasmid-bearing inoculum, across eight orders of magnitude of inoculum.
+That lower limit is a property of the question, not of the arithmetic: an
+eigenvalue describes a vanishing class, and any class you can actually
+simulate is not vanishing. Far above the threshold the linearisation stops
+describing the system, as it should.
 
 It assumes mass-action transfer, which is itself a modelling choice. Transfer
 is density-dependent only at low cell concentrations; above them it becomes

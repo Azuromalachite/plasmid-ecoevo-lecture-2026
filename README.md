@@ -61,16 +61,16 @@ to
 This project grew up alongside the [Thai SynBio Challenge 2026](https://thaisynbiogc.web.app/),
 subtitled "The Arena", organised in collaboration with the Thailand Synthetic
 Biology Consortium, SIAT and Naresuan University. Its design task is unusually
-well matched to this material: teams engineer a 5 kb plasmid carrying a unique
-DNA barcode, all the finalists' plasmids are then grown together in one shared
-*E. coli* BL21(DE3) population, and the plasmid reaching the highest copy
-number — counted by barcode sequencing — wins. A distinctive rule makes it a
-game as well as an experiment: after finalists are announced, strategy videos
-are released to the whole cohort, so teams can revise their designs against
-their rivals' before synthesis. The final is hosted at BMB 2027 in May 2027.
+well matched to this material: teams design a 5 kb plasmid carrying a unique
+DNA barcode, the finalists' constructs are then grown together in one shared
+*E. coli* BL21(DE3) population, and the Arena is scored by sequencing those
+barcodes at the endpoint. A distinctive rule makes it a game as well as an
+experiment: after finalists are announced, strategy videos are released to the
+whole cohort, so teams can revise their designs against their rivals' before
+synthesis. The final is hosted at BMB 2027 in May 2027.
 
-The Arena deliberately makes plasmid copy number the winning criterion under
-a defined experimental regime. That makes it useful to read alongside
+The Arena deliberately makes an endpoint barcode count the winning criterion
+under a defined experimental regime. That makes it useful to read alongside
 [more copies is not always better](misconceptions/more-copy-is-always-better.md):
 the competition asks which design maximises a specified quantity in a shared
 flask, whereas the concept page asks when higher copy number improves, or
@@ -85,6 +85,30 @@ statement carries on its face — **better according to which objective, over
 what timescale, in which environment?** An optimisation target defined for a
 scoring regime is not a general criterion of biological fitness, and noticing
 that difference is most of what this repository is trying to teach.
+
+There is a second collapse to notice, and it is about **measurement** rather
+than objective. The organisers describe the winner as "the plasmid with the
+highest copy number — counted by DNA barcode sequencing". That names two
+quantities and treats them as one. Copies per carrier cell, total plasmid
+molecules in the flask, and barcode read fraction are three different things:
+reads at the endpoint reflect carrier abundance, retention, copies per carrier
+*and* library normalisation, and the public rules do not specify the last of
+those. This repository therefore describes the Arena as scored on a barcode
+read count and does not call that readout a copy-number measurement — the same
+refusal the model makes explicitly in
+[`models/copy-number-burden/`](models/copy-number-burden/), which declines to
+promote either candidate proxy to the scoring observable. Keeping cells,
+plasmids and reads apart is the same discipline as
+[transfer is not spread](misconceptions/transfer-is-not-spread.md), applied to
+an instrument instead of a process.
+
+**How this can be misread.**
+
+| Tempting reading | Status | Better model |
+| --- | --- | --- |
+| The Arena measures plasmid copy number. | **Misleading** | It measures barcode reads at the endpoint. Reads reflect carrier abundance × retention × copies per carrier × library normalisation. Copy number is one factor among four, and the normalisation is not specified in the public rules. |
+| A higher endpoint barcode share means a higher copy number per cell. | **False** | A lineage can win on carrier abundance or retention at a lower copy number, which is the trade-off [more copies is not always better](misconceptions/more-copy-is-always-better.md) describes and the model computes. |
+| The constructs competing in the Arena are the 5 kb designs. | **Unsupported** | The 5 kb limit is stated for the design submission. The public rules do not establish that it describes the constructs that reach the Arena, so this repository does not assert it either way. |
 
 ## Public/private firewall
 
@@ -119,6 +143,7 @@ presentation is never evidence of absence are all set out in
 | [`docs/pedagogy-conventions.md`](docs/pedagogy-conventions.md) | How pages teach inference control and model updating |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Rigour checklist for any new or edited page |
 | [`models/copy-number-burden/`](models/copy-number-burden/) | Executable copy-number/burden model; the Battle Royale scenario |
+| [`models/invasion-threshold/`](models/invasion-threshold/) | The invasion condition γ·n\* > c·ψ + τ, derived symbolically and tested against cases built at known distances from the boundary |
 | [`docs/participant-material-policy.md`](docs/participant-material-policy.md) | What participant-derived material may never enter Git, and on what terms anything could |
 
 Citations in pages use `[@key]`, where `key` is an entry in
