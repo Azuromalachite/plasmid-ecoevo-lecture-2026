@@ -11,7 +11,7 @@ Each case names the defect it is capable of catching. Two are worth calling out:
   reads `git log --all`, not the working tree. A test that only wrote a file
   into the tree would pass against a checker that never looked at history, and
   would therefore be testing nothing.
-- **the last case removes git.** A check that silently covers three of its five
+- **the last case removes git.** A check that silently covers only some of its
   parts because a tool is missing is worse than one that fails, so the checker
   refuses to report on a subset. This asserts that it refuses.
 
@@ -123,6 +123,26 @@ def mutate_stranger_email(root):
         fh.write("\nContact: someone" + "@example.invalid\n")
 
 
+def mutate_ratio_drift(root):
+    """The policy's stated ratio stops matching its badges.
+
+    This is the defect that occurred: the sentence said four checked when six
+    clauses were marked, because it was carried from a draft and never
+    re-derived. Marking one more clause without touching the sentence
+    reproduces it exactly.
+    """
+    replace_once(root / "docs" / "participant-material-policy.md",
+                 "**`ATTESTED`** — unpublished submissions",
+                 "**`CHECKED`** — unpublished submissions")
+
+
+def mutate_ratio_unparseable(root):
+    """The countable form of the ratio is reworded away."""
+    replace_once(root / "docs" / "participant-material-policy.md",
+                 "**6 checked, 2 checkable, 8 attested.**",
+                 "six checked, two checkable, eight attested.")
+
+
 def mutate_no_git(root):
     """git history unavailable: the checker must refuse, not cover a subset.
 
@@ -151,6 +171,10 @@ CASES = [
      "a personal video link in a page"),
     (mutate_stranger_email, "email address not in ALLOWED_EMAILS",
      "contact information for someone other than the author"),
+    (mutate_ratio_drift, "does not match the badges counted",
+     "the policy's stated ratio drifts from its own marks"),
+    (mutate_ratio_unparseable, "no longer states its ratio in a countable form",
+     "the ratio reworded out of a countable form"),
     (mutate_no_git, "cannot read git history",
      "git history unavailable: refuses rather than covering a subset"),
 ]

@@ -7,14 +7,16 @@ means. Without it, "checked" would mean "the author ran a grep once", which is
 an attestation wearing a check's clothes -- and is the defect OF-2 was opened
 for, in a different file.
 
-WHAT IT CHECKS. Five things, all of them *shapes*, none of them names:
+WHAT IT CHECKS. Six things, all of them *shapes* or counts, none of them names:
 
   1. no caption or subtitle file was ever added, on any branch in this clone;
   2. no guarded directory was ever added, on any branch in this clone;
   3. the `.gitignore` net for both is still present, so it cannot be removed
      quietly while this script keeps reporting clean;
   4. no personal video or channel link is in the working tree;
-  5. no email address is in the working tree except those explicitly allowed.
+  5. no email address is in the working tree except those explicitly allowed;
+  6. the ratio of marks the policy states matches the marks it actually
+     carries, because that sentence had already drifted once.
 
 WHAT IT CANNOT CHECK, and the policy says so in its own voice:
 
@@ -130,6 +132,38 @@ def main():
         if not {f"{directory}/", f"**/{directory}/"} & active:
             problems.append(f".gitignore no longer guards {directory}/")
 
+    # The policy states a ratio of marks. A count in prose is an unversioned
+    # copy of a computation, and this one had already drifted once -- it said
+    # four checked when there were six, carried from a draft and never
+    # re-derived. Counting it here is what stops the sentence and the file from
+    # being two different things.
+    #
+    # The rule the policy commits to: outside the definition table, a badge
+    # marks a clause and never explains one. So clause marks are badge
+    # occurrences on lines that are not table rows.
+    policy = (root / "docs" / "participant-material-policy.md")
+    policy_lines = policy.read_text(encoding="utf-8").splitlines()
+    badge = re.compile(r"\*\*`(CHECKED|CHECKABLE|ATTESTED)`\*\*")
+    counted = {"CHECKED": 0, "CHECKABLE": 0, "ATTESTED": 0}
+    for line in policy_lines:
+        if line.lstrip().startswith("|"):
+            continue
+        for found in badge.findall(line):
+            counted[found] += 1
+
+    stated = re.search(r"\*\*(\d+) checked, (\d+) checkable, (\d+) attested\.\*\*",
+                       "\n".join(policy_lines))
+    if not stated:
+        problems.append("the policy no longer states its ratio in a countable "
+                        "form ('**N checked, N checkable, N attested.**')")
+    else:
+        want = dict(zip(("CHECKED", "CHECKABLE", "ATTESTED"),
+                        (int(n) for n in stated.groups())))
+        if want != counted:
+            problems.append(
+                f"the policy's stated ratio {want} does not match the badges "
+                f"counted outside its definition table {counted}")
+
     links, emails = [], []
     for path in tree_files(root):
         text = path.read_text(encoding="utf-8")
@@ -156,6 +190,10 @@ def main():
           f"({', '.join(sorted(SCANNED_SUFFIXES))})")
     print(f"  video/channel links   : {len(links)}")
     print(f"  unexpected emails     : {len(emails)}")
+    print(f"policy clause marks   : {counted['CHECKED']} checked, "
+          f"{counted['CHECKABLE']} checkable, {counted['ATTESTED']} attested "
+          f"({'matches' if stated and want == counted else 'DISAGREES WITH'} "
+          f"the ratio the policy states)")
 
     print("\nNOT checked here, and marked CHECKABLE or ATTESTED in the policy:")
     print("  names and affiliations -- the grep needs the participant list as")

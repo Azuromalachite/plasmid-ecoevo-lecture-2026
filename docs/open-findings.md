@@ -29,6 +29,56 @@ valid registry status, and removing the badge row while keeping the status
 would make the two inconsistent. Revisit if a genuinely contested claim
 appears, or if the status itself is retired.
 
+### OF-10 — a `CHECKED` mark promises more than its script delivers
+
+**Severity:** minor
+**Location:** `docs/participant-material-policy.md`, the YouTube/contact clause
+
+The clause reads "personal YouTube or channel metadata, **or contact
+information**" and is marked `CHECKED`. `check_participant_firewall.py` covers
+`youtube.com`, `youtu.be`, `vimeo.com` and email addresses. Measured on a copy
+outside the repository: a page carrying an Instagram handle, a phone number and
+a Google Drive link produces "no problems", exit 0. "Contact information" is
+broader than "an email address", and the mark does not say so — which is the
+one thing the marking vocabulary exists to prevent, happening inside the
+vocabulary.
+
+**Correction:** split the clause the way the internal-notes clause one bullet
+below it is already split — `CHECKED` for links and addresses, `ATTESTED` for
+the rest — or widen the script and say what it now covers. Either way the ratio
+moves, and the stated line has to move with it; the checker now enforces that.
+
+### OF-11 — the OF-9 split was applied to one checker and not its sibling
+
+**Severity:** minor
+**Location:** `evidence/check_references.py`
+
+OF-9 established that commentary in `reviews/` should not count as content, and
+`check_claim_ids.py` reports "on content pages" and "elsewhere" separately.
+`check_references.py` has no such split, so a key cited only from a review
+counts as cited, and a review can keep a dead reference from being reported as
+an orphan. Latent: the round-1 review cites two keys, both also cited from
+content, so no key is review-only today. The exposure grows with each round.
+
+**Correction:** reuse `CONTENT_DIRS` to report the same split, or state in the
+docstring that commentary counts as a citation and why. Silently differing from
+the sibling checker is the part that is not defensible.
+
+### OF-12 — one entry in `UNCITED_SUFFIXES` rules an open-ended class
+
+**Severity:** trivial
+**Location:** `evidence/check_references.py`
+
+`UNCITED_SUFFIXES` is described as the decision, written down. Four entries
+name a format; the fifth, `""`, covers every extensionless file that will ever
+exist here. Measured: a file named `NOTES` citing a key that does not exist
+produces "no problems". The checker fails loudly on an unruled `.tex` and
+silently accepts an unruled `NOTES`.
+
+**Correction:** replace `""` with the three filenames that exist — `LICENSE`,
+`.gitignore`, `.gitattributes` — so a new extensionless file is unruled and
+fails like any other unruled type.
+
 ---
 
 ## Closed in this changeset
@@ -367,7 +417,7 @@ output rather than leaving the reader to assume.
 ### The checker is known to go red, and for what
 
 It reported clean the first time it ran, which is also what a checker with a
-blind spot does. So twelve mutations are applied to a temporary copy, one at a
+blind spot does. So 15 mutations are applied to a temporary copy, one at a
 time, and each must be caught: a clean control, OF-2's own defect reproduced by
 narrowing the domain, misspelt keys in prose, in the second position of a
 group, in `claims.yml`, in a figure footer and in the notebook, an orphan entry,
@@ -376,7 +426,7 @@ The mutation helpers assemble citations at run time rather than containing them,
 so the test does not become part of the corpus — excluding it would have been
 the other option, and excluding a file is how a check stops seeing things.
 
-**Residue.** Twelve cases is a measured domain of sensitivity, not a proof that
+**Residue.** 15 cases is a measured domain of sensitivity, not a proof that
 no blind spot remains. It says these defects are not among them.
 
 ---
@@ -425,11 +475,11 @@ still present *and uncommented*, no personal video or channel link in the tree,
 no email address outside an explicit allowlist. It reports what it does not
 cover in its own output.
 
-Nine mutations in
+11 mutations in
 [`../evidence/test_check_participant_firewall.py`](../evidence/test_check_participant_firewall.py)
 confirm it goes red for each, including a caption file committed on a branch
 that is never pushed — the case that distinguishes a history check from a tree
-scan — and confirm it refuses to run rather than cover three of its five parts
+scan — and confirm it refuses to run rather than cover part of its 5 checks
 when git is unavailable.
 
 Two defects were found by writing that test rather than by reading the code.
@@ -453,3 +503,57 @@ version of a promise most of which rests on one person's word.
 dropped into the tree. They say nothing about a page written by someone who
 watched the presentations and did not notice they were remembering one. Nothing
 in this changeset moves that, and nothing could.
+
+---
+
+## Closed in the round-2 review changeset
+
+Round-2 adversarial review of `b4d08f5`:
+[`../reviews/review-repository-r2.md`](../reviews/review-repository-r2.md). It
+found five defects, all of them in the checking apparatus added to close round
+one, and **none in work the review's author had not written** — the review
+states that conflict of interest in its own opening and leans on constructed
+counterexamples rather than reading, because those do not care who wrote the
+code. G1 and G2 are closed here; G3 to G5 are open above as OF-10 to OF-12.
+
+| ID | Was | Fix |
+| --- | --- | --- |
+| G2 | `check_references.py` extracted citation keys with the same regex it validated them against, so a key that did not already look like a key was not reported — it was not seen. A bracketed `@Sanmillan2017costs`, the real key with a capital S, passed silently, as did underscore and digits-first keys | Extraction now takes any token after an `@` inside a citation group and validates it, reporting a malformed key rather than discarding it. Three mutation cases added, one per shape |
+| G1 | The policy and this file both said "Four clauses are `CHECKED`, two `CHECKABLE`". Counted: six, two, eight | The sentence now states 6 / 2 / 8 **and is checked**: `check_participant_firewall.py` counts the badges outside the definition table and fails if they disagree. Two mutation cases added |
+
+### Why G2 survived a mutation test
+
+`test_check_references.py` had twelve cases and every one of them planted a key
+that still matched `KEY_SHAPE`. The test inherited the assumption it existed to
+challenge, which is the sharpest available demonstration that mutation testing
+finds what its author thought to plant and nothing else. The fix is three more
+cases; the lesson is that the cases have to attack the *shape* of the
+extractor, not only its subject matter.
+
+Two smaller things fell out of the fix. The pandoc group regex, written as one
+literal, **matched its own source** and reported itself as a malformed key; it
+is now assembled from two pieces, the same move the mutation tests use for
+their citations. And citations inside code spans are now stripped before
+extraction, because documentation *about* citation syntax is not a corpus of
+citations — which also removes the hazard that made two test files fail the
+checker during development.
+
+### Why G1 is the fifth of its kind
+
+OF-5, F1, OF-1, F5 and now G1 are all one defect: a number in prose that drifted
+from the thing it described. Each was fixed where it was found. G1 is the first
+one introduced by the person who had just written that pattern down — the
+sentence was carried from a working draft that counted one section, and never
+re-derived after three further sections were marked.
+
+So this time the number is not corrected, it is **removed as a separate claim**:
+the policy states the ratio in a form a script parses, and the script counts the
+marks and fails on disagreement. That is the only move in this sequence that
+does not depend on the author remembering. The counts in `CONTRIBUTING.md` and
+in this file were re-derived by measurement in the same changeset rather than
+retyped, and three of them had already gone stale.
+
+**Residue.** Every other count asserted anywhere in the repository was verified
+by measurement this round and is correct, but only the policy ratio is
+*enforced*. The mutation-case counts, the bibliography totals and the model's
+sensitivity figures are still prose, and still rely on someone re-deriving them.
