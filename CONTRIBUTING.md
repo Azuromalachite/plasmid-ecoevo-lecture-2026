@@ -20,6 +20,11 @@ nothing alike can both pass it.
 - [ ] `python evidence/check_claim_ids.py` passes. It checks that cited claim
       IDs exist and that every `layer` and `status` is in vocabulary; it does
       not and cannot check that a paraphrase is faithful.
+- [ ] `python evidence/check_references.py` passes. Every `[@key]`, every key
+      in a `references:` list and every key in a figure's `SOURCE_KEYS`
+      resolves to an entry in `references.bib`, and every entry is cited
+      somewhere. It does **not** resolve DOIs: that a DOI works, and that its
+      metadata matches the entry, stays a human check.
 
 **Epistemic state**
 
@@ -99,12 +104,27 @@ nothing alike can both pass it.
 
 ```bash
 python evidence/check_claim_ids.py
+python evidence/check_references.py
 python figures/source/palette.py
 python figures/source/shewanella_oxa48_pathway.py && git status --porcelain
 ```
 
+Both checkers need PyYAML, so from a bare machine:
+`uv run --no-project --with pyyaml python evidence/check_references.py`.
+
 `check_claim_ids.py` also verifies that every `pages:` path exists and that
 any `status:` or `layer:` written in a content page matches the registry.
+
+Each checker states the file types it reads and refuses to pass when a file
+type appears that nobody has ruled on. If you add a format — `.tex`, `.qmd`,
+`.json` — `check_references.py` will fail until you decide whether it can
+carry citations. That is deliberate: the alternative is a check that quietly
+stops covering part of the repository.
+
+`python evidence/test_check_references.py` is not part of the routine run. It
+mutates a temporary copy twelve ways and asserts the checker catches each one.
+Run it after changing `check_references.py`, and add a case when you widen what
+it covers — a checker that has only ever reported clean is not known to work.
 Known unfixed defects are listed in
 [`docs/open-findings.md`](docs/open-findings.md); add one there in the same
 commit that discovers it.

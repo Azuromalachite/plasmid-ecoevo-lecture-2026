@@ -290,6 +290,17 @@ Measured `[M]`:
   `wong2010datafigures`. OF-2 recorded three; it is four now. The blind spot has
   grown since it was described.
 
+> **Correction, added when OF-2 was closed.** The number above is wrong: it is
+> **three**, and OF-2's original count was right. `jahn2016copynumber` is also
+> cited in `models/copy-number-burden/README.md`, inside the grouped citation
+> `[@shao2021singlecell; @jahn2016copynumber]`. The measurement was taken with
+> a `grep` anchored on `[@`, which reads a group as one citation and drops
+> every key after the first — so this reviewer criticised an instrument for
+> having a blind spot using an instrument with a blind spot, and did not check.
+> The finding itself stands; only its illustration was overstated. Left in
+> place rather than edited away, because the error is more instructive than the
+> finding.
+
 So the risk is latent for claim IDs and live for citations: the notebook is a
 file type that the repository's one committed checker cannot see, and content is
 accumulating in it.
