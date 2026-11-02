@@ -15,21 +15,6 @@ finding.
 
 ## Open
 
-### OF-3 — the participant policy does not distinguish checks from attestations
-
-**Severity:** minor
-**Location:** `docs/participant-material-policy.md`
-
-Some clauses are verifiable against an artifact — no transcripts in Git, no
-participant names. Others cannot be: "no emphasis chosen because of what
-teams presented" has no diff to measure, nothing that could falsify it, and
-no procedure that would catch a violation. It is an attestation by someone
-who knows what they did. All clauses are currently presented in the same
-declarative voice, so a reader cannot tell which is which.
-
-**Correction:** mark each clause as checked or attested. Knowing which of the
-two you are holding is most of the discipline.
-
 ### OF-4 — `CONTESTED` has no site on any content page
 
 **Severity:** trivial
@@ -393,3 +378,78 @@ the other option, and excluding a file is how a check stops seeing things.
 
 **Residue.** Twelve cases is a measured domain of sensitivity, not a proof that
 no blind spot remains. It says these defects are not among them.
+
+---
+
+## Closed: OF-3 — the participant policy does not distinguish checks from attestations
+
+**Was:** some clauses are verifiable against an artifact — no transcripts in
+Git, no participant names. Others cannot be: "no emphasis chosen because of
+what teams presented" has no diff to measure, nothing that could falsify it,
+and no procedure that would catch a violation. All clauses were presented in
+the same declarative voice, so a reader could not tell which was which.
+
+**Done:** every clause in `docs/participant-material-policy.md` now carries a
+mark, and the README's firewall paragraph does too — it held the finding's own
+example, so leaving it out would have put the hole exactly where OF-3 pointed.
+
+### Three marks, not two
+
+The finding says checked or attested. There are three, and the third is forced
+by a trap worth recording. "No participant names" *is* mechanically checkable:
+grep the tree against the participant list. But that list is the material the
+policy excludes, so **the check cannot be committed without violating the
+clause it checks**. That is not "no transcripts in Git", which any stranger can
+verify, and not a judgement nobody can. So: **`CHECKED`** (anyone who clones
+can verify), **`CHECKABLE`** (a real procedure whose input cannot live here),
+**`ATTESTED`** (nothing could falsify it).
+
+From a reader's position the last two are identical — they take the author's
+word. The distinction is about what the author can do, not what the reader
+gets, and the policy says so rather than letting `CHECKABLE` read as a weaker
+`CHECKED`.
+
+The marks are a local vocabulary for that one file, explicitly unrelated to the
+`layer` and `status` axes in `evidence-levels.md`. Those describe claims about
+nature; these describe who is in a position to check a promise.
+
+### `CHECKED` had to be made true first
+
+Marking a clause `CHECKED` on the strength of a grep someone ran once would be
+an attestation wearing a check's clothes — OF-2's defect, relocated. So the
+checked clauses are now run by a committed script,
+[`../evidence/check_participant_firewall.py`](../evidence/check_participant_firewall.py):
+caption and subtitle formats and guarded directories never added in any
+reachable commit on any branch in the clone, the `.gitignore` net for both
+still present *and uncommented*, no personal video or channel link in the tree,
+no email address outside an explicit allowlist. It reports what it does not
+cover in its own output.
+
+Nine mutations in
+[`../evidence/test_check_participant_firewall.py`](../evidence/test_check_participant_firewall.py)
+confirm it goes red for each, including a caption file committed on a branch
+that is never pushed — the case that distinguishes a history check from a tree
+scan — and confirm it refuses to run rather than cover three of its five parts
+when git is unavailable.
+
+Two defects were found by writing that test rather than by reading the code.
+The `.gitignore` check used a substring search, so commenting a pattern out
+left `# *.vtt` still containing `*.vtt` and the check passed on exactly the
+thing it existed to catch. And the test's own git-config email was a literal
+address, which the checker correctly flagged — fixed by assembling it at run
+time, the same move `test_check_references.py` uses, rather than by excluding
+the file.
+
+### The ratio is the finding
+
+Four clauses are `CHECKED`, two `CHECKABLE`, the rest `ATTESTED`. OF-3 did not
+ask for the policy to be made checkable and it has not been. A firewall against
+*judgement* being contaminated cannot be reduced to a grep; a policy containing
+only its greppable parts would be a smaller policy, not a better-verified one.
+What was wrong was the uniform voice. Publishing the ratio is the honest
+version of a promise most of which rests on one person's word.
+
+**Residue.** The checked clauses are a floor: they catch a folder of captions
+dropped into the tree. They say nothing about a page written by someone who
+watched the presentations and did not notice they were remembering one. Nothing
+in this changeset moves that, and nothing could.

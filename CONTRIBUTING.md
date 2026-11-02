@@ -89,12 +89,21 @@ nothing alike can both pass it.
 
 - [ ] Nothing derives from Thai SynBio Challenge 2026 participant
       submissions or presentations. Could this page have been written by
-      someone who never watched them?
+      someone who never watched them? This one is **attested**: no script can
+      answer it, which is why it is the working test rather than a check.
+- [ ] `python evidence/check_participant_firewall.py` passes. It covers the
+      **checked** clauses only — caption and subtitle formats, guarded
+      directories, the `.gitignore` net, video links, stray addresses — over
+      every branch in your clone. A clean run is the floor, not the policy.
 - [ ] Nothing on the never-commit list is in the change, **on any branch**:
       transcripts, participant names, channel or contact data, identifying
       affiliations, internal transcription or judging notes, unpublished
-      submissions, or verbatim participant speech. A public video is not
-      permission to republish an identifiable transcript. Full policy:
+      submissions, or verbatim participant speech. The name and affiliation
+      clauses are **checkable** but not checked here: the grep needs the
+      participant list, which must never enter this repository, so run it
+      against your own copy. A public video is not permission to republish an
+      identifiable transcript. Full policy, with every clause marked checked,
+      checkable or attested:
       [`docs/participant-material-policy.md`](docs/participant-material-policy.md).
 - [ ] No omission is written as a negative claim. "Not described in the
       presentation" and "not observable from the available source" are the
@@ -105,6 +114,7 @@ nothing alike can both pass it.
 ```bash
 python evidence/check_claim_ids.py
 python evidence/check_references.py
+python evidence/check_participant_firewall.py
 python figures/source/palette.py
 python figures/source/shewanella_oxa48_pathway.py && git status --porcelain
 ```
@@ -121,10 +131,11 @@ type appears that nobody has ruled on. If you add a format — `.tex`, `.qmd`,
 carry citations. That is deliberate: the alternative is a check that quietly
 stops covering part of the repository.
 
-`python evidence/test_check_references.py` is not part of the routine run. It
-mutates a temporary copy twelve ways and asserts the checker catches each one.
-Run it after changing `check_references.py`, and add a case when you widen what
-it covers — a checker that has only ever reported clean is not known to work.
+The two `test_check_*.py` scripts are not part of the routine run. Each mutates
+a temporary copy — twelve ways for the references checker, nine for the
+firewall checker — and asserts the checker catches each one. Run the matching
+test after changing a checker, and add a case when you widen what it covers: a
+checker that has only ever reported clean is not known to work.
 Known unfixed defects are listed in
 [`docs/open-findings.md`](docs/open-findings.md); add one there in the same
 commit that discovers it.
