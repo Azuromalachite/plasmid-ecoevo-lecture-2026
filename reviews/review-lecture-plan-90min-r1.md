@@ -272,6 +272,21 @@ different sampling frames, same estimator family — and give each frame a
 clause. This **strengthens** the existing "useful null model" lesson by making
 it concrete.
 
+> **Added 3 November 2026, from authoritative metadata.** `[L]` The plan
+> presents the 2026 theory-and-machine-learning work as a later, separate line
+> of support. It is not separate from one of the two 2025 studies:
+> [@shahzadi2026determinants] and [@maddamsetti2025scaling] **share two
+> authors**, R. Maddamsetti and L. You, and their datasets are close in size
+> (11,338 plasmids from 4,317 genomes against 12,006 from 4,644). Taken from
+> the CSL-JSON author lists returned by `doi.org`, not inferred.
+>
+> `[I]` So the section's structure — two independent studies, then independent
+> later confirmation — is one research group appearing twice in a sequence of
+> three. That does not make any of the work wrong, and the third paper's
+> machine-learning approach is genuinely different from the second's
+> regression. It does mean the agreement carries less weight than three
+> separate entries on a slide imply, and it is worth one clause.
+
 ---
 
 ## 6. Finding 5 — The designated payoff shares three minutes and is first on the cut list
@@ -386,10 +401,28 @@ scaling-law empirical figure; `[M]` in this repository a figure declares
 bibliography, so **that figure cannot be built to the project's own standard**
 until roughly six entries are added and DOI-verified.
 
-`[M]` This review demonstrates the constraint rather than describing it: its
-sources below are plain text and URLs, not `references.bib` keys, because
-citing them as keys would make `check_references.py` exit 1 — the checker
-working exactly as intended.
+`[M]` When this review was written it demonstrated the constraint rather than
+describing it: its sources were plain text and URLs, not `references.bib` keys,
+because citing them as keys would have made `check_references.py` exit 1 — the
+checker working exactly as intended.
+
+> **Closed, 3 November 2026.** Seven entries were added to `references.bib`:
+> the three gene-location papers, the three scaling-law papers, and the
+> dissenting preprint. `[M]` All seven DOIs were resolved by content
+> negotiation against `doi.org`, every one returning HTTP 200, and each
+> entry's authors, year, volume and pages were taken from the returned
+> CSL-JSON rather than transcribed from a search result. The Sources section
+> below now cites them as keys.
+>
+> `[M]` They are cited **only from this review**, so `check_references.py`
+> reports all seven under its commentary-only line — the OF-11 reporting added
+> the same day, which until now had nothing to report. That is the correct
+> state for a verified source staged for content that does not exist yet, and
+> it will clear itself when a page or figure cites them.
+>
+> One part of the finding does **not** close: the unnamed 2024 theory paper and
+> the unnamed evolvability work still cannot be resolved, so they cannot be
+> added. `[U]` Naming them is the author's to do.
 
 ---
 
@@ -559,36 +592,41 @@ goes.
 
 ## Sources
 
-Deliberately plain text rather than `references.bib` keys — see Finding 8.
+Cited as bibliography keys since 3 November 2026 — see the annotation under
+Finding 8 for why they were plain text when this review was written, and for
+how the seven entries were verified.
 
-- Ramiro-Martínez, P. *et al.* (2025). *Universal rules govern plasmid copy
-  number.* **Nature Communications**.
-  <https://www.nature.com/articles/s41467-025-61202-5>
-  Verified verbatim: *"The overall slope was k = −0.65 (95% CI: −0.66,
-  −0.63)"*; sampling frame *"nine different bacterial genera from two distinct
-  phyla"* and *"95 species with biotechnological and clinical interest, such as
-  all members of the ESKAPEE group"*; replicon dominance *"Higher copy number
-  replicons were generally recessive … (6 of 22 cases)"*.
-- Maddamsetti, R. *et al.* (2025). *Scaling laws of bacterial and archaeal
-  plasmids.* **Nature Communications**.
-  <https://www.nature.com/articles/s41467-025-61205-2>
-  Verified verbatim: *"we define the plasmid copy number (PCN) as the number of
-  plasmid copies per the longest chromosome per cell"*; 12,006 plasmids across
-  4,644 genomes.
-- Shaw, L. P. (2026). *Plasmid copy numbers reflect distinct evolutionary
-  strategies.* **bioRxiv preprint, not certified by peer review**, doi
-  `10.64898/2026.06.10.731345`.
-  <https://www.biorxiv.org/content/10.64898/2026.06.10.731345v2.full>
-  Verified verbatim: *"both the form and the interpretation of this law are
-  contested"*; *"not through a scaling law, but through the lens of two
-  dominant evolutionary strategies"*; *"A segmented regression is a better
-  model"*; *"need not be governed by a universal constraint"*.
-- *Integrating theory and machine learning to reveal determinants of plasmid
-  copy number.* <https://pubmed.ncbi.nlm.nih.gov/42020421/>
-  `[U]` The likely referent of the plan's 2026 theory-plus-machine-learning
-  citation; reported idealised theoretical exponent −1 with empirical fits near
-  −0.71. Author attribution **not** confirmed against the plan's spelling.
-- This repository: `evidence/references.bib` (51 entries, all with DOI fields),
-  `evidence/check_references.py`, and
-  [`../docs/open-findings.md`](../docs/open-findings.md) (OF-4, the unused
-  `CONTESTED` badge).
+**The scaling-law material.**
+
+- [@ramiromartinez2025universal] — verified verbatim: *"The overall slope was
+  k = −0.65 (95% CI: −0.66, −0.63)"*; sampling frame *"nine different bacterial
+  genera from two distinct phyla"* and *"95 species with biotechnological and
+  clinical interest, such as all members of the ESKAPEE group"*; replicon
+  dominance *"Higher copy number replicons were generally recessive … (6 of 22
+  cases)"*.
+- [@maddamsetti2025scaling] — verified verbatim: *"we define the plasmid copy
+  number (PCN) as the number of plasmid copies per the longest chromosome per
+  cell"*; 12,006 plasmids across 4,644 genomes.
+- [@shahzadi2026determinants] — the plan's 2026 theory-plus-machine-learning
+  citation, **now confirmed** by title and DOI rather than inferred, which
+  retires the `[U]` this review carried. 11,338 plasmids from 4,317 genomes;
+  idealised theoretical exponent −1 with empirical fits near −0.71. Shares two
+  authors with the entry above (Finding 4 annotation).
+- [@shaw2026strategies] — **preprint, not certified by peer review.** Verified
+  verbatim: *"both the form and the interpretation of this law are contested"*;
+  *"not through a scaling law, but through the lens of two dominant
+  evolutionary strategies"*; *"A segmented regression is a better model"*;
+  *"need not be governed by a universal constraint"*.
+
+**The gene-location lineage**, named in the plan and absent from the
+bibliography until this changeset. `[L]` Identified by title and DOI; not read
+in full for this review, so nothing above rests on their contents.
+
+- [@eberhard1989genes]
+- [@svara2011plasmidcarried]
+- [@lehtinen2021location]
+
+**This repository:** `evidence/references.bib` (58 entries since this
+changeset, all with DOI fields), `evidence/check_references.py`, and
+[`../docs/open-findings.md`](../docs/open-findings.md) (OF-4, the unused
+`CONTESTED` badge).
