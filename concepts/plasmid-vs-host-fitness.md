@@ -166,12 +166,12 @@ Two framings are each incomplete:
 - *"Plasmids are genetic parasites."* This over-reads the gap. Many plasmids
   carry genes of clear host benefit, costs are frequently compensated, and
   across wild-type gut enterobacteria a clinical plasmid's effect was an
-  overall reduction in fitness that was nonetheless neutral or positive in
-  several hosts [@alonsodelvalle2021variability]. Those hosts are the ones
-  that bear on parasitism, and they are exceptions inside a net cost, not the
-  central tendency. Pure parasitism also fails as a
-  general explanation: empirically, transfer rates are often too low for
-  plasmids to be maintained as parasites alone [@bergstrom2000natural].
+  overall reduction in fitness that was nonetheless small in most hosts and
+  beneficial in several [@alonsodelvalle2021variability]. Those hosts are the
+  ones that bear on parasitism, and they are exceptions inside a net cost, not
+  the central tendency. Pure parasitism also fails as a general explanation:
+  empirically, transfer rates are often too low for plasmids to be maintained
+  as parasites alone [@bergstrom2000natural].
 - *"Plasmids are accessory genomes that help their hosts."* This ignores the
   gap. It cannot explain addiction systems, copy-number conflict, or
   persistence of costly plasmids in the absence of selection for their cargo.
@@ -199,7 +199,7 @@ Status vocabulary:
 | A plasmid that slows its host has low plasmid fitness. | **Misleading** | Host and plasmid reproductive accounting can diverge. A cost is decisive only to the extent the plasmid's reproduction runs through the host's [@stewart1977population; @lopatkin2017persistence]. |
 | Horizontal transfer makes host cost irrelevant. | **False** | The cost still enters every generation of carriage. Transfer adds a route; it does not delete a term, and it has to outpace cost *plus* segregational loss [@sanmillan2017costs]. |
 | Addiction systems benefit plasmids because they benefit their hosts. | **False** | They stabilise carriage by making plasmid *loss* costly to the host: cells that segregate the plasmid away are killed [@nordstrom1989segregation]. Population-level retention, cell-level harm. |
-| Plasmids are therefore parasites. | **Overgeneralised** | Alignment is conditional. Cargo that pays, compensatory evolution and host–plasmid coevolution all realign interests [@sanmillan2017costs; @harrison2012coevolutionary]; a clinical plasmid's overall reduction in host fitness was neutral or positive in several wild-type hosts [@alonsodelvalle2021variability]; and transfer rates are often too low for plasmids to persist as parasites alone [@bergstrom2000natural]. |
+| Plasmids are therefore parasites. | **Overgeneralised** | Alignment is conditional. Cargo that pays, compensatory evolution and host–plasmid coevolution all realign interests [@sanmillan2017costs; @harrison2012coevolutionary]; a clinical plasmid produced an overall reduction in host fitness that was nonetheless small in most wild-type hosts and beneficial in several [@alonsodelvalle2021variability]; and transfer rates are often too low for plasmids to persist as parasites alone [@bergstrom2000natural]. |
 
 The first and last rows fail in opposite directions, which is the useful
 thing about seeing them together: one under-reads the gap between the two

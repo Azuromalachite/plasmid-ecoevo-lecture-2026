@@ -152,7 +152,18 @@ list. Report the denominator, not the count.
 
 ---
 
-## Open — added by the round-1 review
+## Closed in the minor-findings changeset
+
+OF-6 through OF-9 were opened by the round-1 review and closed in the changeset
+that followed it. Each is kept below with what it was, followed by what was
+done. The one piece deliberately not done is named inside OF-6.
+
+| ID | Fix |
+| --- | --- |
+| OF-6 | Both sites rewritten in the registry's wording; the misreading row no longer predicates "neutral or positive" of the reduction. The automated half is deliberately **not** done — see below |
+| OF-7 | The checker now names the file types it reads and tallies, by extension, the ones it does not. Negative-tested outside the repository against three defects |
+| OF-8 | `numpy>=2.0` stated in "Running it" with the reason; the guard moved from QA cell 44 into configuration cell 4, and verified to fire on a real NumPy 1.26.4 |
+| OF-9 | The inline-citation count is split into "on content pages" and "elsewhere", which restores the content figure to 5 and keeps review commentary visible as commentary. Not fixed with `SKIP_DIRS` |
 
 ### OF-6 — "neutral or positive" drifts from the source and from the registry
 
@@ -167,11 +178,25 @@ positive" admits hosts where the effect was zero, which the source does not
 assert for that set. The misreading row additionally predicates "neutral or
 positive" of the *reduction*, which cannot be either.
 
-**Correction:** the registry wording, verbatim, at both sites. Then extend
-`check_claim_ids.py` to assert that content-page renderings of
-`claim.fitness.cost_is_host_dependent` carry the registry's own words — the
-nearest-ID attribution it already does for `status:` and `layer:` is the
-mechanism.
+**Done:** both sites now carry the registry's wording — "an overall reduction
+in fitness that was nonetheless small in most hosts and beneficial in several"
+— and the misreading row predicates it of the plasmid rather than of the
+reduction.
+
+**Deliberately not done: the automated half.** The review proposed extending
+`check_claim_ids.py` to assert that content-page renderings of a claim carry
+the registry's own words. There is no honest way to do that with what the
+registry has. `statement` is a paragraph, not a phrase, so it cannot be matched
+against prose; making it work would mean adding a per-claim list of required
+wordings, which is a new registry field, a new vocabulary, and a second place
+for the canonical phrasing to live and drift from. It would also be the
+semantic-fidelity check the module docstring says this tool must not pretend to
+be. **What this leaves:** nothing automatic catches a paraphrase that keeps the
+citation and loses the scope. That is the gap the review's F2 walked into and it
+is still open as a *class*; the closing instrument named under F2 — enumerate
+citation sites of the key, inspect each — is a human procedure and is currently
+the only one. Revisit if a third instance appears, which would be evidence the
+procedure is not enough.
 
 ### OF-7 — the committed checker does not enumerate the file types it reads
 
@@ -188,9 +213,23 @@ currently missed — but four bibliography keys are cited *only* there
 (`jahn2016copynumber`, `jambor2025checklist`, `midway2020visualization`,
 `wong2010datafigures`). OF-2 recorded three; the blind spot has grown.
 
-**Correction:** print the suffix set and a count of skipped files in the summary
-block. Adding `.ipynb` to the set is a separate and smaller decision; the
-enumeration is what OF-2 asked for.
+**Done:** every run now opens with the number of files read and the types it
+read them as, followed by a tally of what it skipped, by extension — currently
+`(no suffix) x3, .bib x1, .cff x1, .ipynb x1, .svg x1, .txt x2`. `READ_SUFFIXES`
+and `CONTENT_DIRS` are module constants rather than literals buried in two
+loops.
+
+`.ipynb` was **not** added to the read set. That is the separate and larger
+decision OF-2 distinguishes: enumeration makes the blind spot legible, widening
+the domain changes what the tool claims to cover, and the second should be
+argued on its own. The tally is what makes it arguable.
+
+**Negative-tested** on a copy outside the repository, against three constructed
+defects: a bogus claim ID with a wrong `status:` planted in the notebook —
+still reports "no problems", but the run now says `.ipynb x1` was not read, so
+the silence is visible rather than mistakable for coverage; the same ID planted
+in a content page — caught, exit 1; a `status:` desync on a content page —
+caught, with the nearest-ID attribution naming the right claim.
 
 ### OF-8 — the notebook requires NumPy ≥ 2.0 and does not say so
 
@@ -205,8 +244,16 @@ Colab, whose NumPy version they do not choose. The guard that exists —
 NumPy 1.x the reader meets an `AttributeError` thirty cells before the
 assertion that names the requirement.
 
-**Correction:** state `numpy>=2.0`, and move the guard into the configuration
-cell so it fires before anything depends on it.
+**Done:** "Running it" states **NumPy ≥ 2.0** and says why, naming the two
+cells and the 1.x spelling. The guard moved from QA cell 44 into configuration
+cell 4, where it raises a `RuntimeError` that reports the version found and the
+command to fix it, instead of a bare `assert` thirty cells downstream.
+
+**Verified** by running the guard's condition under a real NumPy 1.26.4
+(`uv run --python 3.11 --with numpy==1.26.4`): it fires, with the installed
+version in the message. The notebook still executes end to end under NumPy 2.x.
+The point is not that the assertion exists — it existed before — but that a
+check downstream of its own subject cannot catch what it names.
 
 ### OF-9 — review documents in the tree perturb the checker
 
@@ -218,8 +265,14 @@ reported "claim IDs cited inline" count from 5 to 7, and a literal placeholder
 ID in it made the checker exit 1 until the placeholder was written in a form the
 regex does not match. Neither is a defect in the repository's content.
 
-**Correction:** none yet, and deliberately not `SKIP_DIRS`. Skipping a directory
-is how a check acquires a domain it cannot see, which is the defect class OF-7
-is about. The options worth weighing are reporting content and non-content
-counts separately, or keeping review documents outside the tree. Decide once
-there is a second round to decide it for.
+**Done:** the count is split. The checker now reports
+`claim IDs cited inline: 5 on content pages, 2 elsewhere`, which restores the
+content figure to what it was before `reviews/` existed and keeps the
+commentary visible as commentary. The split uses `CONTENT_DIRS`, the same
+constant the registry↔page sync check uses, so the two cannot disagree about
+what a content page is.
+
+**Deliberately not `SKIP_DIRS`.** Skipping a directory is how a check acquires
+a domain it cannot see, which is the defect OF-7 is about; a count that is
+wrong is better than a file that is invisible. Reviews stay in the tree and
+stay read — a bogus claim ID written in one is still reported, as it should be.
