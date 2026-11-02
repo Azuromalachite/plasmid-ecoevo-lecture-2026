@@ -236,10 +236,11 @@ two-year hospital study found frequent patient-to-patient transmission of
 pOXA-48-carrying clones **and** pervasive within-patient transfer of the
 plasmid between enterobacteria in the gut microbiota [@leonsampedro2021pervasive].
 
-Fitness effects of pOXA-48_K8 across wild-type gut enterobacteria were mostly
-small, and beneficial in several isolates; in a population model, that
-variability itself widened the conditions for plasmid persistence, with
-persistence increasing with host diversity and depending less on conjugation
+Across wild-type gut enterobacteria, pOXA-48_K8 produced an overall reduction
+in fitness that was nonetheless small in most hosts and beneficial in several
+isolates; in a population model, that variability itself widened the
+conditions for plasmid persistence, with persistence increasing with host
+diversity and depending less on conjugation
 [@alonsodelvalle2021variability]. Within patients, the plasmid continues to
 evolve: compensatory evolution of its fitness cost, and increases in
 resistance level, were observed, with a trade-off between resistance and host

@@ -119,3 +119,107 @@ sites" was written from the enumeration made while planning the fix, not from
 the repository after it. A count in a findings table is a number in prose: an
 unversioned copy of a computation, and it drifted from the thing it described
 in the same commit that introduced it.
+
+---
+
+## Closed in the round-1 review changeset
+
+Adversarial review of the repository at `cb1a249`:
+[`../reviews/review-repository-r1.md`](../reviews/review-repository-r1.md). Its
+seven findings are F1–F7; the three majors are closed here and the four minors
+are carried below as OF-6 through OF-9.
+
+| ID | Was | Fix |
+| --- | --- | --- |
+| F1 | `figures/README.md` anchored its determinism check to commit `e85bb22` and digest `01b91795…`. The figure changed after that commit, so the shipped digest is `a626bbd3…` and a reader running the documented recipe got a mismatch on a build that is in fact byte-identical | The anchored pair is deleted rather than re-measured. The recipe now compares its two `md5sum` lines with each other and the rebuild against the reader's own commit, so it has nothing that can drift. Why it drifted is recorded in place |
+| F2 | B6's eighth site: the case study used Alonso-del Valle with "mostly small, and beneficial in several isolates" and no net direction, in the spread section where the omission does argumentative work — on the page the README calls "if you read one thing, read this" | Rewritten in the registry's wording. Measured after the fix: eight content-page occurrences across eight prose citation sites of the key, whitespace-normalised |
+| F3 | The README stated "the plasmid reaching the highest copy number — counted by barcode sequencing — wins", collapsing copies per cell into barcode reads, which `models/copy-number-burden/` explicitly refuses to do and the notebook's QA audit enforces apart in code | The Arena is now described as scored on an endpoint barcode count, with a three-row misreading table separating reads from copy number and from the 5 kb design limit |
+
+### Why B6 reopened, and what the closing instrument has to be
+
+OF-5 closed B6 by counting the restored clause and finding the count short. A
+count of the clause can only find sites that *have* the clause. It is
+structurally incapable of finding a site that cites the paper and never mentions
+the net direction at all, which is what F2 was. The instrument that closed the
+finding could not see the case that remained — the same class as the line-based
+`grep` above, one level up.
+
+**So the closing instrument for a propagation fix is an enumeration of citation
+sites of the key, not a count of the clause.** `grep -n` on
+`alonsodelvalle2021variability` over content pages returns nine lines: eight
+prose sites, each of which now carries the net direction, and one bare reference
+list. Report the denominator, not the count.
+
+---
+
+## Open — added by the round-1 review
+
+### OF-6 — "neutral or positive" drifts from the source and from the registry
+
+**Severity:** minor
+**Location:** `concepts/plasmid-vs-host-fitness.md`, the parasitism bullet and
+the parasitism misreading row
+
+Both sites render the non-negative hosts as "neutral or positive". The paper
+says "even beneficial effects in several isolates"; the registry says
+"beneficial in several", as do the three other content pages. "Neutral or
+positive" admits hosts where the effect was zero, which the source does not
+assert for that set. The misreading row additionally predicates "neutral or
+positive" of the *reduction*, which cannot be either.
+
+**Correction:** the registry wording, verbatim, at both sites. Then extend
+`check_claim_ids.py` to assert that content-page renderings of
+`claim.fitness.cost_is_host_dependent` carry the registry's own words — the
+nearest-ID attribution it already does for `status:` and `layer:` is the
+mechanism.
+
+### OF-7 — the committed checker does not enumerate the file types it reads
+
+**Severity:** minor
+**Location:** `evidence/check_claim_ids.py`
+
+OF-2 requires of a bibliography checker that it "must enumerate the file types
+it reads and fail visibly on types it does not". The checker that *is*
+committed filters on `.md`, `.yml`, `.py` and says nothing about what it
+skipped. `models/copy-number-burden/battle-royale.ipynb` is 3,010 lines inside
+a directory the sync check's own `content_dirs` set includes, and is invisible
+to it. The notebook carries no claim IDs or status strings today, so nothing is
+currently missed — but four bibliography keys are cited *only* there
+(`jahn2016copynumber`, `jambor2025checklist`, `midway2020visualization`,
+`wong2010datafigures`). OF-2 recorded three; the blind spot has grown.
+
+**Correction:** print the suffix set and a count of skipped files in the summary
+block. Adding `.ipynb` to the set is a separate and smaller decision; the
+enumeration is what OF-2 asked for.
+
+### OF-8 — the notebook requires NumPy ≥ 2.0 and does not say so
+
+**Severity:** minor
+**Location:** `models/copy-number-burden/README.md`, "Running it";
+`battle-royale.ipynb` cells 14, 16 and 44
+
+`np.trapezoid` is called in cells 14 and 16. It was added in NumPy 2.0. The
+README states no version floor and tells the reader to run top to bottom in
+Colab, whose NumPy version they do not choose. The guard that exists —
+`assert hasattr(np, 'trapezoid')` — is in cell 44, after both uses, so on
+NumPy 1.x the reader meets an `AttributeError` thirty cells before the
+assertion that names the requirement.
+
+**Correction:** state `numpy>=2.0`, and move the guard into the configuration
+cell so it fires before anything depends on it.
+
+### OF-9 — review documents in the tree perturb the checker
+
+**Severity:** trivial
+**Location:** `evidence/check_claim_ids.py`, `reviews/`
+
+A review discusses claim IDs, so `reviews/review-repository-r1.md` raises the
+reported "claim IDs cited inline" count from 5 to 7, and a literal placeholder
+ID in it made the checker exit 1 until the placeholder was written in a form the
+regex does not match. Neither is a defect in the repository's content.
+
+**Correction:** none yet, and deliberately not `SKIP_DIRS`. Skipping a directory
+is how a check acquires a domain it cannot see, which is the defect class OF-7
+is about. The options worth weighing are reporting content and non-content
+counts separately, or keeping review documents outside the tree. Decide once
+there is a second round to decide it for.

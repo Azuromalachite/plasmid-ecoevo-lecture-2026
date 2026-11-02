@@ -49,8 +49,19 @@ md5sum figures/output/shewanella-oxa48-pathway.svg   # same digest
 git status --porcelain                               # no output
 ```
 
-Last checked at commit `e85bb22` on Windows: both digests
-`01b91795f4084009ecebf59ce3237c95`, working tree clean.
+This check deliberately carries **no recorded digest to compare against**. The
+two `md5sum` lines are compared with each other, and `git status --porcelain`
+compares the rebuild against whatever commit the reader is standing on, so the
+recipe cannot go stale.
+
+An earlier version of this paragraph did name one — a commit and a digest,
+"last checked" — and it drifted the first time the figure script changed, so
+the file went on promising a digest the repository no longer shipped. A reader
+following the recipe would have got a mismatch and concluded that determinism
+had failed, when it had not. A digest written into prose is an unversioned copy
+of a computation; the same defect class is recorded in
+[`../docs/open-findings.md`](../docs/open-findings.md) under OF-5. The check
+above is the version of it that has nothing to drift.
 
 ## Figures
 
