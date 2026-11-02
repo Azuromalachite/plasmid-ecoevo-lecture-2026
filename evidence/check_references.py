@@ -60,10 +60,32 @@ UNCITED_SUFFIXES = {".bib", ".cff", ".svg", ".txt", ""}
 
 # A BibTeX key in this repository: lowercase name, four-digit year, suffix.
 KEY_SHAPE = r"[a-z][a-z-]*[0-9]{4}[a-z0-9]*"
+KEY_SHAPE_RE = re.compile(r"\A" + KEY_SHAPE + r"\Z")
 
 # Citation syntaxes. See the module docstring, point 3.
-PANDOC_GROUP = re.compile(r"\[@[^\]]*\]", re.S)   # [@a] and [@a; @b] across lines
-KEY_IN_GROUP = re.compile(r"@(" + KEY_SHAPE + r")")
+# Assembled rather than written whole: the pattern is itself a citation
+# group, so a version written as one literal matched its own source and
+# reported the regex as a malformed key.
+PANDOC_GROUP = re.compile(r"\[" + r"@[^\]]*\]", re.S)
+
+# G2: take whatever follows the `@` and judge it, rather than matching only
+# things already shaped like a key. The earlier version extracted with
+# KEY_SHAPE, so a key the shape did not fit was not reported as undefined -- it
+# was not seen at all, and a bracketed `@Sanmillan2017costs` -- a capitalised
+# real key and
+# one of the commonest citation typos there is, passed silently. A checker
+# whose extractor and whose validator are the same regex can only ever find
+# what it already expected.
+KEY_TOKEN_IN_GROUP = re.compile(r"@([^\s;,\]]+)")
+
+# Citations written INSIDE code spans or fences are being discussed, not made:
+# a bracketed `@key` in a sentence about citation syntax, the examples in this
+# file's own
+# docstring, the planted keys in the mutation test. They are removed before
+# extraction so that documentation about citations does not become a corpus of
+# them -- the same reason the mutation tests assemble their brackets at run
+# time. A real citation never needs backticks.
+CODE_SPAN = re.compile(r"`{1,3}.*?`{1,3}", re.S)
 BIB_ENTRY = re.compile(r"^@(\w+)\s*\{\s*([^,\s]+)\s*,", re.M)
 BIB_DOI = re.compile(r"\bdoi\s*=\s*\{([^}]*)\}")
 DOI_SHAPE = re.compile(r"^10\.\d{4,9}/\S+$")
@@ -122,14 +144,22 @@ def parse_bibliography(path):
 # ---------------------------------------------------------------------------
 
 def cites_pandoc(files, root):
-    """`[@key]` and `[@a; @b]`, including groups that wrap across lines."""
-    found = {}
+    """Bracketed citations, including groups that wrap across lines.
+
+    Returns (found, malformed). Every token after an `@` inside a citation
+    group is extracted; those that are not shaped like a key are returned as
+    malformed rather than dropped, because a key the extractor cannot parse is
+    a defect to report, not an absence of a citation.
+    """
+    found, malformed = {}, {}
     for path in files:
-        text = read_text(path)
+        text = CODE_SPAN.sub(" ", read_text(path))
+        where = path.relative_to(root).as_posix()
         for group in PANDOC_GROUP.findall(text):
-            for key in KEY_IN_GROUP.findall(group):
-                found.setdefault(key, set()).add(path.relative_to(root).as_posix())
-    return found
+            for token in KEY_TOKEN_IN_GROUP.findall(group):
+                target = found if KEY_SHAPE_RE.match(token) else malformed
+                target.setdefault(token, set()).add(where)
+    return found, malformed
 
 
 def cites_registry(root):
@@ -181,14 +211,21 @@ def main():
     defined, duplicates, dois = parse_bibliography(root / "evidence" / "references.bib")
     files, skipped, unruled = walk(root)
 
+    pandoc, malformed = cites_pandoc(files, root)
     extractors = {
-        "pandoc  [@key] / [@a; @b]": cites_pandoc(files, root),
+        "pandoc  bracketed citations": pandoc,
         "registry  references:": cites_registry(root),
         "figure footer  SOURCE_KEYS": cites_figure_footers(root),
     }
     cited = merge(*extractors.values())
 
     problems = []
+
+    for token in sorted(malformed):
+        problems.append(
+            f"malformed citation key: {token!r}  "
+            f"(in {', '.join(sorted(malformed[token]))}). Keys are lowercase, "
+            f"a four-digit year, then a suffix -- e.g. sanmillan2017costs")
 
     for key in sorted(k for k in cited if k not in defined):
         problems.append(f"cited but not in references.bib: {key}  "

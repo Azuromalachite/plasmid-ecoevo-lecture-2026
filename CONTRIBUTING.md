@@ -132,7 +132,7 @@ carry citations. That is deliberate: the alternative is a check that quietly
 stops covering part of the repository.
 
 The two `test_check_*.py` scripts are not part of the routine run. Each mutates
-a temporary copy — twelve ways for the references checker, nine for the
+a temporary copy — 15 ways for the references checker, 11 for the
 firewall checker — and asserts the checker catches each one. Run the matching
 test after changing a checker, and add a case when you widen what it covers: a
 checker that has only ever reported clean is not known to work.

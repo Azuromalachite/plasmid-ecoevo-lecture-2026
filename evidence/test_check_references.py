@@ -166,11 +166,37 @@ def mutate_unruled_file_type(root):
         encoding="utf-8")
 
 
+def append_citation(root, relative, *keys):
+    """Append a citation to a page, assembled rather than written."""
+    with (root / relative).open("a", encoding="utf-8") as fh:
+        fh.write("\nAdded by the mutation test: " + cite(*keys) + "\n")
+
+
+def mutate_capitalised_key(root):
+    """A real key with a capital letter.
+
+    G2: the extractor used to be the key regex itself, so a token that did not
+    already look like a key was not reported as wrong -- it was not seen. This
+    is the commonest citation typo there is, and it passed silently.
+    """
+    append_citation(root, "concepts/copy-carry-spread.md", "Sanmillan2017costs")
+
+
+def mutate_underscore_key(root):
+    """A key shaped like another project's convention."""
+    append_citation(root, "concepts/copy-carry-spread.md", "van_der2020thing")
+
+
+def mutate_digits_first_key(root):
+    """A key that starts with its year."""
+    append_citation(root, "concepts/copy-carry-spread.md", "2020orphanyear")
+
+
 CASES = [
     (mutate_nothing, None,
      "an unmutated copy reports clean"),
     # jambor2025checklist is one of the three keys cited ONLY in the notebook.
-    # Three, not four: a grep that reads `[@a; @b]` as one citation undercounts
+    # Three, not four: a grep anchored on the bracket reads a group as one citation and undercounts
     # the rest of the group, and that is how an earlier audit of this very
     # question got the number wrong. See the OF-7 correction note.
     (mutate_drop_ipynb_from_domain,
@@ -179,7 +205,7 @@ CASES = [
     (mutate_typo_in_prose, "cited but not in references.bib: sanmillan2017cost",
      "a misspelt key in prose"),
     (mutate_typo_in_grouped_citation, "cited but not in references.bib: harrison2012coevolution",
-     "a misspelt key in the second position of a [@a; @b] group"),
+     "a misspelt key in the second position of a grouped citation"),
     (mutate_typo_in_registry, "cited but not in references.bib: yin2014recyling",
      "a misspelt key in a claims.yml references: list"),
     (mutate_typo_in_figure_footer, "cited but not in references.bib: carattoli2015inc",
@@ -194,6 +220,15 @@ CASES = [
      "an entry with no doi field"),
     (mutate_malformed_doi, "doi is not shaped like a DOI",
      "a doi field holding a URL instead of a DOI"),
+    # G2: three shapes the extractor used to discard rather than report. The
+    # earlier twelve cases all planted keys that still matched KEY_SHAPE, so
+    # the test inherited the assumption it existed to challenge.
+    (mutate_capitalised_key, "malformed citation key: 'Sanmillan2017costs'",
+     "a real key with a capital letter"),
+    (mutate_underscore_key, "malformed citation key: 'van_der2020thing'",
+     "a key containing an underscore"),
+    (mutate_digits_first_key, "malformed citation key: '2020orphanyear'",
+     "a key that starts with its year"),
     (mutate_unruled_file_type, "unruled file type '.tex'",
      "a file type nobody has ruled on"),
 ]

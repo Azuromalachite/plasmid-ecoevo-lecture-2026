@@ -14,9 +14,12 @@ draft and unpublished branches, and including branches that are never pushed:
 
 Each clause carries a mark, defined under
 [Checked or attested](#checked-or-attested). The short version: the mark says
-who is in a position to verify the clause — anyone (**`CHECKED`**), only
-someone holding material this policy excludes (**`CHECKABLE`**), or the author
-alone (**`ATTESTED`**).
+who is in a position to verify the clause — anyone, only someone holding
+material this policy excludes, or the author alone.
+
+Outside the definition table below, a badge always marks a clause and never
+explains one. That is what makes the clauses countable, and the count is
+checked — see [The ratio](#the-ratio).
 
 - **`CHECKED`** — raw or cleaned transcripts;
 - **`CHECKABLE`** — participant names or other directly identifying personal
@@ -137,7 +140,7 @@ stands:
 > No participant-derived scientific strategy, and no identifiable participant
 > material, enters the public repository.
 
-**`ATTESTED`.** Every checked clause above is a consequence of this one that
+**`ATTESTED`** — every checked clause above is a consequence of this one that
 happens to leave a trace. The firewall itself is broader than all of them
 together, and nothing could falsify it.
 
@@ -180,9 +183,9 @@ not the same as "no transcripts in Git", which any stranger can verify, and
 not the same as a judgement nobody can. Both reductions lose something true,
 so the policy carries three marks rather than two.
 
-From a reader's position **`CHECKABLE`** and **`ATTESTED`** are the same: they
-take the author's word. The distinction is about what the author can do, not
-what the reader gets.
+From a reader's position the second and third marks are the same: they take
+the author's word. The distinction is about what the author can do, not what
+the reader gets.
 
 ### What `CHECKED` is worth
 
@@ -191,7 +194,7 @@ runs the checked clauses: caption and subtitle formats and guarded directories
 never added in any reachable commit on any branch in the clone, the
 `.gitignore` net for both still present and uncommented, no personal video or
 channel link in the tree, and no email address outside an explicit allowlist.
-It states in its own output what it does not cover. Nine mutations in
+It states in its own output what it does not cover. 11 mutations in
 [`../evidence/test_check_participant_firewall.py`](../evidence/test_check_participant_firewall.py)
 confirm it goes red for each of those, including one committed on a branch
 that is never pushed, and that it refuses to run rather than cover a subset
@@ -202,14 +205,24 @@ file-shaped accident — a folder of captions dropped into the tree. They say
 nothing about a page written by someone who watched the presentations and did
 not notice they were remembering one.
 
-### The ratio is the point
+### The ratio
 
-Four clauses are **`CHECKED`**, two **`CHECKABLE`**, and the rest
-**`ATTESTED`**. That is not a defect to be engineered away. A firewall against
-*judgement* being contaminated cannot be reduced to a grep, and a policy
-containing only its greppable parts would be a smaller policy, not a
-better-verified one. Publishing the ratio is the honest version of a promise
-most of which rests on one person's word.
+Counted in this file: **6 checked, 2 checkable, 8 attested.**
+
+Most of this policy is attested, and that is not a defect to be engineered
+away. A firewall against *judgement* being contaminated cannot be reduced to a
+grep, and a policy containing only its greppable parts would be a smaller
+policy, not a better-verified one. Publishing the ratio is the honest version
+of a promise most of which rests on one person's word.
+
+The line above is itself checked. `check_participant_firewall.py` counts the
+badges outside the definition table and fails if they disagree with it, because
+the first version of this sentence said four checked when there were six: it
+was carried over from a working draft that counted one section's clauses, and
+never re-derived after three more sections were marked. A count in prose is an
+unversioned copy of a computation — the defect recorded under OF-5 and found
+again here — and the only durable answer is to make the prose and the
+computation the same thing.
 
 ## Governance principle
 
