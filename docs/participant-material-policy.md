@@ -24,8 +24,9 @@ checked — see [The ratio](#the-ratio).
 - **`CHECKED`** — raw or cleaned transcripts;
 - **`CHECKABLE`** — participant names or other directly identifying personal
   data;
-- **`CHECKED`** — personal YouTube or channel metadata, or contact
-  information;
+- **`CHECKED`** for video and channel links and for email addresses,
+  **`ATTESTED`** for contact information in any other form — personal YouTube
+  or channel metadata, or contact information;
 - **`CHECKABLE`** — schools, universities or affiliations, where these
   identify individuals;
 - **`CHECKED`** for the directory shapes, **`ATTESTED`** for the content —
@@ -165,7 +166,7 @@ three marks.
 | --- | --- | --- |
 | **`CHECKED`** | A committed script verifies it. | Anyone who clones. |
 | **`CHECKABLE`** | A procedure exists and has been run, but its input is material this policy excludes, so the check cannot be committed. | Only someone holding that input. |
-| **`ATTESTED`** | Nothing could falsify it. A statement by the author about their own conduct. | No one. |
+| **`ATTESTED`** | No committable check decides it — either nothing could falsify it, or nothing enumerates what would. A statement by the author about their own conduct. | No one. |
 
 These are a **separate, local vocabulary** for this file. They are not
 evidence badges and have no relationship to the `layer` and `status` axes in
@@ -187,6 +188,26 @@ From a reader's position the second and third marks are the same: they take
 the author's word. The distinction is about what the author can do, not what
 the reader gets.
 
+### What the third mark had to absorb
+
+`ATTESTED` first meant "nothing could falsify it". Splitting the contact
+clause (OF-10) produced a statement that does not fit that: "no contact
+information in any other form" **is** falsifiable — find a phone number in the
+tree and it is false — but no list of what counts as contact information is
+complete, so no committable check decides it. That is a third situation, and
+the mark's definition was widened to hold it rather than filed under the
+nearest existing one.
+
+This is worth stating because the alternative was available and tempting: the
+clause could have kept its single `CHECKED` mark, and the gap between "contact
+information" and "an email address" would have stayed invisible. A vocabulary
+whose categories are never strained is usually a vocabulary nobody has tried to
+use.
+
+What the three marks now separate is who can decide a clause: anyone with a
+clone, only someone holding excluded material, or no one. The widening does not
+touch the first two.
+
 ### What `CHECKED` is worth
 
 [`../evidence/check_participant_firewall.py`](../evidence/check_participant_firewall.py)
@@ -194,7 +215,10 @@ runs the checked clauses: caption and subtitle formats and guarded directories
 never added in any reachable commit on any branch in the clone, the
 `.gitignore` net for both still present and uncommented, no personal video or
 channel link in the tree, and no email address outside an explicit allowlist.
-It states in its own output what it does not cover. 11 mutations in
+Those last two are the whole of what it knows about contact information: a
+phone number, a social handle or a file-sharing link is not in its domain,
+which is why the clause above carries two marks instead of one. It states in
+its own output what it does not cover. 11 mutations in
 [`../evidence/test_check_participant_firewall.py`](../evidence/test_check_participant_firewall.py)
 confirm it goes red for each of those, including one committed on a branch
 that is never pushed, and that it refuses to run rather than cover a subset
@@ -207,7 +231,7 @@ not notice they were remembering one.
 
 ### The ratio
 
-Counted in this file: **6 checked, 2 checkable, 8 attested.**
+Counted in this file: **6 checked, 2 checkable, 9 attested.**
 
 Most of this policy is attested, and that is not a defect to be engineered
 away. A firewall against *judgement* being contaminated cannot be reduced to a

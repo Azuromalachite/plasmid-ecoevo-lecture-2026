@@ -12,15 +12,21 @@ So this script is explicit about three things it could otherwise be vague on:
 
 1. **Which files it opens.** `READ_SUFFIXES` is the domain. Every run prints
    it, with a count. `.ipynb` is in it.
-2. **Which files it has decided carry no citations.** `UNCITED_SUFFIXES` is
-   that decision, written down. A suffix in neither set is a **failure**, not
-   a skip: a file type nobody has ruled on has appeared, and the right response
-   is to rule on it rather than to walk past it.
+2. **Which files it has decided carry no citations.** `UNCITED_SUFFIXES` and
+   `UNCITED_NAMES` are that decision, written down. A file in neither set is a
+   **failure**, not a skip: something nobody has ruled on has appeared, and the
+   right response is to rule on it rather than to walk past it. Extensionless
+   files are ruled on by name, because an empty suffix is not a type (OF-12).
 3. **Which syntaxes it understands.** Citations in this repository are written
    three different ways, and a checker that knew only the obvious one would
    report the other two as orphans. Each extractor reports its own count, so an
    extractor that silently stops matching is visible as a zero rather than as
    an absence.
+4. **Where the citation sits.** A key cited only from `reviews/` or `docs/` is
+   kept alive by commentary about the repository, not by the material, and the
+   orphan check cannot see the difference. The split is reported, with the keys
+   named, and does not fail: whether a review citing a work it alone needs is a
+   problem is a judgement, and this script does not make judgements (OF-11).
 
 WHAT IT DOES NOT DO. It does not resolve DOIs and does not check metadata
 against the publisher: both need the network, and a check that is sometimes
@@ -55,8 +61,30 @@ SKIP_DIRS = {".git", "__pycache__"}
 READ_SUFFIXES = {".md", ".yml", ".py", ".ipynb"}
 
 # (2) The decision, written down. These carry no citations by their nature:
-# the bibliography itself, the citation file, licence and figure output.
-UNCITED_SUFFIXES = {".bib", ".cff", ".svg", ".txt", ""}
+# the bibliography itself, the citation file, figure output and plain text.
+UNCITED_SUFFIXES = {".bib", ".cff", ".svg", ".txt"}
+
+# Extensionless files are ruled on by NAME. OF-12: `""` used to sit in the set
+# above, where it read as a fifth decision and was in fact a standing exemption
+# for every extensionless file that would ever exist here. Measured: a file
+# named NOTES citing a key that does not exist produced "no problems", while an
+# unruled `.tex` failed loudly -- the same checker enforcing its own rule in one
+# direction only. Three names are a decision; `""` was a hole shaped like one.
+UNCITED_NAMES = {"LICENSE", ".gitignore", ".gitattributes"}
+
+# (4) Where a citation sits. OF-11: this checker had no split at all, so a
+# bibliography entry kept alive only by commentary counted as cited and could
+# never be reported as an orphan.
+#
+# This set is deliberately NOT the sibling's CONTENT_DIRS, and saying so is the
+# point of this comment -- differing from it *silently* was the finding, not
+# differing from it. `check_claim_ids.py` asks "is this claim ID surfaced to a
+# reader on a page?", so figure scripts and README fall outside its content
+# set. This script asks "is this source doing work in the public material?",
+# and a figure footer citation is work: it ships inside the SVG. So the split
+# here is material against commentary, and commentary is the two directories
+# that talk ABOUT the repository rather than teach from it.
+COMMENTARY_DIRS = {"reviews", "docs"}
 
 # A BibTeX key in this repository: lowercase name, four-digit year, suffix.
 KEY_SHAPE = r"[a-z][a-z-]*[0-9]{4}[a-z0-9]*"
@@ -102,9 +130,16 @@ def read_text(path):
 
 
 def walk(root):
-    """Yield readable files; return the skip tally and any unruled suffixes."""
+    """Yield readable files, the skip tally, and anything unruled.
+
+    Unruled things come back in two tallies because they are ruled on in two
+    ways: a type by its suffix, an extensionless file by its name. Collapsing
+    them would report a new `NOTES` as unruled file type '', which names
+    neither the file nor the set to add it to.
+    """
     skipped = collections.Counter()
-    unruled = collections.Counter()
+    unruled_suffixes = collections.Counter()
+    unruled_names = collections.Counter()
     files = []
     for path in sorted(root.rglob("*")):
         if not path.is_file() or set(path.parts) & SKIP_DIRS:
@@ -113,10 +148,14 @@ def walk(root):
         if suffix in READ_SUFFIXES:
             files.append(path)
         elif suffix in UNCITED_SUFFIXES:
-            skipped[suffix or "(no suffix)"] += 1
+            skipped[suffix] += 1
+        elif not suffix and path.name in UNCITED_NAMES:
+            skipped[path.name] += 1
+        elif not suffix:
+            unruled_names[path.name] += 1
         else:
-            unruled[suffix] += 1
-    return files, skipped, unruled
+            unruled_suffixes[suffix] += 1
+    return files, skipped, unruled_suffixes, unruled_names
 
 
 # ---------------------------------------------------------------------------
@@ -209,7 +248,7 @@ def merge(*sources):
 def main():
     root = Path(__file__).resolve().parent.parent
     defined, duplicates, dois = parse_bibliography(root / "evidence" / "references.bib")
-    files, skipped, unruled = walk(root)
+    files, skipped, unruled_suffixes, unruled_names = walk(root)
 
     pandoc, malformed = cites_pandoc(files, root)
     extractors = {
@@ -218,6 +257,15 @@ def main():
         "figure footer  SOURCE_KEYS": cites_figure_footers(root),
     }
     cited = merge(*extractors.values())
+
+    # OF-11. A key every one of whose citation sites is commentary. Registry
+    # sites are spelled "claims.yml:<id>" rather than as paths, which have no
+    # directory part and so never count as commentary -- correct, since the
+    # registry is material.
+    commentary_only = sorted(
+        key for key, where in cited.items()
+        if where and all(set(Path(site).parts) & COMMENTARY_DIRS
+                         for site in where))
 
     problems = []
 
@@ -239,10 +287,15 @@ def main():
     for key, doi in sorted((k, v) for k, v in dois.items() if v):
         if not DOI_SHAPE.match(doi):
             problems.append(f"doi is not shaped like a DOI: {key} -> {doi!r}")
-    for suffix, n in sorted(unruled.items()):
+    for suffix, n in sorted(unruled_suffixes.items()):
         problems.append(
             f"unruled file type {suffix!r} ({n} file(s)): decide whether it can "
             f"carry citations, then add it to READ_SUFFIXES or UNCITED_SUFFIXES")
+    for name, n in sorted(unruled_names.items()):
+        problems.append(
+            f"unruled extensionless file {name!r}: decide whether it can carry "
+            f"citations, then add its name to UNCITED_NAMES -- or, if it can, "
+            f"give it a suffix in READ_SUFFIXES")
     for name, found in extractors.items():
         if not found:
             problems.append(f"extractor matched nothing: {name!r} -- either the "
@@ -254,13 +307,23 @@ def main():
     if skipped:
         print("  ruled as carrying no citations: "
               + ", ".join(f"{s} x{n}" for s, n in sorted(skipped.items())))
-    if unruled:
-        print("  UNRULED types present: "
-              + ", ".join(f"{s} x{n}" for s, n in sorted(unruled.items())))
+    if unruled_suffixes or unruled_names:
+        print("  UNRULED present: "
+              + ", ".join([f"{s} x{n}" for s, n in sorted(unruled_suffixes.items())]
+                          + [f"{n_} (no suffix)" for n_ in sorted(unruled_names)]))
     print("citations found, by syntax:")
     for name, found in extractors.items():
         print(f"  {len(found):3d} distinct keys   {name}")
-    print(f"distinct keys cited overall: {len(cited)}")
+    print(f"distinct keys cited overall: {len(cited)}  "
+          f"({len(cited) - len(commentary_only)} from the material, "
+          f"{len(commentary_only)} only from commentary)")
+    if commentary_only:
+        print("  cited only from " + "/".join(sorted(COMMENTARY_DIRS)) + ": "
+              + ", ".join(commentary_only))
+        print("  Not an error: a review may cite a work the teaching material "
+              "does not.\n  Reported because such a key cannot be caught by "
+              "the orphan check -- commentary\n  about the repository keeps "
+              "its bibliography entry alive.")
     print("\nnot checked here: that a DOI resolves, or that its metadata "
           "matches the entry.\nBoth need the network and stay a human step.")
 

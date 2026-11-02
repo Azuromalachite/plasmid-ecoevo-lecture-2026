@@ -129,13 +129,23 @@ Each checker states the file types it reads and refuses to pass when a file
 type appears that nobody has ruled on. If you add a format — `.tex`, `.qmd`,
 `.json` — `check_references.py` will fail until you decide whether it can
 carry citations. That is deliberate: the alternative is a check that quietly
-stops covering part of the repository.
+stops covering part of the repository. The same applies to a file with **no**
+extension: those are ruled on by name, in `UNCITED_NAMES`, so adding a
+`NOTES` or a `Makefile` fails until you say which it is.
 
 The two `test_check_*.py` scripts are not part of the routine run. Each mutates
-a temporary copy — 15 ways for the references checker, 11 for the
-firewall checker — and asserts the checker catches each one. Run the matching
-test after changing a checker, and add a case when you widen what it covers: a
-checker that has only ever reported clean is not known to work.
+a temporary copy — 17 ways for the references checker, 11 for the
+firewall checker — and asserts the checker responds. Sixteen of the references
+cases assert a failure; one asserts that the checker stays green and still
+reports what it found, because not everything worth saying is an error. Run
+the matching test after changing a checker, and add a case when you widen what
+it covers: a checker that has only ever reported clean is not known to work.
+
+When you add a case, check that it **fails against the unfixed checker**. A
+case that passes either way tests nothing, and that is not hypothetical here:
+twelve of the references cases passed against a defect they were written to
+cover, because every one of them planted a key that already matched the
+pattern the extractor used (G2).
 Known unfixed defects are listed in
 [`docs/open-findings.md`](docs/open-findings.md); add one there in the same
 commit that discovers it.

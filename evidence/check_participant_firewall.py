@@ -25,6 +25,13 @@ WHAT IT CANNOT CHECK, and the policy says so in its own voice:
     make this script complete would violate the clause the script exists to
     support. The policy marks those clauses CHECKABLE for exactly this reason:
     the procedure is real, the input cannot live here.
+  - **contact information that is not an email address or a video link.** A
+    phone number, a social handle, a file-sharing link, a personal site. The
+    class has no edge to enumerate, so check 4 and check 5 are the whole of
+    what "contact information" means here. The policy clause carries two marks
+    for this reason (OF-10): CHECKED for the two shapes below, ATTESTED for
+    the rest. Measured before the split: a page carrying a handle, a phone
+    number and a drive link produced "no problems", exit 0.
   - **anything requiring judgement.** Whether a paraphrase came from a
     presentation, whether an emphasis was chosen because of what was presented,
     whether prose began life as someone's unpublished submission. These have no
@@ -198,6 +205,10 @@ def main():
     print("\nNOT checked here, and marked CHECKABLE or ATTESTED in the policy:")
     print("  names and affiliations -- the grep needs the participant list as")
     print("  input, and that list is the material the policy excludes.")
+    print("  Contact information other than an email address or a video link:")
+    print("  a phone number, a social handle, a file-sharing link. The class has")
+    print("  no edge to enumerate, so the clause is marked CHECKED for the two")
+    print("  shapes above and ATTESTED for the rest.")
     print("  Anything needing judgement: whether a paraphrase, an emphasis or a")
     print("  framing came from a presentation. No signature exists to search for.")
 
