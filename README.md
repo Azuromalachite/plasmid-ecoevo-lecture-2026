@@ -121,11 +121,22 @@ comparisons between teams, and no emphasis chosen because of what teams
 presented. The test for every page is: *could this page have been written by
 someone who never watched the presentations?* If not, it does not belong here.
 
+**Those last three are attestations, not checks.** "No frequencies of
+approaches", "no comparisons between teams" and "no emphasis chosen because of
+what teams presented" have no diff to measure, nothing that could falsify
+them, and no procedure that would catch a violation. They are statements by
+the author about their own conduct, and saying so is the point: the clauses
+either side of them *are* machine-checked, and a reader should not have to
+guess which is which.
+
 Participant-derived material is excluded **by default and on every branch**,
 draft and unpublished branches included, and a publicly accessible video is
-not by itself permission to republish an identifiable transcript. What may
-eventually be included, how permission is scoped, and why an omission in a
-presentation is never evidence of absence are all set out in
+not by itself permission to republish an identifiable transcript. The
+file-shaped half of that is checked by
+[`evidence/check_participant_firewall.py`](evidence/check_participant_firewall.py)
+over every branch in the clone. What may eventually be included, how
+permission is scoped, why an omission in a presentation is never evidence of
+absence, and which clause carries which mark, are all set out in
 [`docs/participant-material-policy.md`](docs/participant-material-policy.md).
 
 ## Contents

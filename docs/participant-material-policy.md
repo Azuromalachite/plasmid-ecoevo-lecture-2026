@@ -12,13 +12,24 @@ permanent public archive with their name attached, and the difference matters.
 The following must not enter Git **on any branch** — including temporary,
 draft and unpublished branches, and including branches that are never pushed:
 
-- raw or cleaned transcripts;
-- participant names or other directly identifying personal data;
-- personal YouTube or channel metadata, or contact information;
-- schools, universities or affiliations, where these identify individuals;
-- internal transcription, correction, judging or curation notes;
-- unpublished submissions or presentation material;
-- verbatim participant speech, unless separately and explicitly authorised.
+Each clause carries a mark, defined under
+[Checked or attested](#checked-or-attested). The short version: the mark says
+who is in a position to verify the clause — anyone (**`CHECKED`**), only
+someone holding material this policy excludes (**`CHECKABLE`**), or the author
+alone (**`ATTESTED`**).
+
+- **`CHECKED`** — raw or cleaned transcripts;
+- **`CHECKABLE`** — participant names or other directly identifying personal
+  data;
+- **`CHECKED`** — personal YouTube or channel metadata, or contact
+  information;
+- **`CHECKABLE`** — schools, universities or affiliations, where these
+  identify individuals;
+- **`CHECKED`** for the directory shapes, **`ATTESTED`** for the content —
+  internal transcription, correction, judging or curation notes;
+- **`ATTESTED`** — unpublished submissions or presentation material;
+- **`ATTESTED`** — verbatim participant speech, unless separately and
+  explicitly authorised.
 
 **This applies even when the original presentation or video is publicly
 accessible.** A public source is not, by itself, permission to redistribute an
@@ -29,6 +40,12 @@ Git makes this close to irreversible: a commit on a local branch can be
 pushed later by someone who did not know what was in it, and history is not
 meaningfully editable once shared. "Only on a draft branch" is not a
 mitigation.
+
+The **on any branch** scope is **`CHECKED`** for the file shapes and
+**`ATTESTED`** for content. The checker reads `git log --all`, so it covers
+every branch in the clone it runs in, including ones never pushed — but it
+cannot see a branch that exists only in somebody else's working tree, which is
+the case this clause worries about most.
 
 ## What may eventually be included
 
@@ -120,13 +137,79 @@ stands:
 > No participant-derived scientific strategy, and no identifiable participant
 > material, enters the public repository.
 
+**`ATTESTED`.** Every checked clause above is a consequence of this one that
+happens to leave a trace. The firewall itself is broader than all of them
+together, and nothing could falsify it.
+
 The working test is unchanged: **could this page have been written by someone
-who never watched the presentations?**
+who never watched the presentations?** **`ATTESTED`**, necessarily — it is a
+judgement, which is what makes it a usable test and what makes it unverifiable
+by anyone else.
 
 If permission is later obtained, the firewall is **changed deliberately into a
 permission-gated boundary** — recording which scopes are covered, for whom,
 and by what evidence. It is not removed. A boundary that dissolves the first
 time someone says yes was never a boundary.
+
+## Checked or attested
+
+The clauses in this policy are not all the same kind of statement, and
+presenting them in one declarative voice hid that: a reader could not tell
+which ones they were being asked to take on trust. Each now carries one of
+three marks.
+
+| Mark | Means | Who can verify it |
+| --- | --- | --- |
+| **`CHECKED`** | A committed script verifies it. | Anyone who clones. |
+| **`CHECKABLE`** | A procedure exists and has been run, but its input is material this policy excludes, so the check cannot be committed. | Only someone holding that input. |
+| **`ATTESTED`** | Nothing could falsify it. A statement by the author about their own conduct. | No one. |
+
+These are a **separate, local vocabulary** for this file. They are not
+evidence badges and have no relationship to the `layer` and `status` axes in
+[`../evidence/evidence-levels.md`](../evidence/evidence-levels.md), which
+describe claims about nature. These describe who is in a position to check a
+promise.
+
+### Why the middle mark exists
+
+"No participant names" *is* mechanically checkable: grep the tree for the
+names. But the check needs the list of names as its input, and committing that
+list would commit precisely the identifying data the clause forbids. **The
+check cannot be committed without violating the clause it checks.** That is
+not the same as "no transcripts in Git", which any stranger can verify, and
+not the same as a judgement nobody can. Both reductions lose something true,
+so the policy carries three marks rather than two.
+
+From a reader's position **`CHECKABLE`** and **`ATTESTED`** are the same: they
+take the author's word. The distinction is about what the author can do, not
+what the reader gets.
+
+### What `CHECKED` is worth
+
+[`../evidence/check_participant_firewall.py`](../evidence/check_participant_firewall.py)
+runs the checked clauses: caption and subtitle formats and guarded directories
+never added in any reachable commit on any branch in the clone, the
+`.gitignore` net for both still present and uncommented, no personal video or
+channel link in the tree, and no email address outside an explicit allowlist.
+It states in its own output what it does not cover. Nine mutations in
+[`../evidence/test_check_participant_firewall.py`](../evidence/test_check_participant_firewall.py)
+confirm it goes red for each of those, including one committed on a branch
+that is never pushed, and that it refuses to run rather than cover a subset
+when git is unavailable.
+
+**The checked clauses are the floor, not the policy.** They catch the
+file-shaped accident — a folder of captions dropped into the tree. They say
+nothing about a page written by someone who watched the presentations and did
+not notice they were remembering one.
+
+### The ratio is the point
+
+Four clauses are **`CHECKED`**, two **`CHECKABLE`**, and the rest
+**`ATTESTED`**. That is not a defect to be engineered away. A firewall against
+*judgement* being contaminated cannot be reduced to a grep, and a policy
+containing only its greppable parts would be a smaller policy, not a
+better-verified one. Publishing the ratio is the honest version of a promise
+most of which rests on one person's word.
 
 ## Governance principle
 
@@ -140,6 +223,17 @@ version is reusable, checkable and carries no one's name.
 
 ## Current state
 
-Nothing in this repository is participant-derived. Every page is built from
-published literature with DOI-checked references. This policy is written down
-so that stays true by decision rather than by accident.
+Nothing in this repository is participant-derived. **`ATTESTED`** — it is the
+conjunction of everything above, and while some of its conjuncts are checked,
+the statement is not.
+
+Every page is built from published literature **`CHECKED`** — every citation
+resolves to an entry in the bibliography and every entry is cited, verified by
+[`../evidence/check_references.py`](../evidence/check_references.py) — with
+DOI-checked references, **`CHECKED`** for the presence and shape of each
+`doi` field and **`ATTESTED`** for resolution: that a DOI works, and that its
+metadata matches the entry, is hand-checking the script declines to imitate.
+
+This policy is written down so that stays true by decision rather than by
+accident, and marked so that a reader can tell which half of it rests on a
+command and which on a person.
