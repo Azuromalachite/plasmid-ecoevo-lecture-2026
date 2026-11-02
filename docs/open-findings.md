@@ -15,23 +15,6 @@ finding.
 
 ## Open
 
-### OF-1 — the 59/59 validation is not discriminating
-
-**Severity:** major
-**Location:** `claim.model.plasmid_invasion_threshold` (`evidence/claims.yml`),
-`concepts/fitness-vs-persistence.md`
-
-The invasion threshold's verification note reports that the sign of
-γ·n\* − c·ψ − τ predicted invasion in 59 of 59 sampled parameter sets outside
-a 5% band. Parameter sets were drawn independently and *then* observed to
-fall mostly far from the boundary, so the test could hardly have failed. The
-number sounds discriminating and is not.
-
-**Correction:** redesign so the challenge cases are *derived from the
-invariant being tested* — generate parameter sets at controlled distances
-from the boundary — rather than sampled and hoped over. Report the
-sensitivity domain, not the pass count.
-
 ### OF-2 — no committed bibliography-key checker
 
 **Severity:** minor
@@ -276,3 +259,64 @@ what a content page is.
 a domain it cannot see, which is the defect OF-7 is about; a count that is
 wrong is better than a file that is invisible. Reviews stay in the tree and
 stay read — a bogus claim ID written in one is still reported, as it should be.
+
+---
+
+## Closed: OF-1 — the 59/59 validation is not discriminating
+
+**Was:** the invasion threshold's verification note reported that the sign of
+γ·n\* − c·ψ − τ predicted invasion in 59 of 59 sampled parameter sets outside a
+5% band. Parameter sets were drawn independently and *then* observed to fall
+mostly far from the boundary, so the test could hardly have failed. The number
+sounded discriminating and was not.
+
+**Done:** the check is now a committed script,
+[`../models/invasion-threshold/check_invasion_threshold.py`](../models/invasion-threshold/check_invasion_threshold.py),
+with [a README](../models/invasion-threshold/README.md) stating what it does
+and does not establish. Three things changed, and the first is the one the
+finding was about.
+
+**1. The cases are constructed from the invariant, not sampled near it.**
+Everything except the transfer rate is fixed, γ\_crit is solved for, and γ is
+set to γ\_crit·(1 + ε) for a ladder of signed ε. The predicted eigenvalue is
+then exactly ε·(c·D + τ), so ε is a dimensionless signed distance from the
+threshold with a known consequence, and the full nonlinear system is integrated
+in ln *P* to measure the realised rate against it.
+
+**2. A sensitivity domain replaces the pass count.** The predicted rate is
+recovered to better than 6 × 10⁻⁶ relative for |ε| ≤ 1. The *sign* — which is
+what the condition asserts — is recovered down to |ε| ≈ 10 × *P*₀/*n*\*,
+measured at 1e-5, 1e-7, 1e-9, 1e-11 and 1e-13 for inocula of 1e-4 through
+1e-12 of *n*\*. The lower edge is a property of the question rather than of the
+arithmetic: an eigenvalue describes a vanishing class, and a class you can
+simulate is not vanishing. The evidence for that reading, rather than a solver
+floor dressed as physics, is that the edge tracks the inoculum at a constant
+ratio across eight orders of magnitude and the rate error scales the same way.
+Above |ε| ≈ 10 the linearisation stops describing the system, as it should.
+
+**3. The derivation became a derivation.** The symbolic half now *derives* the
+eigenvalue instead of asserting it, and checks the step that matters: the
+plasmid row of the Jacobian is `[0, 0]` off the diagonal at the plasmid-free
+equilibrium, so the eigenvalue is γ·n\* − c·ψ − τ exactly and not to leading
+order. The note previously claimed "symbolic residual 0" with nothing committed
+that computed it — the same gap as a bibliography checked only by a scratch
+tool (OF-2).
+
+**The old design is measured rather than just criticised.** The script
+reconstructs independent log-uniform sampling of the transfer rate and reports
+what it explored: a median |ε| of about 1.0, 14% of draws two or more orders
+from the boundary, and 1.1% inside the 5% band the old test discarded. That is
+the quantitative form of "could hardly have failed", and it is what makes the
+replacement worth its length.
+
+**What this leaves.** `status: supported` still means supported *within* the
+model. None of the model's assumptions — mass action, well-mixedness,
+per-unit-time segregation, transconjugants transferring like donors, constant
+cost — is tested by any of this, and the README says so in its own section
+rather than leaving it to be inferred.
+
+**Residue: the ladder can still run out.** The script fails rather than quoting
+a resolution that sits at the bottom of its own ε ladder, because that number
+would be the instrument's floor and not the system's. This fired once during
+development, at *P*₀/*n*\* = 1e-12, and the ladder was deepened until the row
+had headroom. The guard is the durable part; the current depth is not.
