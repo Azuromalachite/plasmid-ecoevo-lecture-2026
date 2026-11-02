@@ -29,56 +29,6 @@ valid registry status, and removing the badge row while keeping the status
 would make the two inconsistent. Revisit if a genuinely contested claim
 appears, or if the status itself is retired.
 
-### OF-10 — a `CHECKED` mark promises more than its script delivers
-
-**Severity:** minor
-**Location:** `docs/participant-material-policy.md`, the YouTube/contact clause
-
-The clause reads "personal YouTube or channel metadata, **or contact
-information**" and is marked `CHECKED`. `check_participant_firewall.py` covers
-`youtube.com`, `youtu.be`, `vimeo.com` and email addresses. Measured on a copy
-outside the repository: a page carrying an Instagram handle, a phone number and
-a Google Drive link produces "no problems", exit 0. "Contact information" is
-broader than "an email address", and the mark does not say so — which is the
-one thing the marking vocabulary exists to prevent, happening inside the
-vocabulary.
-
-**Correction:** split the clause the way the internal-notes clause one bullet
-below it is already split — `CHECKED` for links and addresses, `ATTESTED` for
-the rest — or widen the script and say what it now covers. Either way the ratio
-moves, and the stated line has to move with it; the checker now enforces that.
-
-### OF-11 — the OF-9 split was applied to one checker and not its sibling
-
-**Severity:** minor
-**Location:** `evidence/check_references.py`
-
-OF-9 established that commentary in `reviews/` should not count as content, and
-`check_claim_ids.py` reports "on content pages" and "elsewhere" separately.
-`check_references.py` has no such split, so a key cited only from a review
-counts as cited, and a review can keep a dead reference from being reported as
-an orphan. Latent: the round-1 review cites two keys, both also cited from
-content, so no key is review-only today. The exposure grows with each round.
-
-**Correction:** reuse `CONTENT_DIRS` to report the same split, or state in the
-docstring that commentary counts as a citation and why. Silently differing from
-the sibling checker is the part that is not defensible.
-
-### OF-12 — one entry in `UNCITED_SUFFIXES` rules an open-ended class
-
-**Severity:** trivial
-**Location:** `evidence/check_references.py`
-
-`UNCITED_SUFFIXES` is described as the decision, written down. Four entries
-name a format; the fifth, `""`, covers every extensionless file that will ever
-exist here. Measured: a file named `NOTES` citing a key that does not exist
-produces "no problems". The checker fails loudly on an unruled `.tex` and
-silently accepts an unruled `NOTES`.
-
-**Correction:** replace `""` with the three filenames that exist — `LICENSE`,
-`.gitignore`, `.gitattributes` — so a new extensionless file is unruled and
-fails like any other unruled type.
-
 ---
 
 ## Closed in this changeset
@@ -557,3 +507,110 @@ retyped, and three of them had already gone stale.
 by measurement this round and is correct, but only the policy ratio is
 *enforced*. The mutation-case counts, the bibliography totals and the model's
 sensitivity figures are still prose, and still rely on someone re-deriving them.
+
+---
+
+## Closed in the minors changeset
+
+OF-10, OF-11 and OF-12 — the three findings round 2 recorded rather than
+fixed. All three were in the checking apparatus or in the document that
+describes it, which is where round 2 found everything.
+
+### OF-10 — closed by splitting the clause, which moved the vocabulary
+
+The contact clause now reads **`CHECKED`** for video and channel links and for
+email addresses, **`ATTESTED`** for contact information in any other form. The
+script's own output gained a line saying the same thing, because the script is
+what the first mark means and it was not stating this limit.
+
+The part worth recording is what the split cost. `ATTESTED` was defined as
+"nothing could falsify it". "No contact information in any other form" does not
+fit that: it **is** falsifiable — find a phone number in the tree and it is
+false — but no list of what counts as contact information is complete, so no
+committable check decides it. That is a third situation, and the definition was
+widened to hold it: *no committable check decides it, either because nothing
+could falsify it or because nothing enumerates what would*.
+
+Widening a definition to fit a case is the move that turns a vocabulary into
+decoration, so it is stated in the policy under "What the third mark had to
+absorb" rather than made quietly. The alternative was available and worse: keep
+the single `CHECKED` mark and let the gap between "contact information" and "an
+email address" stay invisible. The three marks still separate the same thing —
+who can decide a clause — and the first two are untouched.
+
+**Ratio moved** from 6/2/8 to **6 checked, 2 checkable, 9 attested**, and
+`check_participant_firewall.py` confirmed the stated line and the marks agree.
+That is the G1 enforcement doing its job on the first change after it was
+written, which is the only evidence worth having about it.
+
+**No new mutation case.** The fix narrows a claim; it does not widen a check.
+The consequence that *is* checkable — the ratio — is already covered by
+`mutate_ratio_drift`. A case asserting that the script fails to catch a phone
+number would be a test that the repository has a limitation, which the policy
+states in words.
+
+### OF-11 — closed, and its own measurement was wrong by the time it was read
+
+The finding said: "the round-1 review cites two keys, both also cited from
+content". **Measured on `main` before fixing: `reviews/` contributes zero
+citations.** Both bracketed citations in the round-1 review sit inside
+backticks, and the G2 fix in the same changeset began stripping code spans
+before extraction — correctly, since they are discussion of citation syntax,
+not citations. The finding's premise was overtaken by its sibling fix.
+
+The live instance is elsewhere: `docs/open-findings.md` carries one genuine
+bracketed citation, so this file is the only commentary citing anything. That
+key is also cited from content, so the count today is still zero.
+
+Making it the sixth instance of a number in prose drifting from what it
+describes — after OF-5, F1, OF-1, F5 and G1 — except that this one was in the
+ledger entry *recording* the pattern.
+
+**Fixed by** splitting the reported count: `COMMENTARY_DIRS = {"reviews",
+"docs"}`, keys cited only from commentary counted and **named** in the output.
+
+**Not by reusing `CONTENT_DIRS`**, which is what the correction drafted. The
+sibling asks "is this claim ID surfaced to a reader on a page?", so figure
+scripts and README fall outside its content set. This checker asks "is this
+source doing work in the public material?", and a figure footer citation is
+work: it ships inside the SVG. Reusing the set verbatim would have filed all 13
+figure-footer citations as commentary — a new inaccuracy introduced by a fix,
+which is the defect class round 2 was about. The difference between the two
+sets is now a comment in the file. OF-11's complaint was the *silence*, not the
+difference.
+
+**Reported, not failed.** A review may legitimately cite a work the teaching
+material does not; whether a given case is that or a dead reference is a
+judgement, and the script does not make judgements. This matches OF-9, which
+also split a count without changing a rule.
+
+### OF-12 — closed by naming the three files
+
+`""` is gone from `UNCITED_SUFFIXES`. Extensionless files are ruled on by name
+in a new `UNCITED_NAMES = {"LICENSE", ".gitignore", ".gitattributes"}`, and
+anything else extensionless fails as unruled, with a message that names the
+file and the set to add it to. An empty suffix is not a type, and the entry
+that treated it as one was a standing exemption that read like a decision.
+
+### Both new cases were checked against the unfixed checker
+
+Each fix was reverted on its own in a scratch copy, and the matching case went
+red: the OF-12 case exits 0 with `""` restored, and the OF-11 case stays green
+without the reporting line. This is the control G2 did not have — twelve
+mutation cases passed against the defect they were written to cover — and it is
+now written into `CONTRIBUTING.md` as a requirement for new cases rather than
+left as a lesson.
+
+The references test gained a third kind of assertion for the OF-11 case:
+green **and** saying the thing. Asserting it as a failure would push a
+non-defect into exit 1; asserting it as the control would check "no problems"
+and ignore the sentence entirely. 17 cases: 1 control, 15 red, 1 noted.
+
+### What these three leave behind
+
+`CONTENT_DIRS` and `COMMENTARY_DIRS` are now two sets in two checkers
+partitioning the same tree for different questions, and nothing checks that
+every directory falls on one side of each. A new top-level directory is
+material to one and invisible to the other, silently. Not filed as a finding
+because no such directory exists and inventing a third mechanism to watch two
+sets would cost more than it protects — but it is the shape of the next one.
