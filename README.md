@@ -147,6 +147,7 @@ absence, and which clause carries which mark, are all set out in
 | [`concepts/copy-carry-spread.md`](concepts/copy-carry-spread.md) | Three routes by which a plasmid lineage gains or loses copies |
 | [`concepts/plasmid-vs-host-fitness.md`](concepts/plasmid-vs-host-fitness.md) | Why what is good for the plasmid and what is good for the cell diverge |
 | [`concepts/fitness-vs-persistence.md`](concepts/fitness-vs-persistence.md) | Why a measured fitness cost does not by itself predict fate |
+| [`concepts/plasmid-size-and-copy-number.md`](concepts/plasmid-size-and-copy-number.md) | Why the size–copy-number relationship has two live readings, and why that is not a controversy |
 | [`misconceptions/more-copy-is-always-better.md`](misconceptions/more-copy-is-always-better.md) | Copy number has costs, not just benefits |
 | [`misconceptions/transfer-is-not-spread.md`](misconceptions/transfer-is-not-spread.md) | A transfer event is not a spreading lineage |
 | [`evidence/`](evidence/) | Bibliography, tracked claims, evidence levels |
