@@ -45,6 +45,13 @@ as a genuine policy violation with no explanation of where it came from.
 `git log --all` reports zero caption files, verified with a matcher first shown
 able to find one.
 
+`[M]` **Confirmed independently by the other session**, from the main
+checkout, rather than accepted on report: zero caption or subtitle files among
+**50 paths ever added across 69 commits**; no `scratch/private` branch locally
+or on the remote; `check_participant_firewall.py` exit 0. That matcher was
+also exercised first, on a synthetic caption filename. A containment claim is
+the last thing that should rest on one party's word.
+
 **Fixed by failing closed:** the test refuses to run when `.git` is a file,
 naming the cause and the remedy. Not by repairing the pointer — a test that can
 write to the repository it tests should refuse rather than attempt surgery.
