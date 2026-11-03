@@ -203,14 +203,30 @@ British *"favours"* where the copy-edited published text has *"favors"*:
 > *"Thus, local adaptation only **favours** plasmid-borne resistance if the
 > frequency of the sensitive plasmid is low outside the local niche."*
 
-The claim was made because a case-insensitive, whitespace-normalised search of
-the preprint returned nothing — the variant axis was **orthography**, which
-that search did not defeat. It is the third false negative of its kind in one
-day: whitespace, then case, then en-GB against en-US.
+**Why it was made is not what it first looked like.** The obvious reading is
+that a search missed the sentence on the `favours`/`favors` difference. That
+is wrong, and the author of the claim corrected the diagnosis: the preprint
+was never searched for that sentence. What existed was an earlier exploratory
+query, filtering sentences on an unrelated pattern and then **truncating the
+result set**. The sentence matched that filter and was cut by the truncation.
+Its non-appearance in a deliberately shortened list was then read as absence,
+and restated as fact in committed public content.
+
+So there are **two independent failures here, needing two separate
+defences**:
+
+1. **A truncated result set is never evidence of absence** — not for any
+   matcher, however well built. Count the matches; do not inspect the first
+   *N*. An absence claim needs a search that is complete by construction.
+2. **Then** defeat the variant axes, because a complete search can still miss.
+   Verifying this correction required `/only favou?rs/`: whitespace- and
+   case-normalisation alone would **not** have found it.
 
 `[I]` Worth keeping because of what it was: an **absence claim** published in
 the same changeset that added the rule *"an absence claim is a claim; it needs
-its own evidence"*. The rule was right and its author was its first casualty.
+its own evidence"*. The rule was right and its author was its first casualty —
+and the first diagnosis of *why* was wrong too, which is the more useful half.
+An error's stated cause is itself a claim.
 
 **For retrieval from published text, defeat at least:** whitespace, case,
 British/American spelling, hyphenation, and smart versus straight quotes. The
