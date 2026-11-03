@@ -98,6 +98,66 @@ def main():
     print("   The two positions are the two sides of one inequality. Neither")
     print("   is wrong; they describe different ecologies.")
 
+    # 3b. IS THE BOUNDARY REACHABLE? (OF-13)
+    #
+    # q is a frequency, so it lives in [0, 1]. Solving for q* and reporting it
+    # says nothing until q* is known to land there. The first version of this
+    # script did exactly that -- printed q* and called it the boundary -- which
+    # is the F2 defect one model over, written by the author of the F2 fix two
+    # files away. An unreachable boundary is not a weaker result; it is a
+    # DIFFERENT result, because it means one location wins across the whole
+    # range of the parameter the model is about.
+    print(f"\n3b. IS THE BOUNDARY REACHABLE?")
+    print("   q is a frequency. q* means nothing unless 0 <= q* <= 1.")
+    hi = sp.simplify(sp.numer(sp.together(q_star - 1)))      # q* <= 1
+    lo = sp.simplify(sp.numer(sp.together(q_star)))          # q* >= 0
+    print(f"   q* <= 1  <=>  {hi} <= 0")
+    print(f"   q* >= 0  <=>  {lo} >= 0")
+    hi_sym = sp.simplify(hi.subs(x_C, R / 2))
+    lo_sym = sp.simplify(lo.subs(x_C, R / 2))
+    print(f"\n   At the symmetric point x_C = R/2 these collapse to")
+    print(f"     q* <= 1  <=>  {hi_sym} <= 0")
+    print(f"     q* >= 0  <=>  {lo_sym} >= 0")
+    print("   that is:   c_c <= c_p <= c_c + gamma")
+    print("\n   THE RESULT THE RANGE CHECK UNCOVERS. A reachable boundary needs")
+    print("   the plasmid's carriage cost to exceed the chromosome's -- else the")
+    print("   plasmid wins at every q -- but to exceed it by no more than gamma.")
+    print("   The mobility term can only ever buy gamma. If the plasmid's cost")
+    print("   premium is larger than the transfer rate, no quantity of empty")
+    print("   recipients rescues it, and q stops being the deciding parameter.")
+
+    # Outside that window the model still has an answer; it is just not a
+    # boundary. Counting the cases is how the earlier version's silence shows.
+    print("\n   OUTCOMES OVER AN ANALYST-CHOSEN PROBE GRID")
+    grid = {
+        "R": [sp.Rational(1, 5), sp.Rational(1, 2), sp.Rational(4, 5)],
+        "delta": [sp.Rational(1, 200), sp.Rational(1, 50), sp.Rational(2, 25)],
+        "c_c": [sp.Rational(1, 200), sp.Rational(1, 100), sp.Rational(1, 50)],
+        "c_p": [sp.Rational(1, 200), sp.Rational(3, 200), sp.Rational(3, 100)],
+        "gamma": [sp.Rational(1, 500), sp.Rational(1, 50), sp.Rational(1, 5)],
+    }
+    import itertools
+    inside = above = below = 0
+    for Rv, dv, ccv, cpv, gv in itertools.product(*grid.values()):
+        qv = q_star.subs({R: Rv, delta: dv, c_c: ccv, c_p: cpv,
+                          gamma: gv, x_C: Rv / 2})
+        if qv > 1:
+            above += 1
+        elif qv < 0:
+            below += 1
+        else:
+            inside += 1
+    total = inside + above + below
+    print(f"     reachable boundary in [0,1]      : {inside}")
+    print(f"     q* > 1, plasmid wins at every q  : {above}")
+    print(f"     q* < 0, chromosome at every q    : {below}")
+    print(f"     NO REACHABLE BOUNDARY            : {above + below} of {total}")
+    print("     GRID COUNT, NOT A FREQUENCY. Three values on each of five")
+    print("     parameters at the symmetric point are probes chosen to span")
+    print("     plausible ranges, not a sample of plasmids, niches or designs.")
+    print("     The number says the unreachable case is common in the probed")
+    print("     space; it does not say how common it is in nature.")
+
     # 4. CONTROL A -- no mobility. gamma -> 0 must leave only the priority
     #    effect, for every q. If mobility were doing hidden work elsewhere in
     #    the expression this would fail.
