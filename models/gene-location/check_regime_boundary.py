@@ -45,6 +45,8 @@ Usage (from the repository root):
 Exit status is 1 if a derivation or a control does not reproduce.
 """
 
+import importlib.util
+import pathlib
 import sys
 
 try:
@@ -60,24 +62,51 @@ def main():
     x_C = sp.Symbol("x_C", nonnegative=True)
     x_P = R - x_C
 
-    advantage = gamma * (1 - q) - (c_p - c_c) - delta * (x_C - x_P)
-    advantage = sp.expand(advantage)
+    # OF-15. The difference is DERIVED from two fitness expressions rather than
+    # written as one line. Writing the difference directly made the controls
+    # below properties of how that line was typed: gamma occurred once, so
+    # gamma = 0 could not fail to collapse it. Built this way, a slip in either
+    # fitness expression shows up as b failing to cancel or as the nesting
+    # check failing against the imported sibling.
+    b = sp.Symbol("b", positive=True)
+    w_C = b - c_c - delta * x_P
+    w_P = b - c_p - delta * x_C + gamma * (1 - q)
+    advantage = sp.expand(w_P - w_C)
 
     print("THE COMBINED MODEL")
-    print(f"  w_P - w_C = {advantage}")
+    print(f"  w_C       = {w_C}")
+    print(f"  w_P       = {w_P}")
+    print(f"  w_P - w_C = {advantage}   (derived, not written)")
     print("  positive means plasmid localisation is favoured.")
 
     ok = []
 
-    # 1. NESTING. At q = 1 the mobility term vanishes and the model must reduce
-    #    exactly to the redundancy-only expression already committed.
-    prior = -((c_p - c_c) + delta * (2 * x_C - R))      # from check_priority_effect
+    # 0. The benefit must cancel. A real check on the pair above: it fails if
+    #    b is mistyped in either expression.
+    b_cancels = sp.simplify(sp.diff(advantage, b)) == 0
+    ok.append(b_cancels)
+    print(f"\n0. benefit b cancels between the two fitnesses : {b_cancels}")
+
+    # 1. NESTING, bound to the sibling FILE rather than to a transcription
+    #    (OF-14). A comment saying "from check_priority_effect" keeps passing
+    #    after that file changes; an import does not. Same class as the
+    #    firewall mutation target that broke on 3 November.
+    sibling_path = pathlib.Path(__file__).with_name("check_priority_effect.py")
+    spec = importlib.util.spec_from_file_location("check_priority_effect",
+                                                  sibling_path)
+    sibling = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sibling)
+    prior = sp.expand(sibling.advantage_expr(b, c_c, c_p, delta, R, x_C))
+
     nests = sp.simplify(advantage.subs(q, 1) - prior) == 0
     ok.append(nests)
     print(f"\n1. NESTING at q = 1 (gene-free plasmid everywhere)")
-    print(f"   reduces to the committed redundancy model : {nests}")
+    print(f"   imported from : {sibling_path.name}")
+    print(f"   its w_P - w_C : {prior}")
+    print(f"   reduces to the sibling's own expression   : {nests}")
     print("   So the earlier script is this one's q -> 1 limit, not a rival to")
     print("   it. The Lehtinen regime is the saturated-recipient corner.")
+    print("   This now reads that file. If it changes, this check moves.")
 
     # 2. The Eberhard regime is the opposite corner.
     eberhard = sp.simplify(advantage.subs(q, 0))
@@ -158,13 +187,18 @@ def main():
     print("     The number says the unreachable case is common in the probed")
     print("     space; it does not say how common it is in nature.")
 
-    # 4. CONTROL A -- no mobility. gamma -> 0 must leave only the priority
-    #    effect, for every q. If mobility were doing hidden work elsewhere in
-    #    the expression this would fail.
+    # 4. CONSISTENCY CHECK, not a control (OF-15). gamma appears once in w_P,
+    #    so setting it to zero cannot fail to remove it. What this does catch
+    #    is gamma leaking into w_C, or the sibling disagreeing -- because the
+    #    comparison is against the IMPORTED expression, not a local literal.
+    #    Calling it a control oversold it; the external anchor is check 1.
     no_mobility = sp.simplify(advantage.subs(gamma, 0) - prior) == 0
     ok.append(no_mobility)
-    print(f"\n4. CONTROL A, gamma = 0 (no horizontal transfer at all)")
-    print(f"   collapses to the redundancy model for every q : {no_mobility}")
+    print(f"\n4. CONSISTENCY, gamma = 0 (no horizontal transfer at all)")
+    print(f"   matches the imported redundancy model for every q : {no_mobility}")
+    print("   Not a strong control: gamma occurs once in w_P, so its removal")
+    print("   is near-automatic. It binds only because the right-hand side is")
+    print("   imported from the sibling file.")
 
     # 5. CONTROL B -- no redundancy penalty. delta = 0 must remove the
     #    frequency dependence, leaving a boundary that does not depend on how
@@ -173,7 +207,7 @@ def main():
     q_star_flat = sp.simplify(q_star.subs(delta, 0))
     indep = sp.simplify(sp.diff(q_star_flat, x_C)) == 0
     ok.extend([flat, indep])
-    print(f"\n5. CONTROL B, delta = 0 (dual carriage costs nothing extra)")
+    print(f"\n5. CONSISTENCY, delta = 0 (dual carriage costs nothing extra)")
     print(f"   no dependence on x_C                      : {flat}")
     print(f"   q* = {q_star_flat}")
     print(f"   boundary independent of current frequencies: {indep}")

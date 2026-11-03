@@ -153,15 +153,38 @@ w_P − w_C  =  γ(1−q)  −  (c_p − c_c)  −  δ(x_C − x_P)
 a rival to it. The boundary is `q* = (Rδ + c_c − c_p − 2δx_C + γ)/γ`, which at
 the symmetric point is `1 − (c_p − c_c)/γ`.
 
+That nesting check **imports** `check_priority_effect.py` and compares against
+the expression that file builds (OF-14). It used to compare against a literal
+transcription carrying the comment *"from check_priority_effect"* — correct
+when written, and silently unaffected if the sibling changed. A comment is not
+a binding. Measured: perturbing the sibling's `w_P` now turns this check red
+and exits 1, where the transcription stayed green.
+
 The teaching line is in the first term: **mobility is rented from the ecology,
 not owned by the plasmid.** Its value is multiplied by the fraction of
 recipients still plasmid-free, and that fraction is a property of the world
 outside the niche. Neither paper is wrong; they describe different ecologies.
 
-Two controls, both failing the script if they break: `γ = 0` must collapse to
-the redundancy model for every `q`, and `δ = 0` must remove the frequency
-dependence so the boundary no longer depends on how common either form already
-is — history stops mattering, which is correct for that control.
+### What the checks are actually worth (OF-15)
+
+The difference `w_P − w_C` is now **derived from two fitness expressions**
+rather than written as a single line. That matters for what the substitution
+checks can claim. Written directly, `γ` occurred exactly once, so `γ = 0`
+could not fail to collapse it, and `δ` was the only coefficient on any `x_C`
+term, so `δ = 0` could not fail to flatten it. Both were properties of how one
+statement was typed, and the script called them controls.
+
+Honest labelling now:
+
+| Check | Strength |
+| --- | --- |
+| nesting at `q → 1` against the **imported** sibling | external — reads another file, and goes red when that file moves |
+| `b` cancels between the two fitnesses | real — fails if `b` is mistyped in either expression |
+| `γ = 0`, `δ = 0` | **consistency checks**, not controls — near-automatic given where those symbols appear |
+
+The two substitutions are kept because they bind the result to the imported
+expression, but they are no longer described as if they could have failed
+independently.
 
 ### Is the boundary reachable? (OF-13)
 
