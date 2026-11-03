@@ -184,16 +184,39 @@ Exit status is 1 if a derivation stops reproducing.
 ## Source provenance — which version the quotations come from
 
 Every sentence quoted on this page was checked against the **published**
-Evolution Letters text at `10.1002/evl3.226`, not the preprint. That
-distinction is not pedantry here: the two versions differ in wording. The
-published Discussion contains
+Evolution Letters text at `10.1002/evl3.226`. The published Discussion
+contains the cleanest single statement of the boundary this directory models:
 
 > *"Thus, local adaptation only favors plasmid-borne resistance if the
 > frequency of the sensitive plasmid is low outside the local niche."*
 
-which is the cleanest single statement of the boundary this directory models —
-and it is **not present in the bioRxiv version**. Quote the published text,
-cite the DOI, and never attribute preprint wording to the paper.
+**Quote the published text and cite the DOI**, because that is the version of
+record and its wording is what a reader will find.
+
+### A correction, kept rather than edited away
+
+The first version of this section said that sentence was *"not present in the
+bioRxiv version"*. **That was false.** `[M]` It is present in bioRxiv v2
+(`10.1101/2020.08.04.236455`), differing by one letter — the preprint has
+British *"favours"* where the copy-edited published text has *"favors"*:
+
+> *"Thus, local adaptation only **favours** plasmid-borne resistance if the
+> frequency of the sensitive plasmid is low outside the local niche."*
+
+The claim was made because a case-insensitive, whitespace-normalised search of
+the preprint returned nothing — the variant axis was **orthography**, which
+that search did not defeat. It is the third false negative of its kind in one
+day: whitespace, then case, then en-GB against en-US.
+
+`[I]` Worth keeping because of what it was: an **absence claim** published in
+the same changeset that added the rule *"an absence claim is a claim; it needs
+its own evidence"*. The rule was right and its author was its first casualty.
+
+**For retrieval from published text, defeat at least:** whitespace, case,
+British/American spelling, hyphenation, and smart versus straight quotes. The
+practical form is to search a distinctive fragment containing none of them —
+`plasmid-borne resistance if the frequency of the sensitive plasmid is low`
+matches both documents on the first attempt.
 
 ## References
 
