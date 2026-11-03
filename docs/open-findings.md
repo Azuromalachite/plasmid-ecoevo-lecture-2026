@@ -57,6 +57,26 @@ script exists to enforce. No check now covers that class — the remedy is the
 refusal, which is a guard, not a proof. Worth remembering before the next
 "checked" mark is added: the blast radius of a test is part of its domain.
 
+**Deferred past v0.3, by the user's decision, and what that does and does not
+mean.** `[M]` The hazard is closed, not outstanding: the only script in the
+repository that copies `.git` is this one, and it now refuses when `.git` is a
+file. `test_check_references.py` excludes `.git` from its copy explicitly, and
+`check_participant_firewall.py` invokes only read-only git verbs. The class has
+exactly one member and that member is guarded.
+
+What is deferred is therefore **assurance, not safety**. There is no mutation
+case proving the guard fires — the guard was verified by hand, both ways, and a
+case would have to construct a linked worktree in a temporary directory to
+exercise it. Until that exists, "the firewall test cannot damage the
+repository" is an `ATTESTED` claim in this file's own vocabulary, sitting
+underneath `CHECKED` marks that assume it.
+
+**What would reopen it as blocking:** a second script that copies `.git`, a
+change to the guard, or any `CHECKED` mark added on the strength of a test that
+writes. **What would close it:** a mutation case that builds a worktree and
+asserts the refusal, which is the normal standard here and is only deferred
+because v0.3 is dated.
+
 ### OF-4 — `CONTESTED` has no site on any content page
 
 **Severity:** trivial
