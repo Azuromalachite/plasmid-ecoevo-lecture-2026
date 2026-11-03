@@ -64,6 +64,40 @@ own. The source says the dual-carrier penalty is "the only crucial assumption"
 for the result; switching it off and watching the result disappear is how that
 claim gets tested rather than repeated.
 
+**The control reproduces a published sensitivity analysis, not merely a
+sensible null.** `[L]` Verified in the published text:
+
+> *"eliminating the additional cost from dual resistance, or increasing the
+> benefit of dual resistance so much that it outweighs this additional cost,
+> abolishes the region of bistability"* — [@lehtinen2021location]
+
+That is exactly what `δ = 0` does and exactly what the script asserts happens.
+The control was designed before this sentence was found, which makes the
+agreement worth more than if it had been copied.
+
+### The assumption that makes the benefit cancel
+
+The derived result that `b` cancels — *how useful the gene is cannot predict
+where it sits* — rests on an assumption the authors state and bound:
+
+> `[L]` *"Throughout the work, we have made the assumption that the effect of
+> the gene of interest … is the same on the chromosome and the plasmid: when
+> this assumption does not hold, location can be trivially explained by the
+> fitness difference."*
+
+So the cancellation is a consequence of equal effects, not a general truth, and
+the paper names where equal effects fails first:
+
+> `[L]` *"the equal effects assumption would not hold for high copy number
+> plasmids if gene expression levels increase with copy number"*
+
+**That links this model to [`../copy-number-burden/`](../copy-number-burden/).**
+The gene-location argument assumes equal effects; the copy-number model is
+about precisely the regime where that assumption breaks. A lecture that uses
+both must not let the audience carry the `b`-cancels conclusion into the
+high-copy discussion — there, location is not neutral with respect to
+usefulness, and the paper says so.
+
 ## Reading the literature lineage correctly
 
 The lecture plan lists three papers as a *"useful literature lineage"*:
@@ -146,6 +180,20 @@ uv run --no-project --with sympy python models/gene-location/check_priority_effe
 ```
 
 Exit status is 1 if a derivation stops reproducing.
+
+## Source provenance — which version the quotations come from
+
+Every sentence quoted on this page was checked against the **published**
+Evolution Letters text at `10.1002/evl3.226`, not the preprint. That
+distinction is not pedantry here: the two versions differ in wording. The
+published Discussion contains
+
+> *"Thus, local adaptation only favors plasmid-borne resistance if the
+> frequency of the sensitive plasmid is low outside the local niche."*
+
+which is the cleanest single statement of the boundary this directory models —
+and it is **not present in the bioRxiv version**. Quote the published text,
+cite the DOI, and never attribute preprint wording to the paper.
 
 ## References
 

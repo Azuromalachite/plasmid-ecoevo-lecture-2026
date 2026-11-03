@@ -187,6 +187,35 @@ uv run --no-project python -c "import sys; sys.exit(3)"
 ```
 
 If that does not print `3`, nothing else the loop printed means anything.
+
+### A control on other inputs is not a control on this one
+
+The rule above is necessary and not sufficient, and the sharper version was
+earned three times in one day — twice by searching published text for a
+sentence that was there.
+
+A whitespace-insensitive search missed a sentence because `innerText` inserts
+line breaks. The fix was to normalise whitespace. The *next* search, already
+whitespace-normalised and returning four hits out of six, still produced one
+false negative: the quarry began a sentence and the matcher was
+case-sensitive. That matcher had been demonstrated able to return positives —
+on five other strings in the same document — and it was still wrong about the
+sixth.
+
+> **A control exercises one failure mode. Passing it says nothing about the
+> others.** Before reporting that something is absent, ask which way *this*
+> search could be wrong, and defeat that specific way.
+
+For text retrieval that means normalising whitespace **and** case, and
+preferring a regex over `includes` for anything whose capitalisation depends
+on where a sentence starts. For a numerical verdict it means exact arithmetic
+where a value can land on a boundary: a float base once labelled an
+algebraically-zero cell a win, and a verdict produced by rounding is
+indistinguishable from one produced by the model.
+
+An absence claim is a claim. It needs its own evidence, not the evidence that
+a neighbouring presence claim passed.
+
 Known unfixed defects are listed in
 [`docs/open-findings.md`](docs/open-findings.md); add one there in the same
 commit that discovers it.
