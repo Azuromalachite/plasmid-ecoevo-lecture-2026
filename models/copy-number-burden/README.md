@@ -146,10 +146,81 @@ should state the defect it is capable of catching, and ideally carry a
 deliberately constructed mutation that makes it fail. A test whose domain of
 sensitivity is not legible can pass for the wrong reason.
 
+## Is the optimum reachable? — the question the model kept deferring
+
+[`check_feasible_optimum.py`](check_feasible_optimum.py) answers it, and the
+answer is not the one the question implies.
+
+The analytic layer gives an interior optimum at
+
+```text
+C* = 1 / (beta · G0 · ln 2)
+```
+
+**That there is an optimum is not a result.** For any positive `beta` and `G0`,
+a linear-in-C exponent times a linear prefactor has a stationary point, and it
+is always a maximum. The script confirms this symbolically — including the
+second derivative, so "stationary point" is not doing quiet work for
+"maximum". The only empirical content is *where* `C*` sits relative to what a
+real vector can reach.
+
+Using the authors' own reading of the fitted coefficient — 0.065% of growth
+resources per copy — and sweeping generation count, because the competition's
+culture duration is not public and must not be invented:
+
+| G0 (doublings) | 5 | 10 | 20 | 30 | 50 | 100 |
+| --- | --- | --- | --- | --- | --- | --- |
+| C* (copies/cell) | 444 | 222 | 111 | 74 | 44 | 22 |
+
+Against declared reference ranges for common origin classes — **not** claims
+about any construct in the competition:
+
+| Origin class | At G0 = 10–30 |
+| --- | --- |
+| low-copy, p15A-like (10–15) | `C*` **above** the ceiling → raise copy number |
+| medium, pBR322/pET-like (20–40) | `C*` **above** the ceiling → raise copy number |
+| high-copy, pUC-like (300–500) | `C*` **below** the floor → lower copy number |
+| tunable, wide range (5–500) | interior — a real trade-off |
+
+**For the two commonest fixed-origin classes there is no trade-off at
+realistic batch durations, and they are told to move in opposite
+directions.** Only a vector whose reachable range straddles `C*` faces the
+compromise the model is usually quoted for. Across the swept grid, 9 of 28
+combinations have an interior optimum.
+
+The boundary is solved rather than sampled:
+
+```text
+C* ≤ C_min   ⟺   G0 ≥ 1 / (beta · C_min · ln 2)     floor wins
+C* ≥ C_max   ⟺   G0 ≤ 1 / (beta · C_max · ln 2)     ceiling wins
+```
+
+so whether the trade-off exists is a property of **how long the culture runs**,
+not of the plasmid.
+
+This also locates the 1 − 1/e invariant correctly. The density penalty at `C*`
+against the lowest feasible copy number approaches 63% only as `C_min` → 0; in
+the swept wide-range class it runs 54–63%, and in the medium class, where an
+interior optimum appears only at G0 = 100, it is 9%. The invariant is the
+zero-floor limit of a quantity that is otherwise much smaller — which is why it
+must not be quoted as a fixed cost.
+
+**Not settled by this script:** that burden is linear in copy number (the
+source hedges it), that the coefficient transfers off pUC19-length plasmids
+with near-identical origins, or that retention is independent of copy number.
+Each would move `C*`, and the first would change the shape of the argument
+rather than its value.
+
 ## Running it
 
 Open [`battle-royale.ipynb`](battle-royale.ipynb) in Jupyter or Colab and run
 top to bottom. It needs **NumPy ≥ 2.0**, SciPy, pandas and Matplotlib.
+
+The feasibility check is separate and needs only SymPy:
+
+```bash
+uv run --no-project --with sympy python models/copy-number-burden/check_feasible_optimum.py
+```
 
 The NumPy floor is not cosmetic: two cells integrate with `np.trapezoid`, which
 was added in NumPy 2.0 and is spelled `np.trapz` in 1.x. On a 1.x kernel —
