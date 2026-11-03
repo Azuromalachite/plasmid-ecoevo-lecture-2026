@@ -318,6 +318,21 @@ it concrete.
 > (11,338 plasmids from 4,317 genomes against 12,006 from 4,644). Taken from
 > the CSL-JSON author lists returned by `doi.org`, not inferred.
 >
+> **Extended 3 November, measured across all four papers in the section.**
+> `[L]` Author sets taken from the CSL-JSON each DOI returns, then intersected:
+>
+> | Pair | Shared authors |
+> | --- | --- |
+> | [@xue2024landscape] ↔ [@shahzadi2026determinants] | Xue W., Wang T. |
+> | [@maddamsetti2025scaling] ↔ [@shahzadi2026determinants] | Maddamsetti R., You L. |
+> | **[@ramiromartinez2025universal]** ↔ any other | **none** |
+>
+> `[M]` So of the four papers the section presents as an arc — 2024 theory,
+> two independent 2025 studies, 2026 modelling confirmation — **three are
+> linked through the 2026 paper**, and exactly one shares no author with any
+> other. The section's rhetorical force comes from convergence; what converges
+> is one group's programme plus one genuinely independent study.
+>
 > `[I]` So the section's structure — two independent studies, then independent
 > later confirmation — is one research group appearing twice in a sequence of
 > three. That does not make any of the work wrong, and the third paper's
@@ -458,9 +473,18 @@ checker working exactly as intended.
 > state for a verified source staged for content that does not exist yet, and
 > it will clear itself when a page or figure cites them.
 >
-> One part of the finding does **not** close: the unnamed 2024 theory paper and
-> the unnamed evolvability work still cannot be resolved, so they cannot be
-> added. `[U]` Naming them is the author's to do.
+> One part of the finding did not close at the time: the unnamed 2024 theory
+> paper and the unnamed evolvability work could not be resolved.
+>
+> **The 2024 theory paper is now named**, 3 November: Xue, Hong & Wang,
+> *The evolutionary landscape of prokaryotic chromosome/plasmid balance*,
+> **Communications Biology** 7:1434 (2024) — [@xue2024landscape]. `[L]` DOI
+> resolves, and the returned metadata matches title, authors and year. It is
+> the metabolic-flux treatment of intracellular competition between
+> chromosomal and plasmid-encoded reactions, which is exactly the theoretical
+> bridge the section needs.
+>
+> `[U]` The evolvability work remains unnamed and unresolvable.
 
 ---
 
