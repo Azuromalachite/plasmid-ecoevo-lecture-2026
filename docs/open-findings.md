@@ -93,6 +93,73 @@ an independently stated closed form.
 writing the difference directly — then `gamma = 0` tests something — or relabel
 them as consistency checks, which costs one word and is defensible.
 
+### OF-16 — the firewall's own test breached the firewall
+
+**Severity:** major
+**Location:** `evidence/test_check_participant_firewall.py`
+**Status:** occurred, contained, fix proposed in PR #15 (unmerged at the time
+of writing)
+
+The mutation test commits caption files on purpose — that is the mutation. It
+is safe only because `shutil.copytree` is supposed to produce an isolated
+copy, including `.git`, so the `git commit` calls touch the temporary tree and
+nothing else.
+
+**In a linked git worktree `.git` is not a directory. It is a one-line file
+holding `gitdir: <main>/.git/worktrees/<name>`.** The copy inherits the
+pointer, so every git command the mutations run operates on the **real
+repository** from inside a temporary directory.
+
+What happened, in this repository: a run from a linked worktree committed
+`notes.vtt` to the working branch and `side.srt` to a newly created
+`scratch/private` branch, and left `HEAD` on `scratch/private`.
+
+Caption files in history are the first thing
+`docs/participant-material-policy.md` forbids, and the first thing
+`check_participant_firewall.py` looks for. **The test written to prove the
+firewall works put the material the firewall excludes into the history it
+guards.**
+
+**Why it was nearly invisible.** It surfaced only because that run exited
+non-zero for an unrelated reason and the output was read. For this test the
+dangerous outcome is a **pass**: a pass means every mutation ran, and under
+this defect "ran" meant "committed to the real repository". A clean run would
+have been silent, and the next clean run of the checker would have reported
+the caption files as a genuine policy violation with no explanation of where
+they came from.
+
+**Contained, verified independently** rather than accepted on report: nothing
+was pushed; `scratch/private` does not exist locally or on the remote;
+`git log --all --diff-filter=A` over 69 commits and 50 added paths contains no
+caption or subtitle file; `check_participant_firewall.py` exits 0. The
+matcher used for that search was first shown able to find a caption filename,
+because a negative from an unexercised matcher is worth nothing — see
+`CONTRIBUTING.md`.
+
+**Fix (PR #15):** the test **fails closed** when `.git` is a file, naming the
+cause and the remedy, rather than repairing the pointer. A test that can write
+to the repository it tests should refuse, not attempt surgery. Demonstrated
+both ways: exits 1 from a linked worktree, still passes 11 of 11 from the main
+checkout.
+
+**What this finding is not.** It is not "a test had a bug". The repository's
+only *mechanical* guarantee about participant material — the one thing in the
+policy marked `CHECKED` rather than `CHECKABLE` or `ATTESTED` — was enforced
+by a script whose own test could violate that guarantee undetectably. And it
+happened under a workflow adopted the same day **specifically to be safer**.
+Isolation was assumed by the test rather than checked by it, which is the
+same defect class as a control that cannot fail, with the sign reversed.
+
+**Residue.**
+
+- The fix closes the linked-worktree case by name. It does not establish that
+  no other test can write outside its sandbox. `test_check_references.py`
+  copies with `ignore_patterns(".git")` and is unaffected, but that is a
+  property of that file, not a rule anything enforces.
+- A clean `check_participant_firewall.py` run still speaks only for the
+  clones it can see. That limit was already stated in the policy; this
+  incident is the first time it mattered.
+
 ---
 
 ## Closed in this changeset
