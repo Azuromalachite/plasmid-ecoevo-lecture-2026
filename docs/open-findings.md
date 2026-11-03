@@ -29,6 +29,70 @@ valid registry status, and removing the badge row while keeping the status
 would make the two inconsistent. Revisit if a genuinely contested claim
 appears, or if the status itself is retired.
 
+### OF-13 — `q*` is solved and never checked against `[0, 1]`
+
+**Severity:** major
+**Location:** `models/gene-location/check_regime_boundary.py`
+
+The script states "Plasmid localisation is favoured for q < q*, chromosomal
+for q > q*". `q` is a frequency and lives in `[0, 1]`; `q*` is not constrained
+to. Measured over a sweep of the four cost and rate parameters at `x_C = R/2`
+(81 analyst-chosen grid cells, **not** a frequency over anything biological):
+`q*` lies inside `[0, 1]` in 38, exceeds 1 in 28, and is negative in 15. In
+**43 of 81** there is no boundary in range at all — one location wins at every
+feasible ecology and the stated boundary is an extrapolation outside its own
+variable.
+
+This is OF-1/F2's defect in a new model. `check_feasible_optimum.py` exists
+because `C*` was derived and never compared against `[C_min, C_max]`; the same
+question was not asked of `q*` three directories away.
+
+**Correction:** report `q*` against `[0, 1]` with a verdict per cell, and
+solve the two boundary conditions in closed form as the copy-number script
+does. The second is the interesting one: mobility can only repay a cost gap
+smaller than the transfer rate itself.
+
+### OF-14 — the nesting test binds to a transcription, not to the file it names
+
+**Severity:** minor
+**Location:** `models/gene-location/check_regime_boundary.py`
+
+The nesting check compares against a local literal, `prior = -((c_p - c_c) +
+delta * (2 * x_C - R))`, carrying the comment `# from check_priority_effect`.
+The transcription is correct today — verified against that file's own
+definitions — but nothing reads the file, so if the earlier model changes the
+check still passes and still prints a claim about a file it never opened. A
+comment is not a binding.
+
+Same class as the firewall mutation target that broke on 3 November: a literal
+copied from another file, correct when written, unguarded against the original
+moving.
+
+**Correction:** expose `w_P - w_C` at module level in
+`check_priority_effect.py` and import it. Both modules are side-effect free at
+import time.
+
+### OF-15 — the two "controls" are algebraic consequences of one written line
+
+**Severity:** minor
+**Location:** `models/gene-location/check_regime_boundary.py`
+
+`advantage` is written by hand in one statement. `gamma` occurs exactly once in
+it, so substituting `gamma = 0` cannot fail to collapse it; `delta` is the only
+coefficient on any `x_C` term, so `delta = 0` cannot fail to remove the `x_C`
+dependence. Both are properties of how that line is typed. The script oversells
+them — "if mobility were doing hidden work elsewhere in the expression this
+would fail" is true only of an edit that moves `gamma`.
+
+The algebra is right and the model is not wrong. The assurance is weaker than
+the wording, in a repository whose subject is that gap. Contrast
+`check_feasible_optimum.py`, which solves for `C*` and compares the solution to
+an independently stated closed form.
+
+**Correction:** derive `advantage` from the two fitness expressions rather than
+writing the difference directly — then `gamma = 0` tests something — or relabel
+them as consistency checks, which costs one word and is defensible.
+
 ---
 
 ## Closed in this changeset

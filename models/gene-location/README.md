@@ -184,16 +184,55 @@ Exit status is 1 if a derivation stops reproducing.
 ## Source provenance — which version the quotations come from
 
 Every sentence quoted on this page was checked against the **published**
-Evolution Letters text at `10.1002/evl3.226`, not the preprint. That
-distinction is not pedantry here: the two versions differ in wording. The
-published Discussion contains
+Evolution Letters text at `10.1002/evl3.226`. The published Discussion
+contains the cleanest single statement of the boundary this directory models:
 
 > *"Thus, local adaptation only favors plasmid-borne resistance if the
 > frequency of the sensitive plasmid is low outside the local niche."*
 
-which is the cleanest single statement of the boundary this directory models —
-and it is **not present in the bioRxiv version**. Quote the published text,
-cite the DOI, and never attribute preprint wording to the paper.
+**Quote the published text and cite the DOI**, because that is the version of
+record and its wording is what a reader will find.
+
+### A correction, kept rather than edited away
+
+The first version of this section said that sentence was *"not present in the
+bioRxiv version"*. **That was false.** `[M]` It is present in bioRxiv v2
+(`10.1101/2020.08.04.236455`), differing by one letter — the preprint has
+British *"favours"* where the copy-edited published text has *"favors"*:
+
+> *"Thus, local adaptation only **favours** plasmid-borne resistance if the
+> frequency of the sensitive plasmid is low outside the local niche."*
+
+**Why it was made is not what it first looked like.** The obvious reading is
+that a search missed the sentence on the `favours`/`favors` difference. That
+is wrong, and the author of the claim corrected the diagnosis: the preprint
+was never searched for that sentence. What existed was an earlier exploratory
+query, filtering sentences on an unrelated pattern and then **truncating the
+result set**. The sentence matched that filter and was cut by the truncation.
+Its non-appearance in a deliberately shortened list was then read as absence,
+and restated as fact in committed public content.
+
+So there are **two independent failures here, needing two separate
+defences**:
+
+1. **A truncated result set is never evidence of absence** — not for any
+   matcher, however well built. Count the matches; do not inspect the first
+   *N*. An absence claim needs a search that is complete by construction.
+2. **Then** defeat the variant axes, because a complete search can still miss.
+   Verifying this correction required `/only favou?rs/`: whitespace- and
+   case-normalisation alone would **not** have found it.
+
+`[I]` Worth keeping because of what it was: an **absence claim** published in
+the same changeset that added the rule *"an absence claim is a claim; it needs
+its own evidence"*. The rule was right and its author was its first casualty —
+and the first diagnosis of *why* was wrong too, which is the more useful half.
+An error's stated cause is itself a claim.
+
+**For retrieval from published text, defeat at least:** whitespace, case,
+British/American spelling, hyphenation, and smart versus straight quotes. The
+practical form is to search a distinctive fragment containing none of them —
+`plasmid-borne resistance if the frequency of the sensitive plasmid is low`
+matches both documents on the first attempt.
 
 ## References
 
