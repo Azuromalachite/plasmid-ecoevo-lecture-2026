@@ -15,6 +15,68 @@ finding.
 
 ## Open
 
+### OF-16 — the firewall test can breach the firewall, and did
+
+**Severity:** major
+**Location:** `evidence/test_check_participant_firewall.py`
+
+**Fixed in the same changeset that opened it**, but recorded because the
+incident is the finding, not the bug.
+
+Run from a **linked git worktree**, the mutation test committed `notes.vtt` to
+the caller's branch and `side.srt` to a new `scratch/private` branch **in the
+real repository**, and left `HEAD` on that branch.
+
+The test copies the tree including `.git` and then runs `git commit` inside the
+copy. In an ordinary clone `.git` is a directory and the copy is
+self-contained. In a linked worktree `.git` is a one-line **file** holding
+`gitdir: <main>/.git/worktrees/<name>`, so the copy inherits the pointer and
+every git command operates on the real repository from inside the temporary
+directory.
+
+Caption files in history are exactly what
+[`participant-material-policy.md`](participant-material-policy.md) forbids. The
+test for the firewall breached the firewall. `[M]` It surfaced only because the
+run exited non-zero for an unrelated reason; a clean exit would have left it
+silent, and `check_participant_firewall.py` would then have reported the breach
+as a genuine policy violation with no explanation of where it came from.
+
+**Contained.** Nothing was pushed. The branch and both commits are gone and
+`git log --all` reports zero caption files, verified with a matcher first shown
+able to find one.
+
+**Fixed by failing closed:** the test refuses to run when `.git` is a file,
+naming the cause and the remedy. Not by repairing the pointer — a test that can
+write to the repository it tests should refuse rather than attempt surgery.
+`[M]` Proven both ways: exits 1 with the message from a worktree, still passes
+11/11 from the main checkout.
+
+**What stays open.** The policy's `CHECKED` marks rest on a script whose own
+test could, under a workflow adopted the same day, violate the guarantee the
+script exists to enforce. No check now covers that class — the remedy is the
+refusal, which is a guard, not a proof. Worth remembering before the next
+"checked" mark is added: the blast radius of a test is part of its domain.
+
+**Deferred past v0.3, by the user's decision, and what that does and does not
+mean.** `[M]` The hazard is closed, not outstanding: the only script in the
+repository that copies `.git` is this one, and it now refuses when `.git` is a
+file. `test_check_references.py` excludes `.git` from its copy explicitly, and
+`check_participant_firewall.py` invokes only read-only git verbs. The class has
+exactly one member and that member is guarded.
+
+What is deferred is therefore **assurance, not safety**. There is no mutation
+case proving the guard fires — the guard was verified by hand, both ways, and a
+case would have to construct a linked worktree in a temporary directory to
+exercise it. Until that exists, "the firewall test cannot damage the
+repository" is an `ATTESTED` claim in this file's own vocabulary, sitting
+underneath `CHECKED` marks that assume it.
+
+**What would reopen it as blocking:** a second script that copies `.git`, a
+change to the guard, or any `CHECKED` mark added on the strength of a test that
+writes. **What would close it:** a mutation case that builds a worktree and
+asserts the refusal, which is the normal standard here and is only deferred
+because v0.3 is dated.
+
 ### OF-4 — `CONTESTED` has no site on any content page
 
 **Severity:** trivial
@@ -28,70 +90,6 @@ dependence. So the badge is defined and unused.
 valid registry status, and removing the badge row while keeping the status
 would make the two inconsistent. Revisit if a genuinely contested claim
 appears, or if the status itself is retired.
-
-### OF-13 — `q*` is solved and never checked against `[0, 1]`
-
-**Severity:** major
-**Location:** `models/gene-location/check_regime_boundary.py`
-
-The script states "Plasmid localisation is favoured for q < q*, chromosomal
-for q > q*". `q` is a frequency and lives in `[0, 1]`; `q*` is not constrained
-to. Measured over a sweep of the four cost and rate parameters at `x_C = R/2`
-(81 analyst-chosen grid cells, **not** a frequency over anything biological):
-`q*` lies inside `[0, 1]` in 38, exceeds 1 in 28, and is negative in 15. In
-**43 of 81** there is no boundary in range at all — one location wins at every
-feasible ecology and the stated boundary is an extrapolation outside its own
-variable.
-
-This is OF-1/F2's defect in a new model. `check_feasible_optimum.py` exists
-because `C*` was derived and never compared against `[C_min, C_max]`; the same
-question was not asked of `q*` three directories away.
-
-**Correction:** report `q*` against `[0, 1]` with a verdict per cell, and
-solve the two boundary conditions in closed form as the copy-number script
-does. The second is the interesting one: mobility can only repay a cost gap
-smaller than the transfer rate itself.
-
-### OF-14 — the nesting test binds to a transcription, not to the file it names
-
-**Severity:** minor
-**Location:** `models/gene-location/check_regime_boundary.py`
-
-The nesting check compares against a local literal, `prior = -((c_p - c_c) +
-delta * (2 * x_C - R))`, carrying the comment `# from check_priority_effect`.
-The transcription is correct today — verified against that file's own
-definitions — but nothing reads the file, so if the earlier model changes the
-check still passes and still prints a claim about a file it never opened. A
-comment is not a binding.
-
-Same class as the firewall mutation target that broke on 3 November: a literal
-copied from another file, correct when written, unguarded against the original
-moving.
-
-**Correction:** expose `w_P - w_C` at module level in
-`check_priority_effect.py` and import it. Both modules are side-effect free at
-import time.
-
-### OF-15 — the two "controls" are algebraic consequences of one written line
-
-**Severity:** minor
-**Location:** `models/gene-location/check_regime_boundary.py`
-
-`advantage` is written by hand in one statement. `gamma` occurs exactly once in
-it, so substituting `gamma = 0` cannot fail to collapse it; `delta` is the only
-coefficient on any `x_C` term, so `delta = 0` cannot fail to remove the `x_C`
-dependence. Both are properties of how that line is typed. The script oversells
-them — "if mobility were doing hidden work elsewhere in the expression this
-would fail" is true only of an edit that moves `gamma`.
-
-The algebra is right and the model is not wrong. The assurance is weaker than
-the wording, in a repository whose subject is that gap. Contrast
-`check_feasible_optimum.py`, which solves for `C*` and compares the solution to
-an independently stated closed form.
-
-**Correction:** derive `advantage` from the two fitness expressions rather than
-writing the difference directly — then `gamma = 0` tests something — or relabel
-them as consistency checks, which costs one word and is defensible.
 
 ---
 
@@ -739,3 +737,70 @@ is an instruction, not a check — in this file's own vocabulary, an attestation
 A committed runner that reports each status itself would make it CHECKED. Not
 filed as an open finding because the remedy is a build step this repository has
 deliberately not taken, but it is the shape of the next one.
+
+---
+
+## Closed in the models-lane changeset — OF-13, OF-14, OF-15
+
+All three were raised against `models/gene-location/` by the parallel session's
+round-1 review and are fixed together, because the fix for one strengthened
+another.
+
+### OF-13 — closed, and the check produced a result rather than weakening one
+
+`q` is a frequency. `check_regime_boundary.py` solved for `q*` and reported it
+as the boundary without checking it lands in `[0, 1]`. An unreachable boundary
+is not a weaker finding; it is a different one, because one location then wins
+across the whole range of the parameter the model is about.
+
+`[M]` Confirmed independently on a different grid before fixing — 138 of 243
+cells with no reachable boundary against the review's 43 of 81. Different
+probes, same verdict, and **neither is a frequency**.
+
+Solved rather than swept, at the symmetric point: a reachable boundary requires
+`c_c ≤ c_p ≤ c_c + γ`. **The mobility term can only ever buy γ.** The plasmid's
+carriage cost must exceed the chromosome's, or the plasmid wins at every `q`,
+but by no more than the transfer rate, because past that no quantity of empty
+recipients rescues it. That result was invisible while `q*` went unchecked.
+
+This was the F2 defect one model over, written by the author of the F2 fix two
+files away, in a repository that already contains a script whose entire purpose
+is asking whether a solved optimum is reachable. The lesson did not transfer
+because nothing made it transfer.
+
+**Sibling re-check, reported because silence reads as not having looked:**
+`check_priority_effect.py` does **not** have the defect — it already derives
+when its threshold lies inside `(0, R)` and states `|c_c − c_p| < δR`.
+`models/copy-number-burden/check_feasible_optimum.py` does not have it either;
+it is where the pattern came from. `models/invasion-threshold/` has no solved
+threshold to range-check. One of four models had the defect.
+
+### OF-14 — closed by importing the sibling instead of transcribing it
+
+The nesting check compared against a local literal carrying the comment
+`# from check_priority_effect`. Correct when written, and silently unaffected
+if that file changed. A comment is not a binding.
+
+`check_priority_effect.py` now exposes `fitness()` and `advantage_expr()` at
+module level, and `check_regime_boundary.py` imports the file and compares
+against what it builds.
+
+`[M]` Controlled: perturbing the sibling's `w_P` turns the nesting check red
+and exits 1. Against the transcription it stayed green. Same class as the
+mutation target that broke earlier the same day — a literal copied from another
+file, correct when written, unguarded against the original moving.
+
+### OF-15 — closed by deriving the difference, and by honest relabelling
+
+`w_P − w_C` was written as one statement, so `γ = 0` could not fail to collapse
+it and `δ = 0` could not fail to flatten the `x_C` dependence. Both were
+properties of how that line was typed, and the script called them controls.
+
+The difference is now **derived** from two separately written fitness
+expressions, which makes `b` cancelling a real check — it fails if `b` is
+mistyped in either. The two substitutions are kept but relabelled
+**consistency checks**, and the script now says in its own output that they are
+near-automatic and bind only because the right-hand side is imported.
+
+The algebra was never wrong. The assurance was weaker than the wording, in a
+repository whose subject is that gap.

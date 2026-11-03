@@ -204,11 +204,45 @@ CASES = [
 ]
 
 
+def refuse_in_linked_worktree():
+    """Fail closed when `.git` is a file, because this test commits.
+
+    In an ordinary clone `.git` is a directory, so `shutil.copytree` below
+    produces a self-contained repository and the mutations that run `git
+    commit` touch only the temporary copy. In a **linked worktree** `.git` is
+    a one-line FILE holding `gitdir: <main>/.git/worktrees/<name>`. Copying
+    that file copies the pointer, so every git command the mutations run --
+    `checkout -b`, `add -f`, `commit` -- operates on the REAL repository from
+    inside the temporary directory.
+
+    This is not hypothetical. It happened: a run from a linked worktree put
+    `notes.vtt` on the caller's branch and `side.srt` on a new `scratch/private`
+    branch, in the real repository, and left HEAD on that branch. Caption files
+    committed to history are precisely what `docs/participant-material-policy.md`
+    forbids, so the test for the firewall breached the firewall. Nothing was
+    pushed and the branches were removed, but the damage was real and silent
+    until the run was inspected.
+
+    A test that can write to the repository it is testing must fail closed, so
+    this refuses rather than trying to repair the pointer. Run it from the main
+    checkout, where `.git` is a directory and the copy is genuinely isolated.
+    """
+    marker = ROOT / ".git"
+    if marker.is_file():
+        sys.exit(
+            f"refusing to run: {ROOT} is a linked git worktree.\n"
+            f"  .git is a file pointing at the main checkout, so the mutations\n"
+            f"  below would commit to the REAL repository rather than to a\n"
+            f"  temporary copy. This has happened; see the docstring.\n"
+            f"  Run this test from the main checkout instead.")
+
+
 def run_case(mutate, expect):
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp) / "repo"
         # Copied WITH .git: the clauses are about history, so the test has to
-        # be able to reach it.
+        # be able to reach it. See refuse_in_linked_worktree for why that is
+        # safe only when .git is a directory.
         shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns("__pycache__"))
         mutate(root)
         result = subprocess.run([sys.executable, str(root / CHECKER)],
@@ -226,6 +260,7 @@ def run_case(mutate, expect):
 
 
 def main():
+    refuse_in_linked_worktree()
     print(f"Mutation test for {CHECKER}")
     print(f"{len(CASES)} cases, one mutation each, on a temporary clone\n")
     failures = 0

@@ -56,15 +56,34 @@ except ImportError:
              "models/gene-location/check_priority_effect.py")
 
 
+def fitness(b, c_c, c_p, delta, R, x_C):
+    """(w_C, w_P) for the redundancy-only model, built from first principles.
+
+    Module level and side-effect free so that `check_regime_boundary.py` can
+    IMPORT it rather than transcribe the difference into a literal (OF-14). A
+    comment saying "from check_priority_effect" is not a binding: it keeps
+    passing after this file changes. The import is.
+    """
+    x_P = R - x_C
+    w_C = b - c_c - delta * x_P
+    w_P = b - c_p - delta * x_C
+    return w_C, w_P
+
+
+def advantage_expr(b, c_c, c_p, delta, R, x_C):
+    """w_P - w_C for this model. The sign convention matches the sibling:
+    positive means plasmid localisation is favoured."""
+    w_C, w_P = fitness(b, c_c, c_p, delta, R, x_C)
+    return sp.expand(w_P - w_C)
+
+
 def main():
     b, c_c, c_p, delta, R = sp.symbols("b c_c c_p delta R", positive=True)
     x_C = sp.Symbol("x_C", nonnegative=True)
 
     # The two resistant forms partition the resistant fraction R.
+    w_C, w_P = fitness(b, c_c, c_p, delta, R, x_C)
     x_P = R - x_C
-
-    w_C = b - c_c - delta * x_P
-    w_P = b - c_p - delta * x_C
     diff = sp.simplify(w_C - w_P)
 
     print("THE REDUCTION")

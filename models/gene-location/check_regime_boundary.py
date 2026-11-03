@@ -45,6 +45,8 @@ Usage (from the repository root):
 Exit status is 1 if a derivation or a control does not reproduce.
 """
 
+import importlib.util
+import pathlib
 import sys
 
 try:
@@ -60,24 +62,51 @@ def main():
     x_C = sp.Symbol("x_C", nonnegative=True)
     x_P = R - x_C
 
-    advantage = gamma * (1 - q) - (c_p - c_c) - delta * (x_C - x_P)
-    advantage = sp.expand(advantage)
+    # OF-15. The difference is DERIVED from two fitness expressions rather than
+    # written as one line. Writing the difference directly made the controls
+    # below properties of how that line was typed: gamma occurred once, so
+    # gamma = 0 could not fail to collapse it. Built this way, a slip in either
+    # fitness expression shows up as b failing to cancel or as the nesting
+    # check failing against the imported sibling.
+    b = sp.Symbol("b", positive=True)
+    w_C = b - c_c - delta * x_P
+    w_P = b - c_p - delta * x_C + gamma * (1 - q)
+    advantage = sp.expand(w_P - w_C)
 
     print("THE COMBINED MODEL")
-    print(f"  w_P - w_C = {advantage}")
+    print(f"  w_C       = {w_C}")
+    print(f"  w_P       = {w_P}")
+    print(f"  w_P - w_C = {advantage}   (derived, not written)")
     print("  positive means plasmid localisation is favoured.")
 
     ok = []
 
-    # 1. NESTING. At q = 1 the mobility term vanishes and the model must reduce
-    #    exactly to the redundancy-only expression already committed.
-    prior = -((c_p - c_c) + delta * (2 * x_C - R))      # from check_priority_effect
+    # 0. The benefit must cancel. A real check on the pair above: it fails if
+    #    b is mistyped in either expression.
+    b_cancels = sp.simplify(sp.diff(advantage, b)) == 0
+    ok.append(b_cancels)
+    print(f"\n0. benefit b cancels between the two fitnesses : {b_cancels}")
+
+    # 1. NESTING, bound to the sibling FILE rather than to a transcription
+    #    (OF-14). A comment saying "from check_priority_effect" keeps passing
+    #    after that file changes; an import does not. Same class as the
+    #    firewall mutation target that broke on 3 November.
+    sibling_path = pathlib.Path(__file__).with_name("check_priority_effect.py")
+    spec = importlib.util.spec_from_file_location("check_priority_effect",
+                                                  sibling_path)
+    sibling = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sibling)
+    prior = sp.expand(sibling.advantage_expr(b, c_c, c_p, delta, R, x_C))
+
     nests = sp.simplify(advantage.subs(q, 1) - prior) == 0
     ok.append(nests)
     print(f"\n1. NESTING at q = 1 (gene-free plasmid everywhere)")
-    print(f"   reduces to the committed redundancy model : {nests}")
+    print(f"   imported from : {sibling_path.name}")
+    print(f"   its w_P - w_C : {prior}")
+    print(f"   reduces to the sibling's own expression   : {nests}")
     print("   So the earlier script is this one's q -> 1 limit, not a rival to")
     print("   it. The Lehtinen regime is the saturated-recipient corner.")
+    print("   This now reads that file. If it changes, this check moves.")
 
     # 2. The Eberhard regime is the opposite corner.
     eberhard = sp.simplify(advantage.subs(q, 0))
@@ -98,13 +127,78 @@ def main():
     print("   The two positions are the two sides of one inequality. Neither")
     print("   is wrong; they describe different ecologies.")
 
-    # 4. CONTROL A -- no mobility. gamma -> 0 must leave only the priority
-    #    effect, for every q. If mobility were doing hidden work elsewhere in
-    #    the expression this would fail.
+    # 3b. IS THE BOUNDARY REACHABLE? (OF-13)
+    #
+    # q is a frequency, so it lives in [0, 1]. Solving for q* and reporting it
+    # says nothing until q* is known to land there. The first version of this
+    # script did exactly that -- printed q* and called it the boundary -- which
+    # is the F2 defect one model over, written by the author of the F2 fix two
+    # files away. An unreachable boundary is not a weaker result; it is a
+    # DIFFERENT result, because it means one location wins across the whole
+    # range of the parameter the model is about.
+    print(f"\n3b. IS THE BOUNDARY REACHABLE?")
+    print("   q is a frequency. q* means nothing unless 0 <= q* <= 1.")
+    hi = sp.simplify(sp.numer(sp.together(q_star - 1)))      # q* <= 1
+    lo = sp.simplify(sp.numer(sp.together(q_star)))          # q* >= 0
+    print(f"   q* <= 1  <=>  {hi} <= 0")
+    print(f"   q* >= 0  <=>  {lo} >= 0")
+    hi_sym = sp.simplify(hi.subs(x_C, R / 2))
+    lo_sym = sp.simplify(lo.subs(x_C, R / 2))
+    print(f"\n   At the symmetric point x_C = R/2 these collapse to")
+    print(f"     q* <= 1  <=>  {hi_sym} <= 0")
+    print(f"     q* >= 0  <=>  {lo_sym} >= 0")
+    print("   that is:   c_c <= c_p <= c_c + gamma")
+    print("\n   THE RESULT THE RANGE CHECK UNCOVERS. A reachable boundary needs")
+    print("   the plasmid's carriage cost to exceed the chromosome's -- else the")
+    print("   plasmid wins at every q -- but to exceed it by no more than gamma.")
+    print("   The mobility term can only ever buy gamma. If the plasmid's cost")
+    print("   premium is larger than the transfer rate, no quantity of empty")
+    print("   recipients rescues it, and q stops being the deciding parameter.")
+
+    # Outside that window the model still has an answer; it is just not a
+    # boundary. Counting the cases is how the earlier version's silence shows.
+    print("\n   OUTCOMES OVER AN ANALYST-CHOSEN PROBE GRID")
+    grid = {
+        "R": [sp.Rational(1, 5), sp.Rational(1, 2), sp.Rational(4, 5)],
+        "delta": [sp.Rational(1, 200), sp.Rational(1, 50), sp.Rational(2, 25)],
+        "c_c": [sp.Rational(1, 200), sp.Rational(1, 100), sp.Rational(1, 50)],
+        "c_p": [sp.Rational(1, 200), sp.Rational(3, 200), sp.Rational(3, 100)],
+        "gamma": [sp.Rational(1, 500), sp.Rational(1, 50), sp.Rational(1, 5)],
+    }
+    import itertools
+    inside = above = below = 0
+    for Rv, dv, ccv, cpv, gv in itertools.product(*grid.values()):
+        qv = q_star.subs({R: Rv, delta: dv, c_c: ccv, c_p: cpv,
+                          gamma: gv, x_C: Rv / 2})
+        if qv > 1:
+            above += 1
+        elif qv < 0:
+            below += 1
+        else:
+            inside += 1
+    total = inside + above + below
+    print(f"     reachable boundary in [0,1]      : {inside}")
+    print(f"     q* > 1, plasmid wins at every q  : {above}")
+    print(f"     q* < 0, chromosome at every q    : {below}")
+    print(f"     NO REACHABLE BOUNDARY            : {above + below} of {total}")
+    print("     GRID COUNT, NOT A FREQUENCY. Three values on each of five")
+    print("     parameters at the symmetric point are probes chosen to span")
+    print("     plausible ranges, not a sample of plasmids, niches or designs.")
+    print("     The number says the unreachable case is common in the probed")
+    print("     space; it does not say how common it is in nature.")
+
+    # 4. CONSISTENCY CHECK, not a control (OF-15). gamma appears once in w_P,
+    #    so setting it to zero cannot fail to remove it. What this does catch
+    #    is gamma leaking into w_C, or the sibling disagreeing -- because the
+    #    comparison is against the IMPORTED expression, not a local literal.
+    #    Calling it a control oversold it; the external anchor is check 1.
     no_mobility = sp.simplify(advantage.subs(gamma, 0) - prior) == 0
     ok.append(no_mobility)
-    print(f"\n4. CONTROL A, gamma = 0 (no horizontal transfer at all)")
-    print(f"   collapses to the redundancy model for every q : {no_mobility}")
+    print(f"\n4. CONSISTENCY, gamma = 0 (no horizontal transfer at all)")
+    print(f"   matches the imported redundancy model for every q : {no_mobility}")
+    print("   Not a strong control: gamma occurs once in w_P, so its removal")
+    print("   is near-automatic. It binds only because the right-hand side is")
+    print("   imported from the sibling file.")
 
     # 5. CONTROL B -- no redundancy penalty. delta = 0 must remove the
     #    frequency dependence, leaving a boundary that does not depend on how
@@ -113,7 +207,7 @@ def main():
     q_star_flat = sp.simplify(q_star.subs(delta, 0))
     indep = sp.simplify(sp.diff(q_star_flat, x_C)) == 0
     ok.extend([flat, indep])
-    print(f"\n5. CONTROL B, delta = 0 (dual carriage costs nothing extra)")
+    print(f"\n5. CONSISTENCY, delta = 0 (dual carriage costs nothing extra)")
     print(f"   no dependence on x_C                      : {flat}")
     print(f"   q* = {q_star_flat}")
     print(f"   boundary independent of current frequencies: {indep}")

@@ -153,15 +153,74 @@ w_P − w_C  =  γ(1−q)  −  (c_p − c_c)  −  δ(x_C − x_P)
 a rival to it. The boundary is `q* = (Rδ + c_c − c_p − 2δx_C + γ)/γ`, which at
 the symmetric point is `1 − (c_p − c_c)/γ`.
 
+That nesting check **imports** `check_priority_effect.py` and compares against
+the expression that file builds (OF-14). It used to compare against a literal
+transcription carrying the comment *"from check_priority_effect"* — correct
+when written, and silently unaffected if the sibling changed. A comment is not
+a binding. Measured: perturbing the sibling's `w_P` now turns this check red
+and exits 1, where the transcription stayed green.
+
 The teaching line is in the first term: **mobility is rented from the ecology,
 not owned by the plasmid.** Its value is multiplied by the fraction of
 recipients still plasmid-free, and that fraction is a property of the world
 outside the niche. Neither paper is wrong; they describe different ecologies.
 
-Two controls, both failing the script if they break: `γ = 0` must collapse to
-the redundancy model for every `q`, and `δ = 0` must remove the frequency
-dependence so the boundary no longer depends on how common either form already
-is — history stops mattering, which is correct for that control.
+### What the checks are actually worth (OF-15)
+
+The difference `w_P − w_C` is now **derived from two fitness expressions**
+rather than written as a single line. That matters for what the substitution
+checks can claim. Written directly, `γ` occurred exactly once, so `γ = 0`
+could not fail to collapse it, and `δ` was the only coefficient on any `x_C`
+term, so `δ = 0` could not fail to flatten it. Both were properties of how one
+statement was typed, and the script called them controls.
+
+Honest labelling now:
+
+| Check | Strength |
+| --- | --- |
+| nesting at `q → 1` against the **imported** sibling | external — reads another file, and goes red when that file moves |
+| `b` cancels between the two fitnesses | real — fails if `b` is mistyped in either expression |
+| `γ = 0`, `δ = 0` | **consistency checks**, not controls — near-automatic given where those symbols appear |
+
+The two substitutions are kept because they bind the result to the imported
+expression, but they are no longer described as if they could have failed
+independently.
+
+### Is the boundary reachable? (OF-13)
+
+`q` is a frequency, so it lives in `[0, 1]`. The first version of this script
+solved for `q*` and reported it as the boundary **without checking that it
+lands there** — the F2 defect one model over, committed by the author of the
+F2 fix two files away.
+[`../copy-number-burden/check_feasible_optimum.py`](../copy-number-burden/check_feasible_optimum.py)
+exists precisely to ask whether a solved optimum is reachable, and the lesson
+did not transfer.
+
+An unreachable boundary is not a weaker result. It is a **different** result:
+one location wins across the entire range of the parameter the model is about.
+
+Solved rather than swept, at the symmetric point:
+
+```text
+reachable boundary  ⟺  c_c ≤ c_p ≤ c_c + γ
+```
+
+**The mobility term can only ever buy `γ`.** The plasmid's carriage cost has
+to exceed the chromosome's — otherwise the plasmid wins at every `q` — but by
+no more than the transfer rate, because past that no quantity of empty
+recipients rescues it and `q` stops being the deciding parameter. That result
+was invisible while `q*` went unchecked, which is the argument for the check:
+it did not weaken a finding, it produced one.
+
+On an analyst-chosen probe grid, 135 of 243 cells have no reachable boundary —
+81 where the plasmid always wins, 54 where the chromosome does. **Grid count,
+not a frequency**: three values on each of five parameters are probes spanning
+plausible ranges, not a sample of plasmids or niches.
+
+The sibling [`check_priority_effect.py`](check_priority_effect.py) was
+re-checked for the same defect and does not have it — it already derives when
+its threshold lies inside `(0, R)`, and states the condition
+`|c_c − c_p| < δR`. This model was the one that skipped it.
 
 What it does not settle: which regime any real system is in. `q` is an
 ecological measurement nobody has made here.
@@ -184,55 +243,16 @@ Exit status is 1 if a derivation stops reproducing.
 ## Source provenance — which version the quotations come from
 
 Every sentence quoted on this page was checked against the **published**
-Evolution Letters text at `10.1002/evl3.226`. The published Discussion
-contains the cleanest single statement of the boundary this directory models:
+Evolution Letters text at `10.1002/evl3.226`, not the preprint. That
+distinction is not pedantry here: the two versions differ in wording. The
+published Discussion contains
 
 > *"Thus, local adaptation only favors plasmid-borne resistance if the
 > frequency of the sensitive plasmid is low outside the local niche."*
 
-**Quote the published text and cite the DOI**, because that is the version of
-record and its wording is what a reader will find.
-
-### A correction, kept rather than edited away
-
-The first version of this section said that sentence was *"not present in the
-bioRxiv version"*. **That was false.** `[M]` It is present in bioRxiv v2
-(`10.1101/2020.08.04.236455`), differing by one letter — the preprint has
-British *"favours"* where the copy-edited published text has *"favors"*:
-
-> *"Thus, local adaptation only **favours** plasmid-borne resistance if the
-> frequency of the sensitive plasmid is low outside the local niche."*
-
-**Why it was made is not what it first looked like.** The obvious reading is
-that a search missed the sentence on the `favours`/`favors` difference. That
-is wrong, and the author of the claim corrected the diagnosis: the preprint
-was never searched for that sentence. What existed was an earlier exploratory
-query, filtering sentences on an unrelated pattern and then **truncating the
-result set**. The sentence matched that filter and was cut by the truncation.
-Its non-appearance in a deliberately shortened list was then read as absence,
-and restated as fact in committed public content.
-
-So there are **two independent failures here, needing two separate
-defences**:
-
-1. **A truncated result set is never evidence of absence** — not for any
-   matcher, however well built. Count the matches; do not inspect the first
-   *N*. An absence claim needs a search that is complete by construction.
-2. **Then** defeat the variant axes, because a complete search can still miss.
-   Verifying this correction required `/only favou?rs/`: whitespace- and
-   case-normalisation alone would **not** have found it.
-
-`[I]` Worth keeping because of what it was: an **absence claim** published in
-the same changeset that added the rule *"an absence claim is a claim; it needs
-its own evidence"*. The rule was right and its author was its first casualty —
-and the first diagnosis of *why* was wrong too, which is the more useful half.
-An error's stated cause is itself a claim.
-
-**For retrieval from published text, defeat at least:** whitespace, case,
-British/American spelling, hyphenation, and smart versus straight quotes. The
-practical form is to search a distinctive fragment containing none of them —
-`plasmid-borne resistance if the frequency of the sensitive plasmid is low`
-matches both documents on the first attempt.
+which is the cleanest single statement of the boundary this directory models —
+and it is **not present in the bioRxiv version**. Quote the published text,
+cite the DOI, and never attribute preprint wording to the paper.
 
 ## References
 
