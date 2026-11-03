@@ -57,14 +57,51 @@ having fixed it. The prior round reviewed the previous 60-minute plan on
 |---|---|---|
 | **Retraction** — "a 63.2 % sacrifice, always" was wrong | **Implemented and strengthened** | `[V]` The quantitative section names five reasons not to say it; the claims-to-avoid list repeats it |
 | **F1** (high) — quantitative section states 12–14 min, schedule gives 9 | **Dissolved, not fixed** | `[M]` The model still has **9 min**. The prose budget that created the mismatch is gone; the only prose minute-figures left both agree with the table |
-| **F2** (med-high) — the feasibility escape is correct but unevaluated | **Still open** | `[V]` The plan asks whether \(C^*\) lies inside the feasible range; the production list schedules a re-render; nothing evaluates it |
+| **F2** (med-high) — the feasibility escape is correct but unevaluated | **Settled 3 Nov 2026** — see below | `[M]` [`../models/copy-number-burden/check_feasible_optimum.py`](../models/copy-number-burden/check_feasible_optimum.py) |
 | **F3** (medium) — stops sit after accumulated overrun, buffer downstream | **Worse** | `[M]` See Finding 3 |
 | **F4** (medium) — cut ladder ordered by reluctance, not minutes freed | **Still open** | `[V]` Two unordered lists, no minute attached to any rung |
 | **F5** (medium) — SPREAD defined narrowly first | **Implemented** | `[V]` The definition now leads with establishment in a new cellular lineage, then occupied recipients; the `transfer ≠ establishment ≠ persistence ≠ spread` correction now **precedes** it |
 | **F6** (low-med) — regime table lacks the segregation-flux mechanism | **Implemented** | `[V]` The protocol-regime gate now carries plasmid-free recipient supply as a small flux |
 | **F7** (low) — artifact integrity | **Implemented** | `[M]` Header date matches filename; display math balanced 17/17; inline 11/11; no broken arrow macro |
 
-**Four implemented, two still open, one worse, one dissolved.**
+**Four implemented, one settled after this review, one still open, one worse,
+one dissolved.**
+
+### F2, settled 3 November 2026
+
+Open since 17 October. `[M]` A committed check now evaluates it instead of
+asking. Using the burden coefficient's own authors' reading — 0.065 % of growth
+resources per copy — and sweeping generation count, because culture duration is
+not public and must not be invented:
+
+| G0 (doublings) | 5 | 10 | 20 | 30 | 50 | 100 |
+| --- | --- | --- | --- | --- | --- | --- |
+| \(C^*\) (copies/cell) | 444 | 222 | 111 | 74 | 44 | 22 |
+
+Against declared reference ranges for common origin classes, at a realistic
+batch duration of 10–30 doublings: a low- or medium-copy vector has \(C^*\)
+**above** its ceiling, and a high-copy pUC-like vector has \(C^*\) **below**
+its floor.
+
+**So for the two commonest fixed-origin classes there is no trade-off at all,
+and the model tells them to move in opposite directions.** Only a vector whose
+reachable range straddles \(C^*\) meets the compromise the model is usually
+quoted for — 9 of 28 swept combinations.
+
+`[M]` The boundary is solved, not sampled: \(C^* \le C_{\min}\) exactly when
+\(G_0 \ge 1/(\beta C_{\min}\ln 2)\). Whether the trade-off exists is a property
+of **how long the culture runs**, not of the plasmid.
+
+`[I]` This is a better answer than either branch of the original question, and
+it changes Stop 3. "If you double PCN, do you necessarily increase endpoint
+barcode abundance?" now has a defensible reply: *it depends which origin you
+started from, and for most of them the honest answer is that you are not near
+the optimum at all.*
+
+It also locates the 1 − 1/e invariant: the density penalty approaches 63 % only
+as \(C_{\min}\to 0\), running 54–63 % in the wide-range class and **9 %** in
+the medium class. The retraction that removed "a 63.2 % sacrifice, always" was
+right, and this says by how much.
 
 ### F1 closed by deletion, which is worth naming
 
@@ -517,8 +554,10 @@ re-derived the model: \(Q = C\,2^{G_0(1-\beta C)}\) has a stationary point at
 \(C^{*} = 1/(\beta G_0 \ln 2)\) for **any** positive \(\beta, G_0\), so the
 existence of an interior optimum is a property of the functional form, not a
 result. The plan never claims otherwise, and the feasibility question is
-precisely what keeps the model falsifiable rather than tautological. F2 is
-still unevaluated, but the document says the right thing about it.
+precisely what keeps the model falsifiable rather than tautological. The
+document said the right thing about F2 before anyone had evaluated it, and
+when it was evaluated the answer vindicated the hedge: for most origin classes
+the optimum is not reachable at all.
 
 **4. `[V]` An unknown protocol is converted into a design criterion.** Both
 antibiotic regimes get consequences, then: *do not guess — ask which regime the
