@@ -20,6 +20,39 @@ scientifically coherent capability**, with four conditions:
 Condition 4 is the one that is easy to lose. A release is a contract about a
 commit, not a pointer at the best current state.
 
+## "Withheld" is repository state, not remembered intention
+
+Earned in v0.3. The release note was drafted and deliberately **not**
+committed, because its verification table was false until the findings it
+declared closed actually closed. That decision existed only as an intention.
+A `git add -A` on an unrelated branch swept the untracked file into a commit,
+and `main` then carried a release note making false claims about a release
+that had not happened — underneath this very document, which says a release
+note cannot precede the state it describes.
+
+Nobody was misled, because no tag pointed at it. That is luck. The fix is to
+make the states physically distinct, so that the tooling cannot convert "I
+meant not to publish this" into a repository fact merely because the file
+exists in the working tree:
+
+```text
+exploratory draft      → scratch outside the repository, or a separate worktree
+candidate release note → a release-prep branch
+verified release note  → main
+tag                    → immutable frozen boundary
+```
+
+No automation is needed and none is proposed. The rule is that **each state
+has a location**, and a file's location is what says which state it is in. An
+intention held in one person's head is not a state the repository can observe,
+and `git add -A` cannot be taught to respect one.
+
+The same reasoning governs the private-to-public promotion planned for v0.4:
+it is a **reimplementation from a frozen export**, not a copy of whatever
+currently looks good in the research repository. Copying working state carries
+across exactly the hidden assumptions this episode showed the process does not
+otherwise catch.
+
 ## Frozen artifacts stay frozen
 
 A teaching artifact is tied to the release that produced it, including the
