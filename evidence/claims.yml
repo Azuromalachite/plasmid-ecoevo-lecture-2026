@@ -527,3 +527,32 @@ claims:
       the frozen ontology: it needed no new layer and no new status.
     pages:
       - concepts/plasmid-vs-host-fitness.md
+  - id: claim.copy_number.size_scaling_form
+    statement: >-
+      The form of the relationship between plasmid size and copy number is
+      unsettled: large collections have been fitted with a single power law
+      and with a segmented model over two inheritance strategies, and the
+      published estimates do not share a definition of copy number.
+    layer: interpretation
+    status: not_tested
+    references:
+      - ramiromartinez2025universal
+      - maddamsetti2025scaling
+      - shaw2026strategies
+    notes: >-
+      Not contested under scope before status. The two 2025 studies use
+      different estimators and different definitions -- copies per cell
+      against copies per longest chromosome per cell -- so the first gate of
+      the decision tree in evidence-levels.md answers NO and the comparison is
+      NOT COMPARABLE rather than the claim being contested. What is untested
+      is the model form itself: no study has compared single against segmented
+      fits on one dataset under one definition.
+    verification:
+      source_checked: true
+      checked_against: full_text
+      note: >-
+        Maddamsetti definition verified verbatim in the published text.
+        Shaw 2026 is a preprint, not certified by peer review, and is cited as
+        a dissenting position rather than as evidence for a conclusion.
+    pages:
+      - concepts/plasmid-size-and-copy-number.md

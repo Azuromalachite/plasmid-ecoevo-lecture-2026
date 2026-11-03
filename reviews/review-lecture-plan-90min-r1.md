@@ -531,6 +531,24 @@ and unused on any content page. OF-4 is not closed by this review — no content
 page carries the status yet — but the candidate is now identified, which is
 what OF-4 asks for: *"Revisit if a genuinely contested claim appears."*
 
+> **Corrected when the trigger fired, 3 November 2026.** That paragraph was
+> wrong, and wrong by not applying the repository's own rule. When
+> `concepts/plasmid-size-and-copy-number.md` was written, **scope before
+> status** in `evidence/evidence-levels.md` routed the claim away from
+> `contested`: its first gate asks whether the findings make the same claim
+> under comparable conditions, and the two 2025 studies use different
+> estimators and different definitions of copy number — copies per cell
+> against copies per longest chromosome per cell. The answer at that gate is
+> NO, so the comparison is **`NOT COMPARABLE`**, and the registry entry
+> `claim.copy_number.size_scaling_form` is an `interpretation` that is
+> `not_tested`.
+>
+> **OF-4 is therefore not closed by this material either**, and the candidate
+> this review identified was not one. Worth keeping rather than editing away:
+> a review that spent its length on scope discipline proposed a status without
+> running the scope test its own repository defines — and Finding 2, the three
+> quantities called PCN, contained the reason all along.
+
 ---
 
 ## Summary
