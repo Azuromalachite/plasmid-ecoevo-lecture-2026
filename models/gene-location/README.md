@@ -87,6 +87,51 @@ which location is partly an accident locked in by priority. The second is the
 more useful thing to teach, because it tells a designer that **observed gene
 location is weak evidence about what is optimal**.
 
+## Both regimes from one model
+
+[`check_regime_boundary.py`](check_regime_boundary.py) goes further than
+noting the disagreement: it makes the disagreement the specification. One
+inequality, two corners, and the parameter that separates them.
+
+The later paper states the assumption the earlier argument rests on —
+*"outside the local niche with the beneficial gene, plasmids would not
+persist"* — and then removes it. Removing it reverses the conclusion, because
+if the gene-free version of the same plasmid already persists outside, the
+resistant plasmid has few plasmid-free recipients left to colonise, and the
+cells it does enter become dual carriers. Verified: *"Plasmid-borne resistance
+benefits from the sensitive plasmid being rare."*
+
+So the separating parameter is **q, the frequency of the gene-free plasmid
+among potential recipients**:
+
+```text
+w_P − w_C  =  γ(1−q)  −  (c_p − c_c)  −  δ(x_C − x_P)
+              mobility    carriage        redundancy
+              is rented   cost gap        (priority effect)
+```
+
+| Corner | Regime | Outcome |
+| --- | --- | --- |
+| `q → 0` | Eberhard: no gene-free plasmid outside the niche | full transfer rate available; plasmid localisation can win |
+| `q → 1` | Lehtinen: backbone persists everywhere without the gene | mobility term vanishes; the redundancy model remains |
+
+**The earlier script is this one's `q → 1` limit**, checked symbolically — not
+a rival to it. The boundary is `q* = (Rδ + c_c − c_p − 2δx_C + γ)/γ`, which at
+the symmetric point is `1 − (c_p − c_c)/γ`.
+
+The teaching line is in the first term: **mobility is rented from the ecology,
+not owned by the plasmid.** Its value is multiplied by the fraction of
+recipients still plasmid-free, and that fraction is a property of the world
+outside the niche. Neither paper is wrong; they describe different ecologies.
+
+Two controls, both failing the script if they break: `γ = 0` must collapse to
+the redundancy model for every `q`, and `δ = 0` must remove the frequency
+dependence so the boundary no longer depends on how common either form already
+is — history stops mattering, which is correct for that control.
+
+What it does not settle: which regime any real system is in. `q` is an
+ecological measurement nobody has made here.
+
 ## What it does not show
 
 - Not that real gene location is set this way.
