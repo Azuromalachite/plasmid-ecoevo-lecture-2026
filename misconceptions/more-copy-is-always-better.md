@@ -87,6 +87,20 @@ being selected by, at which level, in this environment?"** And since copy
 number evolves [@dimitriu2021copy], it is a variable of the system, not a
 parameter of the plasmid.
 
+**One answer to that question is now computed rather than asserted.**
+[`../models/copy-number-burden/`](../models/copy-number-burden/) solves for the
+copy number that maximises endpoint plasmid molecules and then asks the
+question this page implies but does not pose: **is that optimum inside the
+range a real origin can reach?** Often it is not. At realistic batch durations
+the optimum sits above a low- or medium-copy vector's ceiling and below a
+high-copy vector's floor, so those two classes are pushed in *opposite*
+directions and neither meets a compromise. Whether a trade-off is faced at all
+turns out to depend on how long the culture runs, not on the plasmid.
+
+That does not weaken this page — it is the same argument one level more
+specific. "Not a performance dial" is right; the model says what the dial is
+attached to.
+
 ## Example
 
 Plasmid R1 evolving in the presence of susceptible, plasmid-free recipients
