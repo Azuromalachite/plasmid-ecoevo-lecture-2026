@@ -65,10 +65,20 @@ the per-release files.
 *The repository no longer merely documents claims and pedagogy; it contains
 executable models that can change or delimit the biological inference.*
 
-See [`v0.3.md`](v0.3.md). Non-goals are named there, and they include
-comprehensive plasmid biology, an empirical gene-location layer, scaling-law
-adjudication, lecture-complete enzymology, and any website, DOI or
-research-software maturity.
+**`v0.3.md` does not exist yet, deliberately.** A release note is a claim
+about a frozen state, so it cannot precede the state it describes: its
+verification table would be false while findings it declares closed are still
+open. It is committed in the release-prep commit, with every number in its
+table re-measured from the resulting `main`, and the link added here then.
+
+Non-goals already fixed for v0.3: comprehensive plasmid biology, an empirical
+gene-location layer, scaling-law adjudication, lecture-complete enzymology,
+and any website, DOI or research-software maturity.
+
+The release verification table must also **say which checkout it was measured
+from**. `evidence/test_check_participant_firewall.py` refuses to run in a
+linked worktree — correctly, since it commits — so a table generated from a
+worktree would record that refusal as a failure and be right to.
 
 ### v0.4 — evolution of genomic address
 
