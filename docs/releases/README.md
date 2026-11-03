@@ -153,6 +153,58 @@ neighbourhood provenance cannot be made explicit, do not release a
 quantitative chromosome/plasmid claim.** Fall back to a bounded curated case
 study and say so.
 
+#### Release-defining, and supporting
+
+The two are kept apart on purpose, because a milestone is defined by **the new
+question the repository can answer** — not by every good artefact made while
+reaching it. A version whose contract absorbs each worthwhile side result
+stops meaning "evolution of genomic address" and starts meaning "things we
+improved after v0.3".
+
+**Release-defining — v0.4 does not ship without these:**
+
+- a verified OXA capture-history case;
+- explicit accession → replicon → neighbourhood provenance;
+- at least two further contrasting address-transition cases;
+- comparable context figures from frozen inputs;
+- the model and the empirical work brought together **without either being
+  offered as evidence for the other**;
+- an adversarial review.
+
+**Supporting, explicitly non-blocking:**
+
+- a PBP / β-lactam mechanism figure built on the ESPMap → frozen-record →
+  exported-fixture route, carrying **both** panels: local reaction-site
+  similarity, *and* the PBP5 result showing recruitment happening away from
+  the active site with stem peptide and β-lactam able to bind at once. A
+  version with only the first panel would teach the oversimplification the
+  figure exists to correct;
+- mechanistic refinement of the lecture's opening arc.
+
+`[I]` The supporting artefacts answer a different question — *what molecular
+feature makes a β-lactam enter the PBP reaction pathway, and why is "it looks
+like D-Ala-D-Ala" not a sufficient answer* — and they strengthen the teaching
+material considerably. They are still not what the version is about. **If the
+empirical genomic-address work runs slow, the figure must not be allowed to
+stand in for the capability v0.4 names.**
+
+The scientific connection runs the other way, and is worth stating because it
+is the reason both belong in the same era:
+
+```text
+MOLECULAR    β-lactam → acyl-enzyme chemistry; OXA can hydrolyse it
+                 ↓
+GENOMIC      chromosomal blaOXA-like → mobilised onto an MGE
+                 ↓
+ECOLOGICAL   new host, regulation, dosage, transmission
+                 ↓
+             clinical resistance determinant
+```
+
+That chain blocks a common collapse — *"the gene became a resistance gene when
+it entered a plasmid"*. The protein chemistry may already have existed. What
+changed was the address, and everything the address brings with it.
+
 ### v0.5 — competing models of plasmid design space
 
 *Which explanatory model of the size–copy-number relationship survives
