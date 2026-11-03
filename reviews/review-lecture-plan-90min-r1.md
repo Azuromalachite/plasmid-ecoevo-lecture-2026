@@ -86,7 +86,8 @@ its floor.
 **So for the two commonest fixed-origin classes there is no trade-off at all,
 and the model tells them to move in opposite directions.** Only a vector whose
 reachable range straddles \(C^*\) meets the compromise the model is usually
-quoted for — 9 of 28 swept combinations.
+quoted for — 9 of 28 **grid cells**, which is a count over an analyst-chosen
+sweep and not a frequency over any population of plasmids.
 
 `[M]` The boundary is solved, not sampled: \(C^* \le C_{\min}\) exactly when
 \(G_0 \ge 1/(\beta C_{\min}\ln 2)\). Whether the trade-off exists is a property

@@ -186,7 +186,14 @@ about any construct in the competition:
 realistic batch durations, and they are told to move in opposite
 directions.** Only a vector whose reachable range straddles `C*` faces the
 compromise the model is usually quoted for. Across the swept grid, 9 of 28
-combinations have an interior optimum.
+cells have an interior optimum.
+
+> **Grid count, not frequency.** The four reference ranges and seven generation
+> counts are deliberately chosen probes of parameter space, not a sample from
+> any population of plasmids. "9 of 28" is not "about a third of cases" and
+> carries no claim about how often real plasmids face this trade-off. The
+> number has exactly the shape of a statistic that later loses its denominator,
+> which is why the script prints the caveat beside it.
 
 The boundary is solved rather than sampled:
 
