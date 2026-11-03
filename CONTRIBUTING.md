@@ -155,6 +155,38 @@ case that passes either way tests nothing, and that is not hypothetical here:
 twelve of the references cases passed against a defect they were written to
 cover, because every one of them planted a key that already matched the
 pattern the extractor used (G2).
+
+## Every instrument needs evidence that it can fail
+
+The rule the defects in this repository keep arriving at:
+
+> **A passing check without a demonstrated failing control is weak evidence of
+> coverage — and that applies recursively to whatever executes the checks.**
+
+Not every script needs a mutation suite. But every gate anyone relies on should
+have **at least one known-negative that travels the same execution path** as
+the real run, and you should have seen it go red.
+
+This is not incidental hygiene. It is the same discipline the teaching material
+asks of an experiment:
+
+```text
+biological assay
+  signal observed      ≠  measurement system shown able to detect failure
+
+repository check
+  exit 0 observed      ≠  harness shown able to propagate failure
+```
+
+Both failures look identical to success from the outside, which is why neither
+can be settled by reading. Before quoting a screen of zeros, push a deliberate
+failure through the same loop:
+
+```bash
+uv run --no-project python -c "import sys; sys.exit(3)"
+```
+
+If that does not print `3`, nothing else the loop printed means anything.
 Known unfixed defects are listed in
 [`docs/open-findings.md`](docs/open-findings.md); add one there in the same
 commit that discovers it.

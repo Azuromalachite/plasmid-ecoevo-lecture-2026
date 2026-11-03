@@ -149,8 +149,11 @@ def main():
             cells.append(f"{tag:<24}")
         print(f"  {g0:>4}  " + "  ".join(cells))
 
-    print(f"\n  interior optima: {interior} of {total} "
-          f"({100*interior/total:.0f}%) of swept combinations")
+    print(f"\n  interior optima: {interior} of {total} grid cells")
+    print("  GRID COUNT, NOT A FREQUENCY. The four ranges and seven generation")
+    print("  counts are analyst-chosen probes of parameter space, not a sample")
+    print("  from any population of plasmids. This is not 'a third of cases'")
+    print("  and must never be quoted as a percentage of anything biological.")
 
     print("\nTHE BOUNDARY, SOLVED RATHER THAN SWEPT")
     print("  C* <= C_min  <=>  G0 >= 1/(beta * C_min * ln2)")
