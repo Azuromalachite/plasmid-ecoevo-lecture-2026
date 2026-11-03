@@ -65,11 +65,11 @@ the per-release files.
 *The repository no longer merely documents claims and pedagogy; it contains
 executable models that can change or delimit the biological inference.*
 
-**`v0.3.md` does not exist yet, deliberately.** A release note is a claim
-about a frozen state, so it cannot precede the state it describes: its
-verification table would be false while findings it declares closed are still
-open. It is committed in the release-prep commit, with every number in its
-table re-measured from the resulting `main`, and the link added here then.
+See [`v0.3.md`](v0.3.md). It was withheld until the state it describes
+existed — a release note is a claim about a frozen state, and its verification
+table would have been false while findings it declares closed were still open.
+Every number in that table was re-measured from the main checkout at the
+tagged commit, and the table says so.
 
 Non-goals already fixed for v0.3: comprehensive plasmid biology, an empirical
 gene-location layer, scaling-law adjudication, lecture-complete enzymology,

@@ -210,7 +210,7 @@ software here become research outputs in their own right.
 
 ## Status
 
-Latest tagged release: v0.2. No website, CI or DOI yet. Corrections with a
+Latest tagged release: v0.3. No website, CI or DOI yet. Corrections with a
 reference are welcome.
 
 ## Licence and citation
