@@ -32,11 +32,22 @@ Two things resist extraction and should stay in the notebook: the `# @title`
 and `# @param` annotations, which are Colab form widgets rather than Python,
 and the interleaved prose, which is the teaching.
 
-Currently extracted: `segregation` only. It was written here rather than in
-the notebook because nothing in the notebook used it, so adding it carried no
-risk to existing output.
+Extracted so far: `config`, `analytic`, `dynamic`, `shared_flask`,
+`mechanistic`, `single_cell` and `segregation`. Each move was verified by the
+before/after stream diff above; the notebook's 15 output-producing cells were
+byte-identical every time.
+
+Still in the notebook, deliberately: the figure helpers, because nearly every
+plotting cell uses them and moving them buys import churn rather than clarity;
+and the QA audit, which is narrative as much as test.
+
+`segregation` is the one module that was never in the notebook. It was written
+here directly, since nothing depended on it and adding it could not change
+existing output.
 """
 
-from . import segregation  # noqa: F401
+from . import (analytic, config, dynamic, mechanistic,  # noqa: F401
+               segregation, shared_flask, single_cell)
 
-__all__ = ["segregation"]
+__all__ = ["analytic", "config", "dynamic", "mechanistic",
+           "segregation", "shared_flask", "single_cell"]
