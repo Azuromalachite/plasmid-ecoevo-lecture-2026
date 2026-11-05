@@ -82,7 +82,7 @@ release record.
 | --- | --- | --- |
 | `v0.1` | scientific and intellectual spine | released |
 | `v0.2` | evidence and pedagogy architecture | released |
-| `v0.3` | **executable inference** | release candidate |
+| `v0.3` | **executable inference** | released |
 | `v0.4` | evolution of genomic address | not started |
 | `v0.5` | competing models of plasmid design space | future |
 | `v0.6` | dynamical regimes and persistence landscapes | future |

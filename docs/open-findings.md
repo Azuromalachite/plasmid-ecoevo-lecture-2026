@@ -15,6 +15,41 @@ finding.
 
 ## Open
 
+### OF-17 — the release ladder can contradict the published releases, and did
+
+**Severity:** trivial
+**Location:** `docs/releases/README.md` release ladder
+
+Publishing a GitHub Release is an action taken outside the repository that
+changes whether a sentence inside it is true. The `v0.3` tag was pushed on
+2026-11-03 and the ladder's `release candidate` was accurate for two days.
+On 2026-11-05 the tag was published as a release and marked latest, which
+falsified that row; it was found on 2026-11-06 and corrected in this commit.
+
+This is the mirror of the rule recorded in
+[`releases/README.md`](releases/README.md) under "Withheld is repository
+state, not remembered intention". That case put a release note on `main` for
+a release that had not happened. This one left the ladder describing a
+release that had. The sign is opposite and the defect is the same: the
+document and the world are coupled by hand, and nothing reports when they
+come apart.
+
+Nothing in the repository reads the remote's release list, so the drift had
+no detector and was found by a reader. It is recorded as trivial because the
+ladder is prose that a reader can check against the releases page in one
+click, not a measurement another claim is derived from — but it is recorded,
+because "trivial and undetectable" is how OF-5 started.
+
+**Correction:** two options, and the cheaper one is not obviously worse.
+Either derive the status column from `gh release list` in a committed check,
+which keeps the strong statement and adds a network dependency to a tree that
+currently has none; or state in the ladder that it records *which contract
+each version earned* rather than *what is published*, so that publishing
+cannot falsify it. The second removes the coupling instead of monitoring it.
+Not yet chosen.
+
+---
+
 ### OF-16 — the firewall test can breach the firewall, and did
 
 **Severity:** major
