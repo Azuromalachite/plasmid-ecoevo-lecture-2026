@@ -70,6 +70,8 @@ __all__ = [
     "bearing_fraction_after",
     "copy_number_pmf",
     "population_loss_rate",
+    "carrier_mean",
+    "loss_rate_from_division_counts",
     "copies_for_retention",
     "loss_table",
     "self_check",
@@ -252,6 +254,65 @@ def population_loss_rate(mean_copies: float, cv: float = 0.0, kmax=None):
     return weighted / carriers
 
 
+def carrier_mean(mean_copies: float, cv: float = 0.0, kmax=None) -> float:
+    """Mean copy number among carriers: the x value a loss rate belongs at.
+
+    `population_loss_rate` conditions on carriers, so the distribution it
+    averages over is NOT the one `mean_copies` names -- dropping the
+    zero-copy cells raises the mean.  At a nominal mean of 10 the difference
+    is invisible; at a nominal mean of 1 with cv 1.0 the carriers average
+    1.46 copies.
+
+    This is the whole explanation of the apparent curve crossings at low
+    mean, and it is worth stating precisely, because Jensen's inequality is
+    unconditional:
+
+        E[2**(-2c)]  >=  2**(-2 E[c])      for ANY distribution of c
+
+    So a spread population can never fall below the uniform line when both
+    are read at the SAME mean.  If a plot shows one doing so, the two means
+    are not the same, and the fix is to plot against this function rather
+    than against the nominal mean.  Nothing biological is happening.
+    """
+    if kmax is None:
+        kmax = _default_kmax(mean_copies, cv)
+    pmf = copy_number_pmf(mean_copies, cv, kmax)
+    carriers = math.fsum(pmf[1:])
+    if carriers <= 0.0:
+        raise ValueError("distribution puts no mass on carriers")
+    return math.fsum(k * p for k, p in enumerate(pmf) if k >= 1) / carriers
+
+
+def loss_rate_from_division_counts(pairs) -> float:
+    """Per-daughter loss rate for an ARBITRARY distribution of copies.
+
+    `pairs` is an iterable of (N, probability) where N is the number of
+    independently segregating copies present at division -- twice the birth
+    copy number in the idealised picture the rest of this module uses.
+    Returns E[2**-N] conditioned on N >= 1.
+
+    This exists because mean and CV do not determine the loss rate, and
+    `copy_number_pmf` cannot show that, having only those two knobs.  Two
+    distributions can share a mean AND a variance and still sit three orders
+    of magnitude apart, because the answer is set by the shape of the
+    low-copy tail and neither moment describes it.  `self_check` carries such
+    a pair, so no curve in this repository can quietly start implying that
+    (mean, cv) is enough.
+    """
+    items = [(int(n), float(p)) for n, p in pairs]
+    if any(n < 0 for n, _ in items):
+        raise ValueError("copy counts must be non-negative")
+    if any(p < 0 for _, p in items):
+        raise ValueError("probabilities must be non-negative")
+    total = math.fsum(p for _, p in items)
+    if not math.isclose(total, 1.0, abs_tol=1e-9):
+        raise ValueError(f"probabilities must sum to 1; got {total}")
+    carriers = math.fsum(p for n, p in items if n >= 1)
+    if carriers <= 0.0:
+        raise ValueError("distribution puts no mass on carriers")
+    return math.fsum(p * 2.0 ** (-n) for n, p in items if n >= 1) / carriers
+
+
 def copies_for_retention(target: float, generations: int) -> int:
     """Smallest integer copy number retaining `target` fraction after n gens.
 
@@ -365,15 +426,98 @@ def self_check(verbose: bool = True) -> int:
                              f"is not above the uniform floor {floor:.3e}; "
                              f"convexity says it must be")
 
-    # ...and both failures below that regime are asserted too, so the
-    # boundary is a tested property rather than a remark in a docstring.
-    if not population_loss_rate(1.0, 0.6) < p_daughter_free(1.0):
-        fails.append("at mean 1 the loss rate should FALL with spread: "
-                     "conditioning on carriers outweighs convexity there")
-    if not population_loss_rate(2.0, 0.1) < p_daughter_free(2.0):
-        fails.append("at mean 2, cv 0.1 the rate should sit just under the "
-                     "floor: lognormal skew plus integer rounding outweighs "
-                     "the convexity gain at small spread")
+    # carrier_mean needs checking in its own right: the Jensen check below
+    # only bites when it comes out too SMALL, so a mean that drifts upward
+    # would sail through. With no spread it must be exactly the rounded mean.
+    for m in (2.0, 5.0, 10.0, 20.0):
+        if carrier_mean(m, 0.0) != float(round(m)):
+            fails.append(f"carrier_mean({m}, 0) should be {float(round(m))}, "
+                         f"got {carrier_mean(m, 0.0)}")
+    # Conditioning removes the lowest bin, so it must raise the mean -- but
+    # relative to the pmf's OWN mean, not the nominal one. Rounding a skewed
+    # distribution to integers already moves the pmf's mean off the nominal
+    # value (at mean 2, cv 0.4 the pmf averages 1.9946), and an earlier
+    # version of this check compared against the nominal mean and failed on
+    # correct code.
+    for m in (1.0, 2.0, 5.0, 20.0):
+        for cv in (0.1, 0.4, 1.0):
+            pmf = copy_number_pmf(m, cv)
+            raw = math.fsum(k * p for k, p in enumerate(pmf))
+            if pmf[0] > 1e-12 and not carrier_mean(m, cv) > raw:
+                fails.append(f"carrier_mean({m}, {cv}) = "
+                             f"{carrier_mean(m, cv)} does not exceed the "
+                             f"unconditioned mean {raw}, though {pmf[0]:.3e} "
+                             f"of cells carry nothing; conditioning is not "
+                             f"happening")
+
+    # Jensen stated the way it is actually true: against the CONDITIONED
+    # mean. In that form it is unconditional and admits no regime boundary,
+    # which makes it a far better check than the boundary assertions it
+    # replaces -- those tested where my x axis was wrong, not where the
+    # mathematics changes.
+    for m in (1.0, 1.5, 2.0, 2.5, 3.0, 5.0, 10.0, 20.0):
+        for cv in (0.1, 0.2, 0.4, 0.6, 1.0):
+            got = population_loss_rate(m, cv)
+            cm = carrier_mean(m, cv)
+            ref = p_daughter_free(cm)
+            if got < ref * (1.0 - 1e-12):
+                fails.append(f"Jensen violated at nominal mean {m}, cv {cv}: "
+                             f"{got:.4e} < {ref:.4e} at carrier mean "
+                             f"{cm:.4f} -- convexity cannot be beaten, so "
+                             f"this is an arithmetic error, not a regime")
+
+    # The apparent crossings against the NOMINAL mean are still real, and
+    # still worth pinning down, but they are now diagnosed rather than
+    # described: conditioning moved the mean. Both of these hold because
+    # carrier_mean(m, cv) > m, not because spread helps.
+    for m, cv in ((1.0, 0.6), (2.0, 0.1)):
+        if not population_loss_rate(m, cv) < p_daughter_free(m):
+            fails.append(f"expected an apparent crossing at nominal mean {m},"
+                         f" cv {cv}")
+        if not carrier_mean(m, cv) > m:
+            fails.append(f"the crossing at mean {m}, cv {cv} should be "
+                         f"explained by carrier_mean exceeding {m}; it is "
+                         f"{carrier_mean(m, cv)}")
+
+    # Mean and CV do not determine the loss rate, and no curve labelled by
+    # those two numbers can. These populations share a mean of 40 copies at
+    # division AND a variance of 16, and sit ~2600x apart.
+    pop_a = [(36, 0.5), (44, 0.5)]
+    pop_b = [(20, 0.02), (40, 0.96), (60, 0.02)]
+    for name, dist in (("A", pop_a), ("B", pop_b)):
+        mu = math.fsum(n * p for n, p in dist)
+        variance = math.fsum(p * (n - mu) ** 2 for n, p in dist)
+        if not (math.isclose(mu, 40.0) and math.isclose(variance, 16.0)):
+            fails.append(f"counterexample {name} should have mean 40 and "
+                         f"variance 16; got {mu} and {variance}")
+    ratio = (loss_rate_from_division_counts(pop_b)
+             / loss_rate_from_division_counts(pop_a))
+    if not 2000.0 < ratio < 3500.0:
+        fails.append(f"two populations sharing a mean and a variance should "
+                     f"differ by roughly 2600x here; got {ratio:.0f}")
+
+    # ...and the uniform case must agree with the single-cell formula.
+    if not math.isclose(loss_rate_from_division_counts([(40, 1.0)]),
+                        p_daughter_free(20), rel_tol=1e-12):
+        fails.append("loss_rate_from_division_counts disagrees with "
+                     "p_daughter_free on a uniform population")
+
+    # Half the cells carry nothing: the answer is the rate among the half
+    # that do, 2**-2, not half of it. Without this the conditioning in
+    # loss_rate_from_division_counts is untested, because every other
+    # distribution here puts no mass at zero.
+    if not math.isclose(loss_rate_from_division_counts([(0, 0.5), (2, 0.5)]),
+                        0.25, rel_tol=1e-12):
+        fails.append("loss_rate_from_division_counts is not conditioning on "
+                     "carriers: plasmid-free cells are being averaged in")
+
+    for bad in ([(10, 0.5)], [(-1, 1.0)], [(0, 1.0)], [(10, 2.0)]):
+        try:
+            loss_rate_from_division_counts(bad)
+            fails.append(f"loss_rate_from_division_counts({bad}) should have "
+                         f"raised")
+        except ValueError:
+            pass
 
     # Monotone: more spread is worse, more copies are better.
     for m in (5, 10, 20):

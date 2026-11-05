@@ -88,18 +88,33 @@ _spec.loader.exec_module(segregation)
 W, H = 900, 640
 PLOT = {"x0": 104, "y0": 118, "x1": 672, "y1": 452}
 
-X_MIN, X_MAX = 3.0, 20.0
-LOG_Y_MIN, LOG_Y_MAX = -13.0, -1.0
-N_SAMPLES = 180
+X_MIN, X_MAX = 2.0, 20.0
+LOG_Y_MIN, LOG_Y_MAX = -13.0, 0.0
+N_SAMPLES = 240
 
 # Ordered variable, so the curves are distinguished by position and by a
 # label at the end of each line, not by hue. One colour, varying dash.
 CVS = [
+    (0.1, "2 3"),
     (0.2, "4 3"),
     (0.4, "9 4"),
     (0.6, "none"),
 ]
 CURVE = palette.OKABE_ITO["blue"]
+
+# Two populations with the SAME mean copy number at division (40, so 20 at
+# birth) and the SAME variance (16, CV 0.10), whose loss rates differ by a
+# factor of about 2600. Counts are copies at division. They are plotted as
+# marks rather than curves because they are exact distributions, not members
+# of the lognormal family the curves sweep -- and they are on the figure
+# because (mean, CV) does not determine the answer, which the curves alone
+# would quietly imply.
+COUNTEREXAMPLES = [
+    ("A", [(36, 0.5), (44, 0.5)]),
+    ("B", [(20, 0.02), (40, 0.96), (60, 0.02)]),
+]
+COUNTER_BIRTH_MEAN = 20.0
+COUNTER_COLOUR = palette.OKABE_ITO["vermillion"]
 
 # Where the bracket is drawn. Read from the model below, not written here.
 CALLOUT_MEAN = 10.0
@@ -137,14 +152,20 @@ def polyline(points, colour, dash, width=2.3):
             f'stroke-linecap="round" stroke-linejoin="round"/>')
 
 
-def sample(fn):
-    """Points across the x range, dropped where they fall off the axis."""
+def sample(point_at):
+    """Points across the sweep, dropped where they fall outside the axes.
+
+    `point_at(m)` returns the (x, y) a nominal mean of m belongs at. For the
+    spread curves x is the CARRIER mean, not m, which is why this sweeps a
+    parameter rather than the axis: see carrier_mean in segregation.py.
+    """
     out = []
+    lo, hi = 0.8 * X_MIN, X_MAX
     for i in range(N_SAMPLES + 1):
-        m = X_MIN + (X_MAX - X_MIN) * i / N_SAMPLES
-        p = fn(m)
-        if p >= 10 ** LOG_Y_MIN:
-            out.append((sx(m), sy(p)))
+        m = lo + (hi - lo) * i / N_SAMPLES
+        x, y = point_at(m)
+        if X_MIN <= x <= X_MAX and 10 ** LOG_Y_MIN <= y <= 10 ** LOG_Y_MAX:
+            out.append((sx(x), sy(y)))
     return out
 
 
@@ -160,11 +181,12 @@ def build():
                           "in copy number across cells; the straight line is "
                           "the textbook formula,", size=13,
                   colour=palette.MUTED))
-    o.append(text(48, 84, "which assumes every cell carries the same number.",
-                  size=13, colour=palette.MUTED))
+    o.append(text(48, 84, "which assumes every cell carries the same number. "
+                          "A and B show that the curves' two parameters are "
+                          "not enough.", size=13, colour=palette.MUTED))
 
     # --- gridlines, every other decade ---
-    for e in range(-13, 0, 2):
+    for e in range(-12, 1, 2):
         y = sy(10.0 ** e)
         o.append(f'  <line x1="{PLOT["x0"]}" y1="{y:.1f}" x2="{PLOT["x1"]}" '
                  f'y2="{y:.1f}" stroke="{palette.RULE}" stroke-width="1"/>')
@@ -177,14 +199,14 @@ def build():
              f'y2="{PLOT["y1"]}" stroke="{palette.INK}" stroke-width="1.2"/>')
     o.append(f'  <line x1="{PLOT["x0"]}" y1="{PLOT["y0"]}" x2="{PLOT["x0"]}" '
              f'y2="{PLOT["y1"]}" stroke="{palette.INK}" stroke-width="1.2"/>')
-    for m in (5, 10, 15, 20):
+    for m in (2, 5, 10, 15, 20):
         x = sx(m)
         o.append(f'  <line x1="{x:.1f}" y1="{PLOT["y1"]}" x2="{x:.1f}" '
                  f'y2="{PLOT["y1"] + 6}" stroke="{palette.INK}" '
                  f'stroke-width="1.2"/>')
         o.append(text(x, PLOT["y1"] + 24, str(m), size=12, anchor="middle"))
     o.append(text((PLOT["x0"] + PLOT["x1"]) / 2, PLOT["y1"] + 50,
-                  "Mean plasmid copy number per cell", size=14,
+                  "Mean copy number among plasmid-bearing cells", size=14,
                   anchor="middle"))
     o.append(f'  <text x="34" y="{(PLOT["y0"] + PLOT["y1"]) / 2:.1f}" '
              f'font-family="Helvetica,Arial,sans-serif" font-size="14" '
@@ -210,16 +232,26 @@ def build():
     # the bracket: next to it, it is painted over three curves. The axis tick
     # at 10 and the words "a mean of 10" do the linking instead of a leader
     # line, which would have to cross the floor to get there.
-    y_note = sy(2e-10)
-    o.append(text(sx(3.5), y_note,
+    y_note = PLOT["y1"] - 104
+    o.append(text(sx(2.6), y_note,
                   "At a mean of 10 copies, a spread of CV 0.6",
                   size=13, colour=palette.MUTED))
-    o.append(text(sx(3.5), y_note + 19,
+    o.append(text(sx(2.6), y_note + 18,
                   f"raises the loss rate {round(ratio, -2):,.0f}×",
                   size=13, weight="bold"))
+    counter = {k: segregation.loss_rate_from_division_counts(v)
+               for k, v in COUNTEREXAMPLES}
+    o.append(text(sx(2.6), y_note + 46,
+                  "A and B: same mean (20) and same CV (0.10),",
+                  size=13, colour=COUNTER_COLOUR))
+    o.append(text(sx(2.6), y_note + 64,
+                  f"{round(counter['B'] / counter['A'], -2):,.0f}× apart. "
+                  f"Two moments are not enough.",
+                  size=13, colour=COUNTER_COLOUR, weight="bold"))
 
-    # --- the uniform floor ---
-    o.append(polyline(sample(floor), palette.INK, "none", width=2.8))
+    # --- the uniform reference line ---
+    o.append(polyline(sample(lambda m: (m, floor(m))),
+                      palette.INK, "none", width=2.8))
     y_end = sy(floor(X_MAX))
     o.append(text(PLOT["x1"] + 12, y_end + 4, "uniform copy number",
                   size=12, weight="bold"))
@@ -227,12 +259,28 @@ def build():
                   size=11, colour=palette.MUTED))
 
     # --- one curve per spread ---
+    # x is the CARRIER mean, not the nominal one. Read at the same mean,
+    # Jensen's inequality forbids a spread curve from dipping below the
+    # uniform line; plotted against the nominal mean these curves appear to
+    # cross it below about 3 copies, which is an artefact of the x value and
+    # not biology. segregation.carrier_mean carries the argument.
     for cv, dash in CVS:
-        pts = sample(lambda m, c=cv: segregation.population_loss_rate(m, c))
+        pts = sample(lambda m, c=cv: (segregation.carrier_mean(m, c),
+                                      segregation.population_loss_rate(m, c)))
         o.append(polyline(pts, CURVE, dash))
         y_lab = sy(segregation.population_loss_rate(X_MAX, cv))
         o.append(text(PLOT["x1"] + 12, y_lab + 4, f"CV = {cv}", size=12,
                       colour=CURVE, weight="bold"))
+
+    # --- the two counterexample populations ---
+    for label, dist in COUNTEREXAMPLES:
+        y = sy(segregation.loss_rate_from_division_counts(dist))
+        x = sx(COUNTER_BIRTH_MEAN)
+        o.append(f'  <circle cx="{x:.1f}" cy="{y:.1f}" r="5.5" '
+                 f'fill="{COUNTER_COLOUR}" stroke="{palette.PAPER}" '
+                 f'stroke-width="1.5"/>')
+        o.append(text(x - 11, y + 4, label, size=13,
+                      colour=COUNTER_COLOUR, anchor="end", weight="bold"))
 
     # --- badge and assumptions ---
     o.append(f'  <rect x="48" y="{PLOT["y1"] + 68}" width="116" height="22" '

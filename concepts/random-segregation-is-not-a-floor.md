@@ -28,7 +28,12 @@ below it.
 
 ---
 
-## The number that settles it
+## The number that started it — and why it does not settle it
+
+> **Read the correction in "What the 1984 number can and cannot carry" below
+> before quoting the eight-orders-of-magnitude figure. A later paper
+> identifies a confound that inflates exactly this kind of measurement.**
+
 
 [Summers & Sherratt (1984)](https://pubmed.ncbi.nlm.nih.gov/6323019/), in
 *Cell*, report that ColE1-related cloning vectors are lost at **10⁻² to 10⁻⁵
@@ -53,6 +58,117 @@ A caveat that matters: "ColE1-related cloning vectors" is a class, their copy
 numbers vary, and the 10⁻²–10⁻⁵ range spans constructs and conditions. This
 is an order-of-magnitude comparison, not a matched measurement on one
 plasmid. It is still far too large a gap to be a modelling detail.
+
+---
+
+## What the 1984 number can and cannot carry
+
+[Lau, Malkus & Paulsson (2013)](https://pubmed.ncbi.nlm.nih.gov/24042048/),
+*Plasmid*, "New quantitative methods for measuring plasmid loss rates reveal
+unexpected stability", is a direct problem for the comparison above.
+
+Their argument: conventional loss assays remove selection and then watch
+plasmid-free cells appear over many generations. But plasmid-free cells grow
+faster, so what accumulates is *loss followed by competitive expansion*. They
+show mathematically that small errors in the growth-rate estimate swamp the
+loss-rate estimate, and conclude that for many plasmids **loss rates may be
+much lower than previously thought**, and for some, the published number "may
+have nothing to do with actual loss rates."
+
+The Summers & Sherratt range is a conventional assay from 1984. So the
+honest statement is:
+
+- the **direction** of the discrepancy is well supported — multimerisation
+  demonstrably reduces the number of independently segregating units, and
+  that must raise loss above the copy-number prediction;
+- the **magnitude** is not. Five to eight orders of magnitude is an upper
+  estimate from a method now known to inflate.
+
+Worse for any tidy story, Lau et al. measured the other direction too. Using
+microscopy over tens of minutes rather than tens of generations, they found
+par⁻ mini-R1 lost at about **10⁻³ per cell per generation** — in their words
+so low as to be *inconsistent with what is known about R1's stabilisation
+mechanisms*, implying some additional mechanism nobody has identified.
+
+So a partition-deficient low-copy plasmid came out **more stable** than
+theory expected, while a multimerising high-copy vector came out **less**
+stable. That is the real state of the evidence, and it is a better lecture
+point than either number alone: *we are not good at measuring this.*
+
+[Tal & Paulsson (2012)](https://pmc.ncbi.nlm.nih.gov/articles/PMC3709585),
+*Plasmid* 67:167–173, doi 10.1016/j.plasmid.2012.01.004, put the measurement
+problem at its root. Reviewing reporter expression, fluorescent labelling,
+single-cell PCR and replication arrest, they conclude that **no method then
+existed to measure plasmid copy number in single cells**, most being
+overwhelmed by experimental noise. The paper is largely an account of their
+own decade of failed attempts.
+
+That is worth sitting with. The `cv` parameter in these curves was, at the
+time that review was written, not merely unmeasured but unmeasurable.
+
+---
+
+## Mean and CV do not determine the loss rate either
+
+This is the sharpest limitation, and it applies to the figure's own
+parameterisation rather than to its biology. Loss is `E[2⁻ᴺ]`, the
+probability-generating function of the copy-number distribution evaluated at
+½. That is a property of the **whole distribution**, and no two moments pin
+it down.
+
+Three populations, all with exactly 40 copies at division on average:
+
+| Population | Distribution at division | Variance | CV | Loss per daughter |
+|---|---|---|---|---|
+| uniform | 100% at 40 | 0 | 0 | 9.09 × 10⁻¹³ |
+| **A** | 50% at 36, 50% at 44 | 16 | 0.10 | 7.30 × 10⁻¹² |
+| **B** | 2% at 20, 96% at 40, 2% at 60 | 16 | 0.10 | 1.91 × 10⁻⁸ |
+
+A and B share a mean **and** a variance, and sit **2,611× apart**. The
+lognormal with the same two moments gives 2.09 × 10⁻¹¹ — between them, and
+900× below B.
+
+So "CV = 0.1" does not name a curve. It names a family of curves spanning
+three orders of magnitude, and the lognormal picks one by assumption. Both
+populations are now marked on the figure for exactly this reason, and
+`segregation.self_check` asserts the 2,611× ratio so no later edit can
+quietly restore the impression that two moments suffice.
+
+The practical consequence: the low-copy tail sets the answer, fitting the
+middle of a distribution tells you very little about it, and a snapshot
+fraction of plasmid-free cells is not a measurement of the rate at which new
+ones appear.
+
+---
+
+## Jensen's inequality, and a crossing that was my error
+
+An earlier version of this work reported that the spread curves cross *below*
+the uniform line at low mean copy number, and recorded two "regimes" with a
+boundary near three copies.
+
+That was wrong as stated, and the correction is clean. Jensen's inequality is
+unconditional for a convex function:
+
+```
+    E[2^(-2c)]  >=  2^(-2 E[c])        for ANY distribution of c
+```
+
+So a spread population can **never** fall below the uniform line when both
+are read *at the same mean*. Every apparent crossing means the two x values
+are not the same mean.
+
+Here the culprit is conditioning on carriers: `population_loss_rate` averages
+only over cells that still have a plasmid, and dropping the zero-copy cells
+raises the mean of the distribution being averaged. At a nominal mean of 1
+with CV 1.0, carriers average 1.46 copies. Integer rounding of a skewed
+distribution moves it too.
+
+Plotted against the **carrier mean**, the crossings vanish — checked over 40
+combinations of mean and CV, zero violations. The figure's x axis is now that
+quantity, which also removed the arbitrary cutoff at three copies, and
+`self_check` asserts Jensen in the unconditional form rather than asserting a
+regime boundary that only existed because the x axis was wrong.
 
 ---
 
@@ -157,6 +273,22 @@ This is why pOXA-48 — large, IncL, low copy — is not a counterexample to the
 figure. It is living far below the curve on purpose, and the distance is the
 measure of what its partition system is doing.
 
+And that is now demonstrated directly on your own plasmid.
+["Genetic determinants of pOXA-48 plasmid maintenance and propagation in
+*Escherichia coli*"](https://www.nature.com/articles/s41467-025-62404-7),
+*Nature Communications* 2025, doi 10.1038/s41467-025-62404-7, reports that
+deleting **either *parA* or *parB* causes rapid pOXA-48 loss without
+antibiotic selection** (their Fig. 2e), while deleting *nuc* does not. They
+also identify *korC*, *orf20* and a novel type I toxin–antitoxin system as
+maintenance factors.
+
+For the lecture that is the cleanest possible pairing: the analytic curve
+says what chance alone would do to a low-copy plasmid, and this experiment
+shows what happens to pOXA-48 the moment you switch its partition system
+off. Note what it does **not** give you: a matched measurement of pOXA-48's
+copy number and loss rate in the same cells, so it cannot be used to place
+pOXA-48 at a particular distance from the curve.
+
 ### Multimer resolution
 
 ColE1's *cer* site, resolved by XerCD with the host factors ArgR and PepA,
@@ -232,6 +364,9 @@ the check is repeatable.
 | Work | Venue | PMID |
 |---|---|---|
 | Summers & Sherratt, multimerisation causes instability; *cer* | *Cell*, 1984 | [6323019](https://pubmed.ncbi.nlm.nih.gov/6323019/) |
+| Tal & Paulsson, no method measures single-cell copy number | *Plasmid*, 2012 | [PMC3709585](https://pmc.ncbi.nlm.nih.gov/articles/PMC3709585) |
+| Lau, Malkus & Paulsson, loss assays overestimate; par⁻ mini-R1 at 10⁻³ | *Plasmid*, 2013 | [24042048](https://pubmed.ncbi.nlm.nih.gov/24042048/) |
+| Genetic determinants of pOXA-48 maintenance; ParAB required | *Nat Commun*, 2025 | [doi](https://www.nature.com/articles/s41467-025-62404-7) |
 | Summers, Beton & Withers, dimer catastrophe hypothesis | *Mol Microbiol*, 1993 | [8361350](https://pubmed.ncbi.nlm.nih.gov/8361350/) |
 | Boe et al., comments on the dimer catastrophe hypothesis | *Mol Microbiol*, 1997 | [9044259](https://pubmed.ncbi.nlm.nih.gov/9044259/) |
 | Paulsson et al., molecular clocks reduce plasmid loss rates | *J Mol Biol*, 2000 | [10704315](https://pubmed.ncbi.nlm.nih.gov/10704315/) |
@@ -244,5 +379,20 @@ the check is repeatable.
 
 Not yet verified to the same standard, and flagged rather than cited as
 settled: the RK2 and oriR1 clustering microscopy, which reached this file
-through a literature search rather than a read of the primary papers, and the
-Song & Wood PMID.
+through a literature search rather than a read of the primary papers; the
+Song & Wood PMID; Shao et al. (2021, *Nat Commun*) on measured single-cell
+copy-number distributions, cited here from a search result rather than a read
+of the paper; and Tucker et al. (1984, *Cell*) on pSC101 *par*, which is
+named in the critique that prompted this revision but which I have not
+checked against its own record.
+
+## What this file still does not do
+
+It argues about the **model** using the literature. It does not place any
+particular plasmid at a measured distance from the curves, because that needs
+copy number and loss rate measured in the same cells by methods Tal &
+Paulsson say did not exist in 2012. Treat the curves as conditional
+scenarios. The defensible claim is the qualitative one:
+
+> The mean tells you how many plasmids a cell carries on average. It does not
+> tell you how reliably they are inherited.

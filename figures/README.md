@@ -148,14 +148,28 @@ gives.
   fitness cost put one above. For ColE1-type cloning vectors the net is five
   to eight orders of magnitude *above*: Summers & Sherratt (1984) measured
   10⁻² to 10⁻⁵ per cell per generation where the copy number predicts about
-  10⁻⁹. The evidence and its citations are in
+  10⁻⁹ — though **that magnitude is an upper estimate**, since Lau et al.
+  (2013) show conventional loss assays of exactly that design confound loss
+  with the faster growth of plasmid-free cells, and measured par⁻ mini-R1 as
+  *more* stable than theory expects. The evidence and its citations are in
   [`../concepts/random-segregation-is-not-a-floor.md`](../concepts/random-segregation-is-not-a-floor.md).
-- **Why the x axis starts at 3:** below about 3 copies the curve ordering
-  reverses, because conditioning on carriers and the upward bias of rounding
-  a skewed distribution to integers both outrun convexity there. Both effects
-  are asserted in `segregation.self_check`, so the boundary is tested rather
-  than described. Plotting that region would show crossings unrelated to the
-  point being made.
+- **Why the x axis is the carrier mean:** Jensen's inequality is
+  unconditional — `E[2^(-2c)] >= 2^(-2 E[c])` for any distribution — so a
+  spread curve can never dip below the uniform line when both are read at the
+  same mean. An earlier version plotted against the *nominal* mean, saw the
+  curves cross below about three copies, and recorded that as a two-regime
+  property of the model. It was not. `population_loss_rate` conditions on
+  carriers, which raises the mean of the distribution it averages over, so
+  the two lines were being read at different x. Plotting against
+  `segregation.carrier_mean` removes every crossing (checked over 40
+  mean/CV combinations) and let the axis extend down to 2.
+- **A and B are not model curves.** They are two exact distributions sharing
+  a mean of 40 copies at division *and* a variance of 16, whose loss rates
+  differ 2,611-fold. They are on the figure because a plot whose curves are
+  labelled by `(mean, CV)` otherwise implies those two numbers determine the
+  answer, and they do not — loss is the whole distribution's generating
+  function at ½, and the low-copy tail sets it. `self_check` asserts the
+  ratio so the point cannot be edited away by accident.
 - **Rendering note:** the three spread curves carry distinct
   `stroke-dasharray` values, but they are also separated by position and by a
   label at the end of each line, so the figure still reads in a renderer that
