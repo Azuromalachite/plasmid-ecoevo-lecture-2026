@@ -356,6 +356,52 @@ event.
 
 ---
 
+## How much does each mechanism buy?
+
+[Effe, Santer, Wang, Feenstra, Hülter & Dagan
+(2025)](https://www.nature.com/articles/s41467-025-62473-8), *Nat Commun*
+16:7078 [@effe2025combination], build the model this page argues for: random segregation extended
+with incomplete monomerisation, active partitioning and post-segregational
+killing. They compete plasmid variants intracellularly and fit the
+mechanisms, then run the fitted model out to a persistence half-life. All the
+virtual variants are set to the same copy number, 5, matching their
+measured plasmids (ca. 5 copies per cell).
+
+| variant | half-life (generations) |
+|---|---|
+| unstable, monomerisation-deficient (U) | 43 |
+| plus active partitioning (P) | 170 |
+| plus partitioning **and** toxin-antitoxin (PT) | 549 |
+| efficient monomer resolution (S) | 709 |
+
+**Do not read that table as a ranking of strategies.** U, P, T and PT are all
+built on the *same monomerisation-deficient backbone*; S is the control with
+the defect absent. So the comparison is not "monomer resolution beats
+partitioning plus TA" — it is that the maintenance systems, in the paper's
+own words, "cannot fully compensate for the monomerisation deficiency". A bar
+chart putting S beside PT invites exactly the wrong reading, and the honest
+presentation is two panels: what the defect costs, and what compensation
+recovers.
+
+Two findings in it bear directly on the sections above.
+
+**The deficient variant has a roughly 16-fold higher segregation rate** than
+the stable one at the same copy number. That is the multimerisation argument
+with a number on it: same molecules, fewer independently segregating units.
+The paper states the mechanism plainly -- "plasmid fusion or clustering of
+sister plasmids may decrease the number of plasmid units available for
+segregation".
+
+**Toxin-antitoxin does not touch segregation.** Their model note is explicit:
+"the TA system does not alter the rate of segregational loss", and the T
+variant tracks P for about a hundred generations before diverging as
+plasmid-free cells come to dominate. That is the same conclusion the
+toxin-antitoxin section below reaches from theory, and the same one Shao et
+al. reached experimentally when hok/sok left the copy-number distribution
+unchanged. Three independent routes to it.
+
+---
+
 ## The correction, stated plainly
 
 ```
@@ -410,6 +456,7 @@ the check is repeatable.
 | Tal & Paulsson, no method measures single-cell copy number | *Plasmid*, 2012 | [PMC3709585](https://pmc.ncbi.nlm.nih.gov/articles/PMC3709585) |
 | Lau, Malkus & Paulsson, loss assays overestimate; par⁻ mini-R1 at 10⁻³ | *Plasmid*, 2013 | [24042048](https://pubmed.ncbi.nlm.nih.gov/24042048/) |
 | Shao et al., single-cell copy number; CV ≈ 1 for four origins | *Nat Commun*, 2021 | [doi](https://www.nature.com/articles/s41467-021-21734-y) |
+| Effe et al., fitted half-lives for each maintenance mechanism | *Nat Commun*, 2025 | [doi](https://www.nature.com/articles/s41467-025-62473-8) |
 | Genetic determinants of pOXA-48 maintenance; ParAB required | *Nat Commun*, 2025 | [doi](https://www.nature.com/articles/s41467-025-62404-7) |
 | Summers, Beton & Withers, dimer catastrophe hypothesis | *Mol Microbiol*, 1993 | [8361350](https://pubmed.ncbi.nlm.nih.gov/8361350/) |
 | Boe et al., comments on the dimer catastrophe hypothesis | *Mol Microbiol*, 1997 | [9044259](https://pubmed.ncbi.nlm.nih.gov/9044259/) |
