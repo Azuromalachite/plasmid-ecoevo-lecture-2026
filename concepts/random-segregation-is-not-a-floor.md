@@ -106,6 +106,49 @@ own decade of failed attempts.
 That is worth sitting with. The `cv` parameter in these curves was, at the
 time that review was written, not merely unmeasured but unmeasurable.
 
+### It became measurable, and the answer is CV ≈ 1
+
+[Shao, Rammohan, Anderson, Alperovich, Ross & Voigt
+(2021)](https://www.nature.com/articles/s41467-021-21734-y), *Nat Commun*
+12:1475, built the method Tal & Paulsson said did not exist: label the
+plasmid with a PhlF–RFP fusion, calibrate spot intensity against the
+single-plasmid step, and count copies in living cells. Their Fig. 1e gives
+distributions for four origins.
+
+| origin | mean copies | cells with no plasmid | n |
+|---|---|---|---|
+| pSC101 | 4 | 5% | 858 |
+| p15A | 11 | 3% | 553 |
+| ColE1 | 15 | 1% | 603 |
+| pUC | 60 | 1% | 355 |
+
+The reported standard deviations are "on the order of the mean copy
+numbers", so **CV ≈ 1** — larger than four of the five curves in the
+companion figure, and far larger than the 0.1 that the A/B counterexample
+uses. Many cells carried four times the mean or more.
+
+Three qualifications, all from that paper, and all of them matter here:
+
+- **The plasmid-free percentages are not loss rates.** They are standing
+  fractions, measured under ampicillin and kanamycin selection, which acts
+  against exactly the cells being counted. The model's per-daughter rate at
+  mean 4 and CV 1.0 is 6.9%, close to the measured 5% standing fraction for
+  pSC101 — and that proximity is a coincidence of units, not agreement. Do
+  not put those two numbers beside each other on a slide without saying so.
+- **The strain is NEB 10-beta**, which the paper notes is deficient for
+  non-specific nuclease and recombinase. The dimer-catastrophe route is
+  largely switched off, so this is heterogeneity measured *without* the
+  mechanism that the Summers work says dominates instability elsewhere.
+- **Their model fits a partitioning coefficient**, alongside a
+  replication-control sensitivity, and they attribute residual prediction
+  error to "additional sources of randomness in plasmid segregation". Plain
+  random partitioning is neither assumed nor concluded.
+
+And a result that belongs with the toxin–antitoxin paragraph below: adding
+**hok/sok gave the same copy-number distribution**. That is a direct
+observation of the point argued there — a TA system removes segregants, it
+does not narrow the spread that produces them.
+
 ---
 
 ## Mean and CV do not determine the loss rate either
@@ -366,6 +409,7 @@ the check is repeatable.
 | Summers & Sherratt, multimerisation causes instability; *cer* | *Cell*, 1984 | [6323019](https://pubmed.ncbi.nlm.nih.gov/6323019/) |
 | Tal & Paulsson, no method measures single-cell copy number | *Plasmid*, 2012 | [PMC3709585](https://pmc.ncbi.nlm.nih.gov/articles/PMC3709585) |
 | Lau, Malkus & Paulsson, loss assays overestimate; par⁻ mini-R1 at 10⁻³ | *Plasmid*, 2013 | [24042048](https://pubmed.ncbi.nlm.nih.gov/24042048/) |
+| Shao et al., single-cell copy number; CV ≈ 1 for four origins | *Nat Commun*, 2021 | [doi](https://www.nature.com/articles/s41467-021-21734-y) |
 | Genetic determinants of pOXA-48 maintenance; ParAB required | *Nat Commun*, 2025 | [doi](https://www.nature.com/articles/s41467-025-62404-7) |
 | Summers, Beton & Withers, dimer catastrophe hypothesis | *Mol Microbiol*, 1993 | [8361350](https://pubmed.ncbi.nlm.nih.gov/8361350/) |
 | Boe et al., comments on the dimer catastrophe hypothesis | *Mol Microbiol*, 1997 | [9044259](https://pubmed.ncbi.nlm.nih.gov/9044259/) |
@@ -380,9 +424,7 @@ the check is repeatable.
 Not yet verified to the same standard, and flagged rather than cited as
 settled: the RK2 and oriR1 clustering microscopy, which reached this file
 through a literature search rather than a read of the primary papers; the
-Song & Wood PMID; Shao et al. (2021, *Nat Commun*) on measured single-cell
-copy-number distributions, cited here from a search result rather than a read
-of the paper; and Tucker et al. (1984, *Cell*) on pSC101 *par*, which is
+Song & Wood PMID; and Tucker et al. (1984, *Cell*) on pSC101 *par*, which is
 named in the critique that prompted this revision but which I have not
 checked against its own record.
 

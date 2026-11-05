@@ -99,6 +99,12 @@ CVS = [
     (0.2, "4 3"),
     (0.4, "9 4"),
     (0.6, "none"),
+    # Shao et al. (2021) measured standard deviations on the order of the
+    # means for pSC101, p15A, ColE1 and pUC, so CV near 1 is the measured
+    # regime rather than an extreme. Note what the curve does there: across
+    # the whole axis it falls about two decades, while the uniform line falls
+    # twelve. At the measured spread, copy number nearly stops mattering.
+    (1.0, "1 4"),
 ]
 CURVE = palette.OKABE_ITO["blue"]
 
@@ -271,6 +277,9 @@ def build():
         y_lab = sy(segregation.population_loss_rate(X_MAX, cv))
         o.append(text(PLOT["x1"] + 12, y_lab + 4, f"CV = {cv}", size=12,
                       colour=CURVE, weight="bold"))
+        if cv == 1.0:
+            o.append(text(PLOT["x1"] + 12, y_lab + 20, "measured range",
+                          size=11, colour=palette.MUTED))
 
     # --- the two counterexample populations ---
     for label, dist in COUNTEREXAMPLES:

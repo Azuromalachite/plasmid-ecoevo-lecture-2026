@@ -175,6 +175,40 @@ gives.
   label at the end of each line, so the figure still reads in a renderer that
   drops dashes. PyMuPDF is one such renderer.
 
+### `measured-copy-number-distributions.svg`
+
+Measured single-cell copy number for four origins, and an explicit list of
+what those measurements do not establish.
+
+- **Source:** [`source/measured_copy_number_distributions.py`](source/measured_copy_number_distributions.py)
+- **Status: reported values, redrawn.** Every number is a summary figure from
+  the Results text of Shao et al. (2021), *Nat Commun* 12:1475, quoted on the
+  figure. Nothing is fitted, simulated or inferred here.
+- **Why it exists:** `copy-number-and-loss-rate.svg` has exactly one free
+  biological assumption — that copy number varies across cells, and by how
+  much. This is the evidence for it. The measured standard deviations are on
+  the order of the means, so CV ≈ 1, which is **larger than four of the five
+  curves** in that figure; the CV = 1.0 curve there is marked "measured
+  range" for this reason.
+- **Why it does not redraw their Fig. 1e.** Their paper is CC BY 4.0, so the
+  panel may be reproduced with credit, and for a talk that is the better
+  option because it shows the distribution *shapes*. What must not happen is
+  regenerating those shapes here from the reported mean and standard
+  deviation — the companion figure's whole argument is that two moments do
+  not determine a distribution, so doing that and captioning it as their
+  measurement would commit the exact error that figure warns against. This
+  one therefore plots only what was reported.
+- **What it marks as not shown**, all from the same paper: the standing
+  plasmid-free fractions are not loss rates and were measured under
+  ampicillin and kanamycin selection; the strain (NEB 10-beta) is
+  recombinase-deficient, so the multimerisation route is largely switched
+  off; and their own model fits a *partitioning coefficient*, with residual
+  error they attribute to further randomness in segregation, so random
+  partitioning is neither assumed nor concluded.
+- **One result worth saying aloud:** adding the hok/sok toxin–antitoxin
+  system gave the *same* copy-number distribution. A TA system removes
+  segregants; it does not narrow the spread that produces them.
+
 ## Colour
 
 [`source/palette.py`](source/palette.py) holds the shared palette and its
