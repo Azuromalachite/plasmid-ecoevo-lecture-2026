@@ -5,10 +5,20 @@ says so: it is "not a fitted pUC segregation law". That is the honest
 treatment, because real plasmid loss depends on multimerisation, clustering,
 partition systems and replication timing, none of which this models.
 
-What this module adds is the floor. Under random segregation with no active
-partition, copy number alone sets a loss rate, and that number is useful when
-choosing the scenario parameter — it says what loss would be if nothing but
-chance were operating.
+What this module adds is the reference point. Under random segregation with
+no active partition, copy number alone sets a loss rate, and that number is
+useful when choosing the scenario parameter — it says what loss would be if
+nothing but chance were operating on molecules that are genuinely independent
+and genuinely as numerous as the measured copy number.
+
+It is NOT a floor, and earlier versions of this file called it one. Measured
+loss rates fall on both sides. Partition systems, multimer resolution and
+toxin-antitoxin push below it; multimerisation, clustering and fitness cost
+push above it, and for ColE1-type vectors the net is five to eight orders of
+magnitude ABOVE: Summers & Sherratt (1984, PMID 6323019) report loss at
+1e-2 to 1e-5 per cell per generation for plasmids whose copy number would
+predict about 1e-9. The gap is not a modelling detail; it is the subject.
+See concepts/random-segregation-is-not-a-floor.md.
 
 The factor of two
 -----------------
@@ -114,9 +124,16 @@ def bearing_fraction_after(copies: float, generations: int) -> float:
 
     Assumes every cell starts as a carrier, equal growth for carriers and
     non-carriers, no transfer and no selection -- so the only process is
-    segregational loss. Any real culture with a fitness cost loses the plasmid
-    faster than this, because plasmid-free cells then outgrow carriers; this
-    is the floor, not a prediction.
+    segregational loss.
+
+    Against a fitness cost alone this is a CEILING on retention, not a floor:
+    plasmid-free cells outgrow carriers, so a real culture keeps less than
+    this. But several mechanisms run the other way -- partition systems,
+    multimer resolution, conjugation re-infecting free cells -- and others,
+    such as multimerisation and clustering, make retention worse still. The
+    returned number bounds nothing in general. It is the retention you would
+    see if segregation were the only process, which it never is.
+    See concepts/random-segregation-is-not-a-floor.md.
     """
     if generations < 0:
         raise ValueError("generations must be non-negative")
@@ -216,9 +233,13 @@ def population_loss_rate(mean_copies: float, cv: float = 0.0, kmax=None):
 
     Same scope as the rest of this module: random segregation only.  No
     partition system, no multimer resolution, no clustering, no selection.
-    An active partition system is precisely what lets a real low-copy plasmid
-    live far below this curve, so the distance between this number and a
-    measured one is a rough measure of how much work partitioning is doing.
+
+    A low-copy plasmid with an active partition system lives far BELOW this
+    curve, and that distance measures what partitioning is doing.  A
+    multimerising or clustering high-copy vector lives far ABOVE it, because
+    neither the segregating unit nor its count is what the formula assumes.
+    Do not read a gap in either direction as an error.
+    See concepts/random-segregation-is-not-a-floor.md.
     """
     if kmax is None:
         kmax = _default_kmax(mean_copies, cv)

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
-  <rect width="900" height="600" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="640" viewBox="0 0 900 640">
+  <rect width="900" height="640" fill="#ffffff"/>
   <text x="48.0" y="42.0" font-family="Helvetica,Arial,sans-serif" font-size="20" fill="#1b1f23" text-anchor="start" font-weight="bold">Mean copy number does not determine the loss rate</text>
   <text x="48.0" y="66.0" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#5a6570" text-anchor="start" font-weight="normal">Random segregation only. Each curve is one spread in copy number across cells; the straight line is the textbook formula,</text>
   <text x="48.0" y="84.0" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#5a6570" text-anchor="start" font-weight="normal">which assumes every cell carries the same number.</text>
@@ -48,5 +48,7 @@
   <text x="176.0" y="535.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal">No data and no fit: every value is computed from models/copy-number-burden/battle_royale/segregation.py</text>
   <text x="48.0" y="556.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal">Assumes random segregation with no partition system, no multimer resolution and no selection, and a lognormal copy-number distribution across cells.</text>
   <text x="48.0" y="572.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal">The left tail of that distribution sets every value here, so read the gaps as orders of magnitude rather than as numbers.</text>
-  <text x="48.0" y="588.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal">Sources: ilhan2019segregational, nordstrom1989segregation, paulsson2002multileveled</text>
+  <text x="48.0" y="589.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#1b1f23" text-anchor="start" font-weight="bold">A reference point, not a bound: partition systems put a plasmid below these curves, multimerisation and clustering put one above.</text>
+  <text x="48.0" y="605.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal">Measured loss for ColE1-type vectors runs five to eight orders of magnitude higher than their copy number predicts (Summers & Sherratt 1984).</text>
+  <text x="48.0" y="624.0" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#5a6570" text-anchor="start" font-weight="normal">Sources: ilhan2019segregational, nordstrom1989segregation, paulsson2002multileveled, summers1984multimerization</text>
 </svg>

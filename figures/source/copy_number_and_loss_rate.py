@@ -27,10 +27,13 @@ either. The curves are consequences of assumptions, and the assumptions are
 printed on the figure:
 
   * Random segregation ONLY. No partition system, no multimer resolution, no
-    clustering, no selection, no conjugation. Real low-copy plasmids carry
-    active partition systems precisely because this floor is unaffordable,
-    so a measured loss rate sitting far below these curves is the expected
-    result, not a contradiction.
+    clustering, no selection, no conjugation. These curves are a reference
+    point and NOT a bound in either direction. Partition systems and multimer
+    resolution put a real plasmid below them; multimerisation, clustering and
+    fitness cost put one above. For ColE1-type vectors the net is five to
+    eight orders of magnitude ABOVE: Summers & Sherratt (1984) measured
+    1e-2 to 1e-5 per cell per generation where copy number predicts ~1e-9.
+    concepts/random-segregation-is-not-a-floor.md has the evidence.
   * Copy number lognormal across cells, rounded to integers -- the same
     distribution the notebook's single-cell simulation samples from. It is a
     convenient positive, skewed choice. The LEFT TAIL drives every number
@@ -70,6 +73,7 @@ SOURCE_KEYS = [
     "ilhan2019segregational",
     "nordstrom1989segregation",
     "paulsson2002multileveled",
+    "summers1984multimerization",
 ]
 
 # The model lives in the models tree and is imported by path rather than
@@ -81,7 +85,7 @@ _spec = importlib.util.spec_from_file_location("_segregation", _SEG)
 segregation = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(segregation)
 
-W, H = 900, 600
+W, H = 900, 640
 PLOT = {"x0": 104, "y0": 118, "x1": 672, "y1": 452}
 
 X_MIN, X_MAX = 3.0, 20.0
@@ -248,7 +252,18 @@ def build():
                   "The left tail of that distribution sets every value here, "
                   "so read the gaps as orders of magnitude rather than as "
                   "numbers.", size=11, colour=palette.MUTED))
-    o.append(text(48, PLOT["y1"] + 136, "Sources: " + ", ".join(SOURCE_KEYS),
+    # A slide gets separated from its README, so the correction that matters
+    # most travels on the figure itself: these curves bound nothing.
+    o.append(text(48, PLOT["y1"] + 137,
+                  "A reference point, not a bound: partition systems put a "
+                  "plasmid below these curves, multimerisation and clustering "
+                  "put one above.", size=11, weight="bold"))
+    o.append(text(48, PLOT["y1"] + 153,
+                  "Measured loss for ColE1-type vectors runs five to eight "
+                  "orders of magnitude higher than their copy number predicts "
+                  "(Summers & Sherratt 1984).", size=11,
+                  colour=palette.MUTED))
+    o.append(text(48, PLOT["y1"] + 172, "Sources: " + ", ".join(SOURCE_KEYS),
                   size=11, colour=palette.MUTED))
 
     o.append("</svg>")

@@ -141,9 +141,15 @@ gives.
   least entitled to claim it got right. Read the vertical gaps as orders of
   magnitude, not as values.
 - **What it deliberately leaves out:** partition systems, multimer
-  resolution, clustering, conjugation and selection. A measured loss rate far
-  **below** these curves is the expected result for a real low-copy plasmid,
-  not a contradiction — active partitioning is what buys that distance.
+  resolution, clustering, conjugation and selection. **These curves are a
+  reference point, not a bound in either direction**, and an earlier version
+  of this entry wrongly called them a floor. Partition systems and multimer
+  resolution put a real plasmid below them; multimerisation, clustering and
+  fitness cost put one above. For ColE1-type cloning vectors the net is five
+  to eight orders of magnitude *above*: Summers & Sherratt (1984) measured
+  10⁻² to 10⁻⁵ per cell per generation where the copy number predicts about
+  10⁻⁹. The evidence and its citations are in
+  [`../concepts/random-segregation-is-not-a-floor.md`](../concepts/random-segregation-is-not-a-floor.md).
 - **Why the x axis starts at 3:** below about 3 copies the curve ordering
   reverses, because conditioning on carriers and the upward bias of rounding
   a skewed distribution to integers both outrun convexity there. Both effects
