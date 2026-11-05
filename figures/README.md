@@ -114,6 +114,47 @@ chromosomal context → Tn*1999* → pOXA-48 → new host and clinical spread.
   `claim.shewanella.oxa_ancestral_selection` in
   [`../evidence/claims.yml`](../evidence/claims.yml)).
 
+### `copy-number-and-loss-rate.svg`
+
+Segregational loss against **mean** copy number, with one curve per spread in
+copy number across cells, drawn over the straight line the textbook formula
+gives.
+
+- **Source:** [`source/copy_number_and_loss_rate.py`](source/copy_number_and_loss_rate.py)
+- **Status: analytic — no data and no fit.** This is a third badge, and it is
+  not a softer version of either existing one. The other two figures are
+  `illustrative` because their points are synthetic; this one has no points.
+  Every value is computed by importing
+  [`../models/copy-number-burden/battle_royale/segregation.py`](../models/copy-number-burden/battle_royale/segregation.py)
+  by path, so the figure cannot drift from the model. Nothing is hand-placed
+  — and nothing is measured either. **Do not caption it as evidence that real
+  plasmids lose at these rates.**
+- **What it is for:** `2**(-2c)` is steeply convex, so its average over a
+  distribution of copy numbers is not its value at the mean. The low-copy
+  tail carries essentially all of the loss. At a mean of 10 copies a CV of
+  0.6 raises the rate about 2,100-fold; by a mean of 20 the gap is eight
+  orders of magnitude. The figure exists so that "mean copy number" and
+  "loss rate" are not spoken as if one determined the other.
+- **The assumption that does the work:** copy number is taken to be lognormal
+  across cells, matching the notebook's single-cell simulation. The left tail
+  sets every value plotted, and a lognormal's left tail is the part it is
+  least entitled to claim it got right. Read the vertical gaps as orders of
+  magnitude, not as values.
+- **What it deliberately leaves out:** partition systems, multimer
+  resolution, clustering, conjugation and selection. A measured loss rate far
+  **below** these curves is the expected result for a real low-copy plasmid,
+  not a contradiction — active partitioning is what buys that distance.
+- **Why the x axis starts at 3:** below about 3 copies the curve ordering
+  reverses, because conditioning on carriers and the upward bias of rounding
+  a skewed distribution to integers both outrun convexity there. Both effects
+  are asserted in `segregation.self_check`, so the boundary is tested rather
+  than described. Plotting that region would show crossings unrelated to the
+  point being made.
+- **Rendering note:** the three spread curves carry distinct
+  `stroke-dasharray` values, but they are also separated by position and by a
+  label at the end of each line, so the figure still reads in a renderer that
+  drops dashes. PyMuPDF is one such renderer.
+
 ## Colour
 
 [`source/palette.py`](source/palette.py) holds the shared palette and its
