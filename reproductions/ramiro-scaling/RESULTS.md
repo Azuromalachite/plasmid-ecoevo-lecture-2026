@@ -327,6 +327,35 @@ other.
 | called from under 5x | 0.8% | **95.5%** |
 | enriched genera | *Salmonella* 3.7x | *Agrobacterium* **25x**, *Paracoccus* 6.0x, *Pantoea* 5.6x, *Rhizobium* 5.1x |
 
+**The high tail tracks sequencing depth, not biology, at its extreme.** A
+reader asked whether the two top rows, both *Chlamydia psittaci* at 7,553 bp,
+were one record entered twice. They are not -- different accessions, different
+assemblies, one isolate from a parrot foetus and one from a placenta -- and no
+plasmid accession appears twice anywhere in the file. What they are is the
+same plasmid in different genomes, and its other appearances settle the
+question:
+
+| accession | copies | coverage | isolate |
+|---|---:|---:|---|
+|  | 1.7 | 30x | parrot, faeces |
+|  | 3.9 | 6x | magpie, cloacal swab |
+|  | 4.0 | 4x | goat |
+|  | 7.9 | 7x | human |
+|  | 14.5 | 33x | human |
+|  | 30.0 | 46x | human |
+| **the two in the tail** | **2,268-2,423** | **4,615-4,722x** | parrot foetus, placenta |
+
+One conserved plasmid, a 1,400-fold range, and the extremes are exactly the
+only two assemblies sequenced past 4,000x. Copy number is a ratio, and at that
+depth the denominator is doing something the biology is not.
+
+**And 23.5% of the file is not independent.** 2,818 of 12,006 rows share an
+organism and an exact plasmid length with another row -- the same plasmid in a
+different isolate. Within the top 200 by copy number, 20 such groups cover 47
+rows; collapsing every organism-and-length group to its median leaves 10,005
+distinct pairs. Every AIC comparison in this document counts those as separate
+evidence, so every dAIC here is larger than it should be.
+
 **The high tail is small and well measured**, and sits where the scaling
 relationship predicts rather than off it. Its extreme top is where to be most
 sceptical: two independent *Chlamydia psittaci* genomes put a 7.55 kb plasmid
