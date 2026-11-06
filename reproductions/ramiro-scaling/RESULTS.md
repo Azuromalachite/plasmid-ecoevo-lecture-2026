@@ -337,12 +337,12 @@ question:
 
 | accession | copies | coverage | isolate |
 |---|---:|---:|---|
-|  | 1.7 | 30x | parrot, faeces |
-|  | 3.9 | 6x | magpie, cloacal swab |
-|  | 4.0 | 4x | goat |
-|  | 7.9 | 7x | human |
-|  | 14.5 | 33x | human |
-|  | 30.0 | 46x | human |
+| `NZ_CP110212.1` | 1.7 | 30x | parrot, faeces |
+| `NZ_OU508368.1` | 3.9 | 6x | magpie, cloacal swab |
+| `NZ_CP047320.1` | 4.0 | 4x | goat |
+| `NZ_CP018053.1` | 7.9 | 7x | human |
+| `NZ_CP015297.1` | 14.5 | 33x | human |
+| `NZ_CP015299.1` | 30.0 | 46x | human |
 | **the two in the tail** | **2,268-2,423** | **4,615-4,722x** | parrot foetus, placenta |
 
 One conserved plasmid, a 1,400-fold range, and the extremes are exactly the
