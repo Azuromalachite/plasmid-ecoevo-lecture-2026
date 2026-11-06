@@ -116,6 +116,15 @@ extra mutational supply did not translate into a proportionally higher
 evolutionary rate, because drift at division removed new variants
 [@ilhan2019segregational].
 
+The intuition is right that extra copies raise the supply of mutations. It
+misses what else they do: a new allele arrives as one copy among many in the
+same cell, so the thing that made the mutation likelier also makes it slower
+to matter.
+
+More copies make mutations commoner and each one count for less.
+
+---
+
 ## References
 
 [@sanmillan2017costs; @ilhan2019segregational; @rodriguezbeltran2018tradeoffs;

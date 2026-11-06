@@ -208,6 +208,15 @@ set its width (`claim.fitness.conditional_alignment`).
 
 ---
 
+Both misreadings treat the width of the gap as a property of the plasmid.
+It is not. Transfer opportunity, host density, within-cell competition and
+whether loss is punished are all conditions, and they are what set how far
+the two accountings diverge.
+
+Parasite or partner is a question about the conditions, not about the plasmid.
+
+---
+
 **Next.** If plasmid fitness and host fitness are different quantities, then
 measuring either one does not settle what happens to the plasmid:
 [`fitness-vs-persistence.md`](fitness-vs-persistence.md).

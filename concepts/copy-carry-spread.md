@@ -179,6 +179,15 @@ The processes are coupled, often in ways that frustrate simple predictions.
   is why costly plasmids persist without antibiotic selection
   [@lopatkin2017persistence].
 
-The next page asks why these couplings so often leave plasmid interest and
-host interest pointing in different directions:
+A single *copA* change moved copy number, transfer rate and host cost at
+once. That is the ordinary case rather than the exception, and it is why the
+three headings above are a way of reading a plasmid, not a list of things it
+has. Selection never sees them separately.
+
+They are not three dials. They are three views of one budget.
+
+---
+
+**Next.** Why these couplings so often leave plasmid interest and host
+interest pointing in different directions:
 [`plasmid-vs-host-fitness.md`](plasmid-vs-host-fitness.md).

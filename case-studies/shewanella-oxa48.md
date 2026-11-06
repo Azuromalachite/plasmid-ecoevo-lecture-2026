@@ -319,3 +319,14 @@ inducible" is too flat a summary to be worth teaching
 (`claim.shewanella.blaa_regulation_not_uniform`: `layer: interpretation`,
 `status: supported` — the reports are not comparable, so they do not
 establish a disagreement).
+
+---
+
+The chain in this case is traceable in one direction only. We can follow the
+gene forward from a chromosome in an environmental bacterium to a transposon,
+a plasmid, a new host and a hospital, with a citation at each step. Run it
+backwards and it stops at the first move: what maintained the gene before any
+of this is recorded here as unresolved, and it is the step the whole story
+would need to be about if we wanted to call it an origin.
+
+We know what the gene became. We do not know what it was for.

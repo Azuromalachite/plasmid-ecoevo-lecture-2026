@@ -108,6 +108,15 @@ into the transfer-inhibition gene *tir* [@potron2014derepressed]. Several
 links are favourable simultaneously; that is what an epidemic plasmid looks
 like.
 
+A mating assay is an answer about one step. It tells you the plasmid can
+cross into a recipient under the conditions you arranged. Everything after
+that step, including whether the recipient keeps it and whether its
+descendants do, fails or succeeds for reasons the assay never touched.
+
+Getting in is not staying.
+
+---
+
 ## References
 
 [@fox2008spatial; @novick1987incompatibility; @garcillan2008entry;

@@ -83,3 +83,12 @@ The 2026 modelling work [@shahzadi2026determinants] shares two authors with
 [@maddamsetti2025scaling], so the three studies are not three independent
 observations; that is recorded here because a slide listing them in sequence
 implies more corroboration than exists.
+
+---
+
+So there are three papers here and, between them, neither a corroboration nor
+a disagreement: two share authors and observations, and the third is not
+estimating the same quantity. That is not a gap in the reading. It is the
+state of the question.
+
+A disagreement needs a shared question first.

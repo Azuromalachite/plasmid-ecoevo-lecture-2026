@@ -288,6 +288,17 @@ the evidence was.
 
 ---
 
+A competition assay returns *c*. It cannot return *τ*, and it cannot return
+γ·*n\**, in which *n\** is simply how many plasmid-free cells happen to be
+nearby. That is why the same plasmid changes verdict with host density, and
+why the precision of a cost measurement says nothing about the two terms
+sitting beside it.
+
+The measurement is a property of the plasmid. The outcome is a property of
+the situation.
+
+---
+
 **See also.** The three routes whose balance this page describes:
 [`copy-carry-spread.md`](copy-carry-spread.md). Why cost exists at all and
 whom it is paid by: [`plasmid-vs-host-fitness.md`](plasmid-vs-host-fitness.md).
