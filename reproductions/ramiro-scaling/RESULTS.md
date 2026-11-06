@@ -124,35 +124,61 @@ threshold would have to act on: families over evolutionary time, not
 plasmids along a size gradient.
 See [`../../concepts/random-segregation-is-not-a-floor.md`](../../concepts/random-segregation-is-not-a-floor.md).
 
-## 5. The breakpoint is between families, not within them
+## 5. Most of the breakpoint is between families — but not all of it
 
 §3 and §4 both treat the breakpoint as a threshold on plasmid size. The
 caveat below used to say that a mixture of replicon families with different
 characteristic copy numbers would produce the same segmented preference, and
 that separating the two needed family-level annotation.
 
-The annotation is in the file. `Predicted_ptu` is a plasmid taxonomic unit
-— 139 of them — and a PTU is a replicon family. So the two hypotheses can be
-told apart, because they differ in one place: **a real break is a
-within-family phenomenon**, and a family spanning the threshold should kink.
-A mixture is purely between-family, and removing the family means removes
-it.
+The annotation is in the file. `Predicted_ptu` is a plasmid taxonomic unit,
+139 of them. A PTU is **not** the same thing as a replicon family — the two
+are correlated classifications built from different information, and the
+authors assign replicon types to far more plasmids than they assign named
+PTUs. A PTU is the nearest thing to a plasmid species, which is what this
+test needs.
+
+The two hypotheses differ in one place: **a real break is a within-family
+phenomenon**, and a family spanning the threshold should kink. A mixture is
+purely between-family.
 
 | fit | ΔAIC | slopes |
 |---|---:|---|
 | pooled, as in §3 | **−148.1** | −0.683 then −0.150 |
-| family-centred | **−1.3** | −0.356 then −0.598 |
+| **knee held at 1.73%, PTU as a fixed effect** | **−19.4** | **−0.499 then −0.119** |
+| family-centred, knee rescanned | −1.3 | −0.356 then −0.598 |
 
-The preference disappears. The single-slope exponent moves with it, from
+**The second row is the one that answers the question, and an earlier version
+of this section reported only the third.** Centring *x* and *y* within PTU and
+then rescanning for a knee asks whether there is a kink anywhere in the
+within-family relationship. It does not ask whether the kink at 1.73% of
+chromosome length survives adjusting for family, because subtracting a
+different mean from each family means a fixed plasmid size no longer maps to
+one centred *x*. Holding the knee fixed and absorbing PTU intercepts — the
+within-transform applied to *y*, *x* **and** the hinge term, which is the step
+the rescan omits — gives ΔAIC −19.4, not −1.3.
+
+Thirty-eight of the 116 families straddle the knee, holding 1,677 records, so
+the hinge is identified within families rather than being an artefact of
+collinearity.
+
+The preference weakens by most of its magnitude and does not disappear. The single-slope exponent moves with it, from
 −0.620 pooled to **−0.399** once families are centred — so a third of the
 headline exponent in §1 is also a between-family effect.
 
-**This is absence, not blindness.** Centring removes most of the range in
-the predictor: 95.3% of the variance in log relative size lies between
-families, only 4.7% within, because families occupy narrow size bands. A
-null result on 4.7% of the variance invites the obvious objection. So the
-pooled break (a slope change of +0.533) was injected into the centred data
-and the same test re-run:
+The slope change falls from **+0.533** pooled to **+0.380** adjusted — about
+a 29% reduction, against an 87% reduction in ΔAIC. And the adjusted model,
+allowed to choose, puts its knee at **0.84%** of chromosome length rather than
+1.73%, which is its own argument against treating either number as a
+constant. Dropping the three most abundant lineages one at a time leaves
+ΔAIC between −16.4 and −22.1, so the residual bend is not one lineage's
+doing.
+
+**On the rescanned test, the null is at least readable.** Centring removes
+most of the range in the predictor: 95.3% of the variance in log relative
+size lies between families, only 4.7% within. So the pooled break (a slope
+change of +0.533) was injected into the centred data and the same test
+re-run:
 
 | injected at | ΔAIC | |
 |---|---:|---|
@@ -160,8 +186,11 @@ and the same test re-run:
 | 50th percentile | −45.1 | recovered |
 | 75th percentile | −33.6 | recovered |
 
-A break of that size would have been seen at ΔAIC ≈ −45. The observed value
-is −1.3.
+A break of that size would have been seen at ΔAIC ≈ −45. The rescanned value
+is −1.3. That still says there is no second kink hiding inside families once
+their means are gone; it is simply not the same statement as "the bend at
+1.73% is entirely between families", which is what this section used to
+claim.
 
 **Sign convention.** ΔAIC here is AIC(segmented) − AIC(single line), so a
 negative value favours the segmented model. The receipt records it under
@@ -193,11 +222,15 @@ would not produce that scatter; small-sample hinge fitting does.
 ### What this means for §3 and §4
 
 The arithmetic in §4 is untouched: median PCN really is 5.59 below the break
-and 1.48 above, a 301-fold step in daughters born plasmid-free. What changes
-is what the break *is*. Not a size at which an individual plasmid's
-inheritance stops working, but the point where the **composition of families
-changes over** — small-plasmid families carry high copy number, large-plasmid
-families low, and each sits in its own narrow band.
+and 1.48 above, a 301-fold step in daughters born plasmid-free.
+
+What changes is how much of the break is a property of plasmids and how much
+of the catalogue. Most of it is composition — small-plasmid families carry
+high copy number, large-plasmid families low, and each sits in its own narrow
+band. A residual bend survives that adjustment, and these data do not
+distinguish it from within-lineage curvature, PTU misclassification, the
+PCN ≥ 1 truncation or sampling bias. It is not evidence of a replication-size
+transition; it is a reason not to have closed the question.
 
 The consequence for §3 is sharper, and it cuts against the most quotable
 claim in this document. A breakpoint agreeing with Maddamsetti's to within
@@ -211,15 +244,16 @@ Maddamsetti's sample, which is not in these data.
 ## What this does not establish
 
 - Nothing about Fig. 5A, which uses a different and larger dataset.
-- That these plasmids represent plasmids. Beyond the PCN floor in §2 there is
-  a **second selection in the file that it does not state**: every one of the
-  3,961 records carries a named PTU. COPLA writes `-` for an unclassified
-  plasmid and `PTU-?` for a putative new one, and neither string appears here.
-  Against COPLA's own benchmark — 41% of new plasmids assignable to an existing
-  PTU overall, 63% within Enterobacterales — a file with no unassigned rows is
-  one the unclassifiable plasmids have already been removed from. That selection
-  runs toward well-sampled lineages, and it is upstream of every number in this
-  document.
+- That these plasmids represent plasmids. Beyond the PCN floor in §2, the
+  modelling subset carries further curation **which the authors document and
+  this file does not show**: unassigned PTUs removed, redundant variables
+  dropped, and copy numbers above 100 excluded. The file is consistent with
+  all three — every one of the 3,961 records carries a named PTU where COPLA
+  would write `-` or `PTU-?`, and the maximum PCN is 99.50 with nothing at or
+  above 100. An earlier version of this list called the PTU filtering an
+  undisclosed selection. That was wrong: it is disclosed in the paper, and
+  only invisible in the CSV. It still runs toward well-sampled lineages, and
+  it is still upstream of every number here.
 - That the breakpoint is biological. This was listed here as untested; §5
   now tests it, and the mixture reading wins. What remains untested is
   whether the family-level pattern — small families with high copy number,

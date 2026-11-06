@@ -324,6 +324,84 @@ def main() -> int:
         print(f"      at q={p['quantile']:.2f}  dAIC {p['delta_aic']:+9.1f}"
               f"   {'recovered' if p['delta_aic'] < -10 else 'NOT recovered'}")
 
+    # --- 6b. the test section 6 should have run ----------------------------
+    # Centring x and y within PTU and then RESCANNING for a knee asks "is
+    # there a kink anywhere in the within-family relationship". It does not
+    # ask whether the kink AT the published breakpoint survives adjusting for
+    # family: subtracting a different mean per family means a fixed plasmid
+    # size no longer maps to one centred x. The second question is a
+    # fixed-effects regression with c held FIXED, which by
+    # Frisch-Waugh-Lovell is the within-transform applied to y, x and the
+    # hinge term z = max(0, x - c). Demeaning z is the step section 6 omits.
+    #
+    # This matters: it is the difference between "the bend is between
+    # families" and "most of the bend is between families". The second is
+    # what the data support.
+    zc = np.maximum(xn - c, 0.0)
+
+    def _demean(v, g):
+        out = np.empty_like(v)
+        for p in np.unique(g):
+            m = g == p
+            out[m] = v[m] - v[m].mean()
+        return out
+
+    gk = np.array([recs[i][1] for i in range(len(recs))])
+    inkeep = np.isin(gk, list(keep))
+    gk, yk, xk, zk = gk[inkeep], Y[inkeep], xn[inkeep], zc[inkeep]
+    yd2, xd2, zd2 = (_demean(yk, gk), _demean(xk, gk), _demean(zk, gk))
+    nk = len(xk)
+
+    def _sse(cols, yv):
+        M = np.column_stack(cols)
+        beta, *_ = np.linalg.lstsq(M, yv, rcond=None)
+        return float(((yv - M @ beta) ** 2).sum()), beta
+
+    sse_fe1, b_fe1 = _sse([xd2], yd2)
+    sse_fe2, b_fe2 = _sse([xd2, zd2], yd2)
+    n_ptu = len(np.unique(gk))
+    d_fixed = (aic(sse_fe2, nk, n_ptu + 3) - aic(sse_fe1, nk, n_ptu + 2))
+
+    straddle = [p for p in np.unique(gk)
+                if (xk[gk == p] < c).any() and (xk[gk == p] >= c).any()]
+    n_strad = int(sum((gk == p).sum() for p in straddle))
+
+    print("\n  KNEE HELD AT THE PUBLISHED VALUE, PTU AS A FIXED EFFECT")
+    print(f"    families straddling the knee  {len(straddle)} of {n_ptu},"
+          f" holding {n_strad} of {nk} records")
+    print(f"    slopes below / above          {b_fe2[0]:+.3f} /"
+          f" {b_fe2[0] + b_fe2[1]:+.3f}   (change {b_fe2[1]:+.3f})")
+    print(f"    dAIC                          {d_fixed:+.1f}"
+          f"   vs {d_aic:+.1f} pooled and {d_aic_c:+.1f} when rescanned")
+
+    # Where does the adjusted model want the knee?
+    best_fe = None
+    for cc in np.linspace(np.quantile(xk, 0.05), np.quantile(xk, 0.95), 400):
+        s, b = _sse([xd2, _demean(np.maximum(xk - cc, 0.0), gk)], yd2)
+        if best_fe is None or s < best_fe[0]:
+            best_fe = (s, cc, b)
+    sse_fe3, c_fe, b_fe3 = best_fe
+    d_free = aic(sse_fe3, nk, n_ptu + 4) - aic(sse_fe1, nk, n_ptu + 2)
+    print(f"    knee the adjusted model prefers  {10 ** c_fe * 100:.2f}% of"
+          f" chromosome  (dAIC {d_free:+.1f})")
+    print("    -- so the published 1.73% is not where the adjusted bend sits")
+
+    loo = []
+    for drop in ([], ["PTU-E1"], ["PTU-FE"], ["PTU-FK"],
+                 ["PTU-E1", "PTU-FE", "PTU-FK"]):
+        m = ~np.isin(gk, drop)
+        g2, x2, y2 = gk[m], xk[m], yk[m]
+        z2 = np.maximum(x2 - c, 0.0)
+        a1, _ = _sse([_demean(x2, g2)], _demean(y2, g2))
+        a2, ab = _sse([_demean(x2, g2), _demean(z2, g2)], _demean(y2, g2))
+        n2, k2 = len(x2), len(np.unique(g2))
+        loo.append({"excluded": drop, "n": n2,
+                    "delta_aic": aic(a2, n2, k2 + 3) - aic(a1, n2, k2 + 2),
+                    "slope_change": float(ab[1])})
+    print("    leave-one-lineage-out:", ", ".join(
+        f"{'none' if not r['excluded'] else '-'.join(s[4:] for s in r['excluded'])}"
+        f" {r['delta_aic']:+.1f}" for r in loo))
+
     # Each family that spans the fitted breakpoint, on its own.
     print("\n    EACH SPANNING FAMILY")
     print(f"      {'PTU':<14}{'n':>5}{'below':>7}{'above':>7}"
@@ -380,6 +458,21 @@ def main() -> int:
             "injected_break_magnitude": delta,
             "power_check": power,
             "per_family": per_family,
+            "fixed_knee_ptu_fixed_effects": {
+                "note": "knee HELD at the published breakpoint; PTU as a "
+                        "fixed effect; the test section 6's rescan does not "
+                        "perform",
+                "families_straddling_knee": len(straddle),
+                "records_straddling": n_strad,
+                "slope_below": float(b_fe2[0]),
+                "slope_above": float(b_fe2[0] + b_fe2[1]),
+                "slope_change": float(b_fe2[1]),
+                "delta_aic": d_fixed,
+                "knee_preferred_by_adjusted_model_percent":
+                    float(10 ** c_fe * 100),
+                "delta_aic_free_knee": d_free,
+                "leave_one_lineage_out": loo,
+            },
         },
     }
     (HERE / "receipt.json").write_text(

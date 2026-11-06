@@ -68,10 +68,11 @@ _spec.loader.exec_module(pal)
 #: Series roles for this figure. Verified against palette.py's own measure in
 #: build(); see the module docstring for why these three.
 POOLED = "sky_blue"
-PLANTED = "bluish_green"
-CENTRED = "vermillion"
+PLANTED = "bluish_green"   # the rescan question and its controls
+CENTRED = "bluish_green"  # same block as its controls
+FIXED = "vermillion"      # the test that answers the question
 
-W, H = 760, 348
+W, H = 760, 386
 X0, X1 = 250, 720          # plot area
 TOP = 60
 ROW_H, BAR_H = 38, 20
@@ -84,18 +85,20 @@ def esc(s):
 def load():
     d = json.loads(RECEIPT.read_text(encoding="utf-8"))
     seg, mix = d["segmented"], d["break_or_mixture"]
-    rows = [("Pooled, as published", mix["pooled_delta_aic"], POOLED, True)]
+    fe = mix["fixed_knee_ptu_fixed_effects"]
+    rows = [("Pooled, as published", mix["pooled_delta_aic"], POOLED, True),
+            ("Knee fixed, family absorbed", fe["delta_aic"], FIXED, True),
+            ("Family-centred, knee re-fitted",
+             mix["family_centred_delta_aic"], CENTRED, True)]
     for p in mix["power_check"]:
         pct = int(round(p["quantile"] * 100))
-        rows.append((f"Planted break, {pct}th pct", p["delta_aic"], PLANTED,
-                     False))
-    rows.append(("Family-centred, observed", mix["family_centred_delta_aic"],
-                 CENTRED, True))
+        rows.append((f"   planted control, {pct}th pct", p["delta_aic"],
+                     PLANTED, False))
     return d, seg, mix, rows
 
 
 def build():
-    worst = pal._worst((POOLED, PLANTED, CENTRED))
+    worst = pal._worst((POOLED, PLANTED, FIXED))
     if worst < pal.MIN_DISTANCE:
         sys.exit(f"palette: {POOLED}/{PLANTED}/{CENTRED} separate by only "
                  f"{worst:.1f}, below MIN_DISTANCE {pal.MIN_DISTANCE}")
@@ -125,7 +128,7 @@ def build():
          f'<rect width="{W}" height="{H}" fill="{pal.PAPER}"/>']
 
     s.append(f'<text x="24" y="30" font-size="15" font-weight="bold" '
-             f'fill="{pal.INK}">Removing the family means removes the bend</text>')
+             f'fill="{pal.INK}">Most of the bend is between families, not all of it</text>')
     s.append(f'<text x="24" y="48" font-size="12" fill="{pal.MUTED}">'
              f'&#916;AIC, two segments minus one line. More negative is '
              f'stronger evidence for a bend.</text>')
@@ -184,7 +187,7 @@ def build():
     s.append('</svg>')
 
     OUT.write_text("\n".join(s) + "\n", encoding="utf-8", newline="\n")
-    print(f"  palette: {POOLED}/{PLANTED}/{CENTRED} separate by "
+    print(f"  palette: {POOLED}/{PLANTED}/{FIXED} separate by "
           f"{worst:.1f} (>= {pal.MIN_DISTANCE})")
     print(f"  drawn from receipt sha256 {d['source']['sha256'][:12]}")
     for label, val, _, _ in rows:

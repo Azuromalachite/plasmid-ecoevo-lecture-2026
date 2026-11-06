@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-06T07:06:20+00:00",
+  "generated_utc": "2026-11-06T08:12:38+00:00",
   "status": "COMPLETED",
   "scope": "independent reanalysis of a curated author subset; NOT a reproduction of any published figure",
   "source": {
@@ -259,6 +259,59 @@
         "slope_above": 0.07039620240461641,
         "delta_aic": -6.5572830024071465
       }
-    ]
+    ],
+    "fixed_knee_ptu_fixed_effects": {
+      "note": "knee HELD at the published breakpoint; PTU as a fixed effect; the test section 6's rescan does not perform",
+      "families_straddling_knee": 38,
+      "records_straddling": 1677,
+      "slope_below": -0.49860849938664675,
+      "slope_above": -0.11893906135519006,
+      "slope_change": 0.3796694380314567,
+      "delta_aic": -19.35575006052568,
+      "knee_preferred_by_adjusted_model_percent": 0.8388773103609893,
+      "delta_aic_free_knee": -23.396704609700464,
+      "leave_one_lineage_out": [
+        {
+          "excluded": [],
+          "n": 3930,
+          "delta_aic": -19.35575006052568,
+          "slope_change": 0.3796694380314567
+        },
+        {
+          "excluded": [
+            "PTU-E1"
+          ],
+          "n": 3690,
+          "delta_aic": -22.069352769758552,
+          "slope_change": 0.3986716506590817
+        },
+        {
+          "excluded": [
+            "PTU-FE"
+          ],
+          "n": 3631,
+          "delta_aic": -20.946207710809176,
+          "slope_change": 0.44236805782712463
+        },
+        {
+          "excluded": [
+            "PTU-FK"
+          ],
+          "n": 3703,
+          "delta_aic": -16.389937498781364,
+          "slope_change": 0.40215074451067123
+        },
+        {
+          "excluded": [
+            "PTU-E1",
+            "PTU-FE",
+            "PTU-FK"
+          ],
+          "n": 3164,
+          "delta_aic": -21.64938957862887,
+          "slope_change": 0.5301436777728809
+        }
+      ]
+    }
   }
 }

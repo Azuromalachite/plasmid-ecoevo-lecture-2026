@@ -1,8 +1,17 @@
-# The breakpoint that wasn't
+# Mostly the catalogue, not the plasmids
 
 A scaling threshold that replicated another lab's number to within a tenth of
-a percentage point turns out to be a fact about which plasmid families exist,
-not about plasmids.
+a percentage point turns out to be *mostly* a fact about which plasmid
+families exist. Mostly, not entirely — and an earlier version of this report
+said entirely, on a test that could not have shown otherwise.
+
+> **Correction, 6 November 2026.** This report first claimed the breakpoint
+> was a between-family effect and nothing more. The test behind that claim
+> centred plasmid size within each family and then searched for a *new* bend,
+> which is a different question. Holding the bend where the pooled fit put it
+> and absorbing family intercepts leaves ΔAIC −19.4, not −1.3. Most of the
+> signal is composition; a weaker bend survives. The claims ledger and
+> §5 of `RESULTS.md` carry the corrected numbers.
 
 > **This file is the argument. [`RESULTS.md`](RESULTS.md) is the record.**
 > Every number below comes from [`receipt.json`](receipt.json) and regenerates
@@ -43,13 +52,31 @@ at 45.2, 45.1 and 33.6.](../../figures/output/breakpoint-is-between-families.svg
 | fit | ΔAIC | slope below | slope above |
 |---|---:|---:|---:|
 | Pooled, as published | **−148.1** | −0.683 | −0.150 |
-| Family-centred | **−1.3** | −0.356 | −0.598 |
+| **Bend held at 1.73%, family as a fixed effect** | **−19.4** | **−0.499** | **−0.119** |
+| Family-centred, bend re-fitted | −1.3 | −0.356 | −0.598 |
 
 ΔAIC is AIC(segmented) − AIC(single line), so negative favours the bend.
 
-The preference collapses. The single-slope exponent moves with it, from −0.620
-pooled to **−0.399** once families are centred, so roughly a third of the
-headline exponent in §1 is also a between-family effect.
+The middle row is the test that answers the question. Centring size within
+each family moves the 1.73% mark to a different coordinate for every family,
+so re-fitting a bend afterwards asks whether *any* kink hides inside
+families — a reasonable question, answered no, and not the one the headline
+was making. Holding the bend fixed and absorbing one intercept per family
+keeps the mark where it was. Thirty-eight of the 116 families straddle it,
+holding 1,677 plasmids, so the test has something to work with.
+
+The slope change falls from **+0.533** pooled to **+0.380** adjusted. ΔAIC
+falls by 87%. Neither reaches zero.
+
+The single-slope exponent moves too, from −0.620 pooled to **−0.399** once
+families are absorbed, so roughly a third of the headline exponent is also a
+between-family effect.
+
+Two further things the adjusted model says. Allowed to choose its own bend,
+it puts it at **0.84%** of chromosome length, not 1.73% — an argument against
+treating either number as a constant. And dropping the three most abundant
+lineages one at a time leaves ΔAIC between −16.4 and −22.1, so what survives
+is not one lineage's doing.
 
 ## Why the planted breaks matter more than the observed one
 
@@ -125,11 +152,15 @@ would travel to a new sample.
 
 **A number that replicates is not thereby a measurement of the same thing.**
 
+And a test that cannot return the other answer is not thereby evidence.
+
 ## Claims ledger
 
 | claim | status | the strongest version the evidence would not support |
 |---|---|---|
-| The segmented preference is between-family; centring takes ΔAIC from −148.1 to −1.3, and a planted break of the same size is recovered at −45 | supported | That no size threshold exists in plasmid biology. Scope is this dataset and these predicted families. |
+| Most of the segmented preference is between-family: holding the bend at 1.73% and absorbing family intercepts takes ΔAIC from −148.1 to −19.4 | supported | That the bend is *entirely* between families. An earlier version of this report claimed that, on a test that re-fitted the bend in centred coordinates and so could not have shown otherwise. |
+| No second bend hides inside families once their means are removed: ΔAIC −1.3, where a planted break of the pooled size is recovered at −45 | supported | That the bend at 1.73% disappears under adjustment. It does not; this is a different question. |
+| The residual bend is evidence of a replication-size transition | **not supported** | These data cannot separate it from within-lineage curvature, PTU misclassification, the PCN ≥ 1 truncation or sampling bias. The adjusted model prefers a bend at 0.84%. |
 | 95.3% of the variance in log relative size is between families | supported | That families are biologically discrete. It is a decomposition on predicted labels. |
 | The PCN < 1 exclusion is a one-sided truncation that flattens the exponent monotonically | supported | That the authors' published exponent is wrong. It is conditional on a cut they stated. |
 | 1.73% and 1.84% are two different measurements landing 0.1 points apart | narrowed | "The breakpoint replicates." Different sample, estimator and filters, and the finding above gives a reason they might agree without a shared threshold. |
@@ -160,21 +191,29 @@ chromosome-normalised size, and a variance decomposition by predicted PTU.
 Grouping is by PTU alone rather than by genus and PTU together, since a PTU is
 already a plasmid taxonomic unit.
 
-There is a second selection in the file that the file does not state. Every
-one of the 3,961 records carries a named PTU. COPLA writes `-` for an
-unclassified plasmid and `PTU-?` for a putative new one; neither appears.
-Against COPLA's own benchmark — 41% of new plasmids assignable overall, 63%
-within Enterobacterales — a file with no unassigned rows is one the
-unclassifiable plasmids have already been dropped from, which runs toward
-well-sampled lineages and sits upstream of every number here.
+The modelling subset is curated further than the PCN floor, in ways the
+authors document and the file does not show: unassigned PTUs removed,
+redundant variables dropped, copy numbers above 100 excluded. The file is
+consistent with all three — every record carries a named PTU where COPLA
+would write `-` or `PTU-?`, and the maximum PCN is 99.50 with nothing at or
+above 100. An earlier version of this report called the PTU filtering an
+undisclosed selection; that was wrong, and this is the correction. It is
+disclosed in the paper and merely invisible in the CSV. It still runs toward
+well-sampled lineages.
 
-The file also carries **no accession, assembly or strain identifier of any
-kind**: ten columns, none of which names a record. So these plasmids cannot be
-joined to the published PTU membership tables, to replicon or MOB typing, or
-to any external annotation. Questions of the form "do lineages with different
-partitioning architectures scale differently" are good ones and cannot be
-asked of this file; they need the accessions, which means going back to the
-authors' upstream data rather than their modelling subset.
+A PTU is also **not** a replicon family, and an earlier version of this
+report said it was. They are correlated classifications built from different
+information — whole-plasmid relatedness against replication machinery — and
+the authors assign replicon types to far more plasmids than named PTUs.
+Shared PTU is not proof of shared replication control.
+
+The file carries **no accession, assembly or strain identifier**: ten
+columns, none of which names a record. So nothing in *this CSV* can be joined
+to PTU membership tables, replicon typing or any external annotation. That is
+a limit of the modelling subset, not of the authors' release: their
+repository ships seven supplementary datasets, and whether every modelling
+record can be recovered from them is an open question and the obvious next
+check.
 
 Every plasmid here was sequenced, assembled and binned, and copy number
 affects all three. Whether the family-level pattern is itself selected, or
