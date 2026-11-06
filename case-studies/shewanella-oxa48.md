@@ -13,6 +13,13 @@ The spine of the case:
 Each arrow is a different kind of biological event, and none of them is
 contained in the sequence of the gene.
 
+Read that as a chain of states that now exist, not as a dated sequence. The
+first arrow is the one to distrust: what maintained the gene in environmental
+*Shewanella* before any of the rest happened is recorded in this repository
+as unresolved (`claim.shewanella.oxa_ancestral_selection`), and section 9
+says so at length. The chain is evidence about a present configuration, and
+only in places about an order.
+
 ---
 
 ## Before you read on: commit to an answer

@@ -2,15 +2,17 @@
 
 **Educational ecology and evolution of plasmids and mobile DNA**
 
-Plasmid Eco-Evo is an educational project about the ecology and evolution of
-plasmids and mobile DNA. It began around a 2026 lecture on plasmid fitness but
-is being developed as a reusable collection of biological case studies,
-conceptual frameworks, quantitative models and teaching figures. The central
-idea is simple: plasmid success is not a property of DNA sequence alone.
-Replication, host physiology, horizontal transmission, ecological
-interactions, environmental context and evolutionary history jointly determine
-whether a plasmid persists, spreads or disappears. The project therefore treats
-plasmids not only as molecular vectors, but as evolving ecological entities.
+Plasmid success is not a property of DNA sequence alone. The same plasmid can
+persist in one host and be lost from the next, spread through one community
+and go nowhere in another. What decides it is replication, the physiology of
+the host it lands in, how often it transfers, and the ecology the cell is
+sitting in at the time.
+
+So this project treats plasmids as evolving ecological entities rather than
+as molecular vectors, and collects what follows from that: biological case
+studies, conceptual frameworks, quantitative models and teaching figures. It
+began around a 2026 lecture on plasmid fitness and is being built into a
+reusable resource.
 
 ## What success looks like
 

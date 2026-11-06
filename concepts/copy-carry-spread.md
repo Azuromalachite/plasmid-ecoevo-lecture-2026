@@ -1,7 +1,12 @@
 # COPY, CARRY, SPREAD
 
-A plasmid lineage can gain or lose copies in three ways, operating on three
-different timescales and under three different selective regimes:
+Turn a plasmid's copy number up. Gene dosage rises, and so does the chance
+that both daughter cells inherit a copy. The host also grows more slowly, and
+a new mutation now arrives as one allele among many in the same cell. One
+change, pulling in four directions at once.
+
+That is the ordinary case, and it is the reason for separating three
+processes that are usually discussed as one:
 
 | | Process | Unit that changes | Timescale |
 | --- | --- | --- | --- |
@@ -9,8 +14,9 @@ different timescales and under three different selective regimes:
 | **CARRY** | the host cell divides, or does not | plasmid-bearing cells | generations |
 | **SPREAD** | transfer to a cell that did not have it | host lineages | generations to outbreaks |
 
-The three are not independent, and a change that helps one can hurt another.
-That is the point of separating them.
+Each row answers a different question, and the answers can disagree. Keeping
+them apart is what makes the disagreement visible instead of averaging it
+away.
 
 ---
 
