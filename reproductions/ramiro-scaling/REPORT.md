@@ -138,12 +138,9 @@ small-sample noise than as nine lineages behaving differently.
 
 ## Why families do this
 
-A plasmid family is not a size range that happens to be populated. It is a
-replication and maintenance architecture, and that architecture largely fixes
-both how big the plasmid is and how many copies it keeps. Pool several hundred
-families whose sizes barely overlap, and the pooled curve has to bend wherever
-the families hand over. Nothing in that bend is a property of any individual
-plasmid.
+Families occupy narrow size bands, and within a band copy number is fairly consistent. Pool several hundred such bands and the pooled curve bends where they hand over, whether or not anything bends inside them. That is the composition effect, and it accounts for about a third of this bend.
+
+The tempting next sentence is that a plasmid family *is* a replication and maintenance architecture which fixes both size and copy number. An earlier version of this file said exactly that. Nothing here measured it: the grouping variable is a predicted plasmid taxonomic unit, assigned from whole-sequence relatedness, and these data carry no replicon typing, no copy-number control genes and no partitioning systems. The mechanism is a plausible reason for the pattern, not a finding.
 
 ## What it costs the headline
 
