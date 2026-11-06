@@ -156,6 +156,38 @@ twelve of the references cases passed against a defect they were written to
 cover, because every one of them planted a key that already matched the
 pattern the extractor used (G2).
 
+## Recording a review
+
+Reviews live in [`reviews/`](reviews/), one file per round. The *method* is
+not described here — it lives outside this repository and evolves there, and
+a copy kept in-tree drifts. What this repository fixes is the **ledger**: how
+a finding is identified, what establishes it, and what it leaves behind.
+
+1. **Exact SHA in the title.** A review of an implicitly identified artifact
+   cannot be re-run.
+2. **One lead finding.** The most consequential, not the first discovered.
+3. **Two-part tag: severity, and how it was established.** `[HIGH] ·
+   CONFIRMED by recomputation (<probe>)` says something `[HIGH]` alone does
+   not — it separates a finding you can act on from an opinion.
+4. **Disposition of the previous round**, each one FIXED / PARTIAL /
+   ACCEPTED / OPEN / REJECTED. A PARTIAL carries an explicit *blocks* or
+   *does not block* verdict and names the open paths; "only OPEN blocks"
+   lets a serious defect be downgraded on a fix that closed the easy half.
+5. **Residue.** What a closed finding failed to establish. A fix can be
+   correct and still leave an untested assumption behind, and `FIXED` erases
+   that distinction unless the round writes it down. Carry it forward with a
+   link to the current round's IDs; that is what makes rounds cumulative
+   rather than merely numbered.
+
+Findings about **committed public content** go to
+[`docs/open-findings.md`](docs/open-findings.md). Reviews of drafts, plans
+and other unpublished artifacts do **not**: "the plan needs revision" and
+"the repository contains an error" are different claims, and a ledger
+holding both is unreadable as a record of either. Such a review instead
+carries a **promotion conditions** table — each finding that *would* become
+a repository defect, and the trigger that would make it one. Promote when the
+trigger fires, not before.
+
 ## Every instrument needs evidence that it can fail
 
 The rule the defects in this repository keep arriving at:
