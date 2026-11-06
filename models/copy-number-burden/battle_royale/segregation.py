@@ -337,9 +337,14 @@ def loss_table(copy_numbers=(3, 5, 6, 8, 10), generations=100):
 def self_check(verbose: bool = True) -> int:
     """Checks that can fail. Returns the failure count.
 
-    Mutation-tested: removing the factor of two, swapping which probability
-    `bearing_fraction_after` uses, or dropping the input validation each makes
-    this report a failure.
+    Mutation-tested, and the harness is committed rather than described:
+    `models/copy-number-burden/test_segregation_self_check.py` applies twenty
+    deliberate breakages one at a time -- removing the factor of two, swapping
+    which probability `bearing_fraction_after` uses, dropping the carrier
+    conditioning, deleting the input validation -- and requires every one of
+    them to make this function report a failure. It runs each mutant on a
+    copy in a temporary directory, never on the tracked file, and refuses to
+    report at all if the unmutated module does not first pass.
     """
     fails = []
 
