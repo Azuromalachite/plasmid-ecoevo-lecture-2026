@@ -144,7 +144,7 @@ threshold would have to act on: families over evolutionary time, not
 plasmids along a size gradient.
 See [`../../concepts/random-segregation-is-not-a-floor.md`](../../concepts/random-segregation-is-not-a-floor.md).
 
-## 5. Most of the breakpoint is between families — but not all of it
+## 5. Most of the bend survives its families
 
 §3 and §4 both treat the breakpoint as a threshold on plasmid size. The
 caveat below used to say that a mixture of replicon families with different
@@ -186,19 +186,44 @@ The preference weakens by most of its magnitude and does not disappear. The sing
 −0.620 pooled to **−0.399** once families are centred — so a third of the
 headline exponent in §1 is also a between-family effect.
 
-The slope change falls from **+0.533** pooled to **+0.380** adjusted — about
-a 29% reduction, against an 87% reduction in ΔAIC. And the adjusted model,
-allowed to choose, puts its knee at **0.84%** of chromosome length rather than
-1.73%, which is its own argument against treating either number as a
-constant. Dropping the three most abundant lineages one at a time leaves
-ΔAIC between −16.4 and −22.1, so the residual bend is not one lineage's
-doing.
+**Those two reductions are not the same quantity, and an earlier version of
+this section leaned on the wrong one.** ΔAIC falls 87%, but ΔAIC is a
+model-comparison statistic, not a share of anything: the adjusted fit also
+spends 116 parameters on intercepts while only 4.7% of the variance in size
+lies within families, so a large drop is expected whether or not the bend is
+real. The quantity that measures the bend is the change in slope, and it
+falls from **+0.533** to **+0.380** — a **29%** reduction. Roughly seven
+tenths of the bend's magnitude survives adjusting for family.
 
-**On the rescanned test, the null is at least readable.** Centring removes
-most of the range in the predictor: 95.3% of the variance in log relative
-size lies between families, only 4.7% within. So the pooled break (a slope
-change of +0.533) was injected into the centred data and the same test
-re-run:
+So the honest summary is close to the opposite of what this section first
+said. Families account for something like a third of the bend, not most of
+it; what collapses under adjustment is the *evidence*, not the *effect*.
+
+Two things still qualify it. Allowed to choose, the adjusted model puts its
+knee at **0.84%** of chromosome length rather than 1.73%. And the residual
+does not survive narrowing the data: restricted to *Escherichia* it is
+**+0.6**, and with the PCN floor raised to three it is **−0.1**. Dropping
+the three most abundant lineages one at a time leaves ΔAIC between −16.4
+and −22.1, so what survives is at least not one lineage's doing.
+
+**The rescanned test is uninformative, and an earlier version of this
+section claimed the opposite.** It argued that a near-null rescan was an
+absence rather than blindness, on the strength of breaks injected into the
+centred data and recovered at ΔAIC ≈ −45. But those breaks were injected at
+a common *centred* coordinate. A real shared threshold sits at a common
+*original* size, which centring scatters across families, so the controls
+validated the detection of something no biological threshold would look
+like.
+
+`reproduce.py` now simulates data that genuinely has a shared threshold —
+116 families in narrow size bands, a true bend at the fitted knee — and runs
+the rescan on it. The rescan returns a **positive** ΔAIC: it misses a bend
+that is really there, where the fixed-effects test with the knee held at the
+truth finds it. A near-null rescan therefore says nothing either way, and
+the −1.3 below should be read as a test that cannot answer the question
+rather than as an answer.
+
+The injected-break figures are kept here only because they were published:
 
 | injected at | ΔAIC | |
 |---|---:|---|
@@ -206,11 +231,9 @@ re-run:
 | 50th percentile | −45.1 | recovered |
 | 75th percentile | −33.6 | recovered |
 
-A break of that size would have been seen at ΔAIC ≈ −45. The rescanned value
-is −1.3. That still says there is no second kink hiding inside families once
-their means are gone; it is simply not the same statement as "the bend at
-1.73% is entirely between families", which is what this section used to
-claim.
+Those numbers are real and they mean less than they appear to. They show the
+rescan can find a break placed where centring leaves it, not that it could
+find a biological threshold.
 
 **Sign convention.** ΔAIC here is AIC(segmented) − AIC(single line), so a
 negative value favours the segmented model. The receipt records it under
@@ -234,10 +257,14 @@ descent, so they are not independent observations and the nominal AIC
 comparison flatters itself.
 
 Nine families have at least five records on each side of the fitted
-breakpoint. Three prefer a kink, and the directions disagree — PTU-FS runs
-+0.63 then −3.41, PTU-E5 −1.10 then +0.84, PTU-E64 −0.74 then +0.07. Only
-PTU-FK (n = 227) resembles the pooled shape. A shared physical threshold
-would not produce that scatter; small-sample hinge fitting does.
+breakpoint. Three prefer a kink, and **all three flatten**, in the same direction as the
+pooled fit: PTU-FK +0.561, PTU-Bac45 +1.111, PTU-E64 +0.812, against a pooled
++0.533. An earlier version of this section said their directions disagreed
+and cited PTU-FS and PTU-E5 as the evidence. Those two score −3.7 and −2.0
+and are not among the three; the sentence compared the wrong families. The
+correction runs against the reading this document reaches, which is why it is
+stated plainly: within the families large enough to test it, the bend goes
+the same way it goes in the pooled data.
 
 ### What this means for §3 and §4
 

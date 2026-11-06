@@ -1,17 +1,26 @@
-# Mostly the catalogue, not the plasmids
+# Most of the bend survives its families
 
 A scaling threshold that replicated another lab's number to within a tenth of
-a percentage point turns out to be *mostly* a fact about which plasmid
-families exist. Mostly, not entirely — and an earlier version of this report
-said entirely, on a test that could not have shown otherwise.
+a percentage point is partly a fact about which plasmid families exist — but
+only partly, and less than this report has twice claimed.
 
-> **Correction, 6 November 2026.** This report first claimed the breakpoint
-> was a between-family effect and nothing more. The test behind that claim
-> centred plasmid size within each family and then searched for a *new* bend,
-> which is a different question. Holding the bend where the pooled fit put it
-> and absorbing family intercepts leaves ΔAIC −19.4, not −1.3. Most of the
-> signal is composition; a weaker bend survives. The claims ledger and
-> §5 of `RESULTS.md` carry the corrected numbers.
+> **Corrections.** This claim has been revised twice, in opposite
+> directions, and the history is kept because it is the evidence for how much
+> weight it will bear.
+>
+> *6 November.* The report first said the bend was a between-family effect
+> and nothing more. The test behind that centred plasmid size within each
+> family and then searched for a *new* bend — a different question. Holding
+> the bend where the pooled fit put it and absorbing family intercepts gives
+> ΔAIC −19.4, not −1.3.
+>
+> *7 November.* The replacement then said *most* of the bend was between
+> families, on the strength of ΔAIC falling 87%. ΔAIC is not a share of
+> anything. The bend's magnitude — the change in slope — falls only 29%, so
+> roughly seven tenths of it survives adjusting for family. Two further
+> errors went with it: the near-null rescan was called an absence when a
+> simulation shows it misses a real shared threshold, and the families that
+> prefer a bend were said to disagree in direction when all three agree.
 
 > **This file is the argument. [`RESULTS.md`](RESULTS.md) is the record.**
 > Every number below comes from [`receipt.json`](receipt.json) and regenerates
@@ -65,8 +74,12 @@ was making. Holding the bend fixed and absorbing one intercept per family
 keeps the mark where it was. Thirty-eight of the 116 families straddle it,
 holding 1,677 plasmids, so the test has something to work with.
 
-The slope change falls from **+0.533** pooled to **+0.380** adjusted. ΔAIC
-falls by 87%. Neither reaches zero.
+ΔAIC falls by 87%, but ΔAIC is a model-comparison statistic, not a share:
+the adjusted fit spends 116 parameters on intercepts while only 4.7% of the
+variation in size lies within families, so a large drop is expected either
+way. The quantity that measures the bend is the change in slope, and it falls
+from **+0.533** to **+0.380** — **29%**. About seven tenths of the bend
+survives.
 
 The single-slope exponent moves too, from −0.620 pooled to **−0.399** once
 families are absorbed, so roughly a third of the headline exponent is also a
@@ -101,9 +114,11 @@ We observed −1.3.
 ## What the families say one at a time
 
 Nine families carry at least five plasmids on each side of the fitted
-breakpoint. Three prefer a bend, their directions disagree with each other,
-and only `PTU-FK` resembles the pooled shape. A shared physical threshold
-would not produce that scatter; small-sample hinge fitting does. The full
+breakpoint. Three prefer a bend, and **all three flatten in the same direction as the
+pooled fit** — PTU-FK +0.561, PTU-Bac45 +1.111, PTU-E64 +0.812, against a
+pooled +0.533. An earlier version of this report said their directions
+disagreed, citing two families that do not prefer a bend at all. They
+agree. The full
 table is in [`RESULTS.md`](RESULTS.md) §5.
 
 Those nine are not a sample of plasmid diversity, and the arithmetic says so:
@@ -132,11 +147,17 @@ plasmid.
 
 ## What it costs the headline
 
-The arithmetic in `RESULTS.md` §4 is untouched. Below the bend the median
-plasmid carries 5.59 copies and binomial segregation alone loses 0.043% of
-daughters; above it the median is 1.48 and the same model loses 12.93%. That
-301-fold step is why the bend looked mechanical: it sits almost exactly where
-random inheritance stops being survivable.
+Below the bend the median plasmid carries 5.59 copies and above it 1.48.
+Putting those two medians through the binomial segregation model gives 0.043%
+and 12.93%, a 301-fold ratio, and that is why the bend looked mechanical.
+
+**It is a ratio of two point evaluations, not a comparison of group loss
+rates.** The loss rate of a group is the average of a convex function over
+its copy-number distribution, which by Jensen's inequality exceeds the
+function evaluated at the average — the point this repository's own
+`copy-number-and-loss-rate` figure exists to make. Applying it to two medians
+is arithmetic we can do; it does not estimate what either group loses, and it
+does not establish that a lineage above the bend cannot persist.
 
 It is still a boundary between kinds of plasmid rather than a point an
 individual plasmid crosses as it grows. If the threshold means anything
@@ -152,14 +173,16 @@ would travel to a new sample.
 
 **A number that replicates is not thereby a measurement of the same thing.**
 
-And a test that cannot return the other answer is not thereby evidence.
+And a test that cannot return the other answer is not thereby evidence —
+which this report has now had to learn twice about its own tests.
 
 ## Claims ledger
 
 | claim | status | the strongest version the evidence would not support |
 |---|---|---|
-| Most of the segmented preference is between-family: holding the bend at 1.73% and absorbing family intercepts takes ΔAIC from −148.1 to −19.4 | supported | That the bend is *entirely* between families. An earlier version of this report claimed that, on a test that re-fitted the bend in centred coordinates and so could not have shown otherwise. |
-| No second bend hides inside families once their means are removed: ΔAIC −1.3, where a planted break of the pooled size is recovered at −45 | supported | That the bend at 1.73% disappears under adjustment. It does not; this is a different question. |
+| Adjusting for family reduces the bend's magnitude by 29%, from a slope change of +0.533 to +0.380, and ΔAIC from −148.1 to −19.4 | supported | That families explain *most* of the bend. The 87% ΔAIC drop is a drop in evidence, not a variance share. |
+| The centre-and-rescan test (ΔAIC −1.3) cannot distinguish no bend from a real shared threshold | supported | Anything about whether a bend is present. A simulation with a true shared threshold returns a positive ΔAIC from the same test. |
+| All three families that prefer a bend flatten in the same direction as the pooled fit | supported | That this shows the bend is biological; three families, the thinnest side of one holding six plasmids. |
 | The residual bend is evidence of a replication-size transition | **not supported** | These data cannot separate it from within-lineage curvature, PTU misclassification, the PCN ≥ 1 truncation or sampling bias. The adjusted model prefers a bend at 0.84%. |
 | 95.3% of the variance in log relative size is between families | supported | That families are biologically discrete. It is a decomposition on predicted labels. |
 | The PCN < 1 exclusion is a one-sided truncation that flattens the exponent monotonically | supported | That the authors' published exponent is wrong. It is conditional on a cut they stated. |

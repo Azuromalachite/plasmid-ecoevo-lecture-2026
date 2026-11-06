@@ -306,23 +306,68 @@ def main() -> int:
     print(f"    family-centred dAIC {d_aic_c:+5.1f}   slopes"
           f" {loc:+.3f} then {hic:+.3f}   (single line {kc:+.3f})")
 
-    # Could the centred test have SEEN a break? Centring removes most of the
-    # x-range, so a null result might be blindness rather than absence.
-    # Inject a break of exactly the pooled magnitude and try to recover it.
+    # WHAT THIS CHECK USED TO DO, AND WHY IT WAS WRONG.
+    #
+    # It injected a break at a common CENTRED coordinate, recovered it, and
+    # concluded the near-null rescan was an absence rather than blindness.
+    # But a real shared threshold sits at a common ORIGINAL size, and
+    # centring scatters that across families. So the old check validated the
+    # ability to detect something no biological threshold would look like.
+    #
+    # The replacement simulates data that DOES have a shared threshold and
+    # runs the rescan on it. If the rescan cannot tell that apart from no
+    # threshold, the rescan is uninformative and this says so.
+    def _sse_fe(cols, yv):
+        M = np.column_stack(cols)
+        beta, *_ = np.linalg.lstsq(M, yv, rcond=None)
+        return float(((yv - M @ beta) ** 2).sum()), beta
+
     delta = hi - lo
-    power = []
-    for q in (0.25, 0.50, 0.75):
-        c0 = float(np.quantile(cx, q))
-        inj = cy + delta * np.maximum(cx - c0, 0.0)
-        s1 = float(((inj - np.polyval(np.polyfit(cx, inj, 1), cx)) ** 2).sum())
-        _, _, _, s2 = best_hinge(cx, inj)
-        power.append({"quantile": q, "knee": c0,
-                      "delta_aic": aic(s2, nc, 4) - aic(s1, nc, 2)})
-    print(f"    power check: inject the pooled break ({delta:+.3f}) into the"
-          f" centred data")
-    for p in power:
-        print(f"      at q={p['quantile']:.2f}  dAIC {p['delta_aic']:+9.1f}"
-              f"   {'recovered' if p['delta_aic'] < -10 else 'NOT recovered'}")
+    rng = np.random.default_rng(11)
+    sx, sy, sg = [], [], []
+    for j in range(116):
+        band = rng.uniform(float(np.quantile(xn, .02)),
+                           float(np.quantile(xn, .90)))
+        xf = band + rng.normal(0, 0.12, 34)
+        sy.append(rng.normal(0.6, 0.45) + lo * xf
+                  + delta * np.maximum(xf - c, 0.0) + rng.normal(0, 0.25, 34))
+        sx.append(xf)
+        sg += [j] * 34
+    sx = np.concatenate(sx); sy = np.concatenate(sy); sg = np.array(sg)
+    ns = len(sx)
+
+    def _dm(v, g):
+        o = np.empty_like(v, dtype=float)
+        for q in np.unique(g):
+            m = g == q
+            o[m] = v[m] - v[m].mean()
+        return o
+
+    sse_p = float(((sy - np.polyval(np.polyfit(sx, sy, 1), sx)) ** 2).sum())
+    _, _, _, sse_ps = best_hinge(sx, sy)
+    d_sim_pooled = aic(sse_ps, ns, 4) - aic(sse_p, ns, 2)
+
+    sxd, syd = _dm(sx, sg), _dm(sy, sg)
+    sse_c1 = float(((syd - np.polyval(np.polyfit(sxd, syd, 1), sxd)) ** 2).sum())
+    _, _, _, sse_c2 = best_hinge(sxd, syd)
+    d_sim_rescan = aic(sse_c2, ns, 4) - aic(sse_c1, ns, 2)
+
+    szd = _dm(np.maximum(sx - c, 0.0), sg)
+    a1, _ = _sse_fe([sxd], syd)
+    a2, _ = _sse_fe([sxd, szd], syd)
+    d_sim_fe = aic(a2, ns, 116 + 3) - aic(a1, ns, 116 + 2)
+
+    power = {"what": "simulated data WITH a shared threshold at the fitted "
+                     "knee, 116 families in narrow size bands",
+             "pooled_delta_aic": d_sim_pooled,
+             "rescan_delta_aic": d_sim_rescan,
+             "fixed_effects_delta_aic": d_sim_fe}
+    print("    can the rescan see a REAL shared threshold? (simulation)")
+    print(f"      pooled on simulated data      dAIC {d_sim_pooled:+8.1f}")
+    print(f"      centre-and-rescan             dAIC {d_sim_rescan:+8.1f}"
+          f"   <- misses it")
+    print(f"      knee held at the truth        dAIC {d_sim_fe:+8.1f}")
+    print("      -> a near-null rescan is NOT evidence of absence")
 
     # --- 6b. the test section 6 should have run ----------------------------
     # Centring x and y within PTU and then RESCANNING for a knee asks "is
@@ -352,13 +397,8 @@ def main() -> int:
     yd2, xd2, zd2 = (_demean(yk, gk), _demean(xk, gk), _demean(zk, gk))
     nk = len(xk)
 
-    def _sse(cols, yv):
-        M = np.column_stack(cols)
-        beta, *_ = np.linalg.lstsq(M, yv, rcond=None)
-        return float(((yv - M @ beta) ** 2).sum()), beta
-
-    sse_fe1, b_fe1 = _sse([xd2], yd2)
-    sse_fe2, b_fe2 = _sse([xd2, zd2], yd2)
+    sse_fe1, b_fe1 = _sse_fe([xd2], yd2)
+    sse_fe2, b_fe2 = _sse_fe([xd2, zd2], yd2)
     n_ptu = len(np.unique(gk))
     d_fixed = (aic(sse_fe2, nk, n_ptu + 3) - aic(sse_fe1, nk, n_ptu + 2))
 
@@ -377,7 +417,7 @@ def main() -> int:
     # Where does the adjusted model want the knee?
     best_fe = None
     for cc in np.linspace(np.quantile(xk, 0.05), np.quantile(xk, 0.95), 400):
-        s, b = _sse([xd2, _demean(np.maximum(xk - cc, 0.0), gk)], yd2)
+        s, b = _sse_fe([xd2, _demean(np.maximum(xk - cc, 0.0), gk)], yd2)
         if best_fe is None or s < best_fe[0]:
             best_fe = (s, cc, b)
     sse_fe3, c_fe, b_fe3 = best_fe
@@ -392,8 +432,8 @@ def main() -> int:
         m = ~np.isin(gk, drop)
         g2, x2, y2 = gk[m], xk[m], yk[m]
         z2 = np.maximum(x2 - c, 0.0)
-        a1, _ = _sse([_demean(x2, g2)], _demean(y2, g2))
-        a2, ab = _sse([_demean(x2, g2), _demean(z2, g2)], _demean(y2, g2))
+        a1, _ = _sse_fe([_demean(x2, g2)], _demean(y2, g2))
+        a2, ab = _sse_fe([_demean(x2, g2), _demean(z2, g2)], _demean(y2, g2))
         n2, k2 = len(x2), len(np.unique(g2))
         loo.append({"excluded": drop, "n": n2,
                     "delta_aic": aic(a2, n2, k2 + 3) - aic(a1, n2, k2 + 2),

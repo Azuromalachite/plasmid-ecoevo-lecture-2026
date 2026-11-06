@@ -72,7 +72,7 @@ PLANTED = "bluish_green"   # the rescan question and its controls
 CENTRED = "bluish_green"  # same block as its controls
 FIXED = "vermillion"      # the test that answers the question
 
-W, H = 760, 386
+W, H = 800, 386
 X0, X1 = 250, 720          # plot area
 TOP = 60
 ROW_H, BAR_H = 38, 20
@@ -86,14 +86,17 @@ def load():
     d = json.loads(RECEIPT.read_text(encoding="utf-8"))
     seg, mix = d["segmented"], d["break_or_mixture"]
     fe = mix["fixed_knee_ptu_fixed_effects"]
-    rows = [("Pooled, as published", mix["pooled_delta_aic"], POOLED, True),
-            ("Knee fixed, family absorbed", fe["delta_aic"], FIXED, True),
-            ("Family-centred, knee re-fitted",
-             mix["family_centred_delta_aic"], CENTRED, True)]
-    for p in mix["power_check"]:
-        pct = int(round(p["quantile"] * 100))
-        rows.append((f"   planted control, {pct}th pct", p["delta_aic"],
-                     PLANTED, False))
+    sim = mix["power_check"]
+    rows = [
+        ("Pooled, as published", mix["pooled_delta_aic"], POOLED, True),
+        ("Knee fixed, family absorbed", fe["delta_aic"], FIXED, True),
+        ("Knee re-fitted after centring",
+         mix["family_centred_delta_aic"], CENTRED, True),
+        ("  simulated threshold, knee held",
+         sim["fixed_effects_delta_aic"], FIXED, False),
+        ("  simulated threshold, re-fitted",
+         sim["rescan_delta_aic"], CENTRED, False),
+    ]
     return d, seg, mix, rows
 
 
@@ -108,10 +111,15 @@ def build():
         sys.exit("receipt records a run against an unexpected input; "
                  "re-run reproduce.py before building this figure")
 
-    span = max(abs(v) for _, v, _, _ in rows)
-    top = 40 * (int(span // 40) + 1)          # round the axis up to a tick
+    # The axis now has to carry a POSITIVE value as well: the rescan misses
+    # the simulated threshold and scores above zero. Zero therefore sits
+    # inside the plot rather than at its left edge.
+    lo_v = min(0.0, min(v for _, v, _, _ in rows))
+    hi_v = max(0.0, max(v for _, v, _, _ in rows))
+    top = 40 * (int(abs(lo_v) // 40) + 1)
+    pos = 10 * (int(hi_v // 10) + 1)
     def x(v):
-        return X0 + abs(v) / top * (X1 - X0)
+        return X0 + (v + top) / (top + pos) * (X1 - X0)
 
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
          f'viewBox="0 0 {W} {H}" font-family="Helvetica,Arial,sans-serif" '
@@ -128,41 +136,50 @@ def build():
          f'<rect width="{W}" height="{H}" fill="{pal.PAPER}"/>']
 
     s.append(f'<text x="24" y="30" font-size="15" font-weight="bold" '
-             f'fill="{pal.INK}">Most of the bend is between families, not all of it</text>')
+             f'fill="{pal.INK}">The rescan misses a threshold the adjusted fit finds</text>')
     s.append(f'<text x="24" y="48" font-size="12" fill="{pal.MUTED}">'
              f'&#916;AIC, two segments minus one line. More negative is '
              f'stronger evidence for a bend.</text>')
 
     # gridlines, zero emphasised
-    for t in range(0, top + 1, 40):
-        gx = X0 + t / top * (X1 - X0)
+    ticks = list(range(-top, int(pos) + 1, 40))
+    for t in ticks:
+        gx = x(t)
         s.append(f'<line x1="{gx:.1f}" y1="{TOP - 10}" x2="{gx:.1f}" '
                  f'y2="{TOP + len(rows) * ROW_H - 4}" stroke="{pal.RULE}" '
                  f'stroke-width="1"/>')
+        lab = "0" if t == 0 else (("&#8722;" + str(abs(t))) if t < 0
+                                  else "+" + str(t))
         s.append(f'<text x="{gx:.1f}" y="{TOP + len(rows) * ROW_H + 14}" '
                  f'font-size="11" fill="{pal.MUTED}" text-anchor="middle">'
-                 f'{"0" if t == 0 else "&#8722;" + str(t)}</text>')
-    s.append(f'<line x1="{X0}" y1="{TOP - 10}" x2="{X0}" '
+                 f'{lab}</text>')
+    zx = x(0.0)
+    s.append(f'<line x1="{zx:.1f}" y1="{TOP - 10}" x2="{zx:.1f}" '
              f'y2="{TOP + len(rows) * ROW_H - 4}" stroke="{pal.MUTED}" '
              f'stroke-width="2"/>')
 
     for i, (label, val, role, strong) in enumerate(rows):
         cy = TOP + i * ROW_H
-        w = x(val) - X0
+        bx = min(x(0.0), x(val))
+        w = abs(x(val) - x(0.0))
         s.append(f'<text x="{X0 - 12}" y="{cy + 14}" font-size="12" '
                  f'text-anchor="end" fill="{pal.INK}"'
                  f'{" font-weight=\"bold\"" if strong else ""}>'
                  f'{esc(label)}</text>')
-        s.append(f'<rect x="{X0}" y="{cy}" width="{max(w, 2):.1f}" '
+        s.append(f'<rect x="{bx:.1f}" y="{cy}" width="{max(w, 2):.1f}" '
                  f'height="{BAR_H}" rx="3" fill="{pal.OKABE_ITO[role]}"/>')
         # value label: inside the bar when it fits, otherwise just past its end
-        txt = f'&#8722;{abs(val):.1f}'
+        # Never hardcode the sign. Every value is negative today, so
+        # a literal minus with abs() was right by luck and would have
+        # rendered a positive dAIC -- a model preference REVERSED --
+        # as negative.
+        txt = ('&#8722;' if val < 0 else '+') + f'{abs(val):.1f}'
         if w > 60:
-            s.append(f'<text x="{X0 + w - 8:.1f}" y="{cy + 14}" font-size="12" '
+            s.append(f'<text x="{bx + w - 8:.1f}" y="{cy + 14}" font-size="12" '
                      f'text-anchor="end" fill="#ffffff" font-weight="bold">'
                      f'{txt}</text>')
         else:
-            s.append(f'<text x="{X0 + w + 8:.1f}" y="{cy + 14}" font-size="12" '
+            s.append(f'<text x="{bx + w + 8:.1f}" y="{cy + 14}" font-size="12" '
                      f'fill="{pal.INK}" font-weight="bold">{txt}</text>')
 
     base = TOP + len(rows) * ROW_H - 4

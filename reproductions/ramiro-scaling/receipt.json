@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-06T08:12:38+00:00",
+  "generated_utc": "2026-11-06T19:18:00+00:00",
   "status": "COMPLETED",
   "scope": "independent reanalysis of a curated author subset; NOT a reproduction of any published figure",
   "source": {
@@ -160,23 +160,12 @@
     "family_centred_slope_below": -0.35649285479859383,
     "family_centred_slope_above": -0.5976578650059986,
     "injected_break_magnitude": 0.5330006045774575,
-    "power_check": [
-      {
-        "quantile": 0.25,
-        "knee": -0.05655470519454203,
-        "delta_aic": -45.17969152304613
-      },
-      {
-        "quantile": 0.5,
-        "knee": -0.001317437389621312,
-        "delta_aic": -45.084596266688095
-      },
-      {
-        "quantile": 0.75,
-        "knee": 0.055379850905455164,
-        "delta_aic": -33.6396691705304
-      }
-    ],
+    "power_check": {
+      "what": "simulated data WITH a shared threshold at the fitted knee, 116 families in narrow size bands",
+      "pooled_delta_aic": -5.194103152309253,
+      "rescan_delta_aic": 3.0976505742692098,
+      "fixed_effects_delta_aic": -11.938066936847463
+    },
     "per_family": [
       {
         "ptu": "PTU-FE",
