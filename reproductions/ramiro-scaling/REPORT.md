@@ -1,25 +1,25 @@
-# Most of the bend survives its families
+# Most of the bend survives its PTUs
 
 A scaling threshold that replicated another lab's number to within a tenth of
-a percentage point is partly a fact about which plasmid families exist — but
+a percentage point is partly a fact about which plasmid PTUs exist — but
 only partly, and less than this report has twice claimed.
 
 > **Corrections.** This claim has been revised twice, in opposite
 > directions, and the history is kept because it is the evidence for how much
 > weight it will bear.
 >
-> *6 November.* The report first said the bend was a between-family effect
+> *6 November.* The report first said the bend was a between-PTU effect
 > and nothing more. The test behind that centred plasmid size within each
-> family and then searched for a *new* bend — a different question. Holding
-> the bend where the pooled fit put it and absorbing family intercepts gives
+> PTU and then searched for a *new* bend — a different question. Holding
+> the bend where the pooled fit put it and absorbing PTU intercepts gives
 > ΔAIC −19.4, not −1.3.
 >
 > *7 November.* The replacement then said *most* of the bend was between
-> families, on the strength of ΔAIC falling 87%. ΔAIC is not a share of
+> PTUs, on the strength of ΔAIC falling 87%. ΔAIC is not a share of
 > anything. The bend's magnitude — the change in slope — falls only 29%, so
-> roughly seven tenths of it survives adjusting for family. Two further
+> roughly seven tenths of it survives adjusting for PTU. Two further
 > errors went with it: the near-null rescan was called an absence when a
-> simulation shows it misses a real shared threshold, and the families that
+> simulation shows it misses a real shared threshold, and the PTUs that
 > prefer a bend were said to disagree in direction when all three agree.
 
 > **This file is the argument. [`RESULTS.md`](RESULTS.md) is the record.**
@@ -41,49 +41,49 @@ from a different sample with a different coverage estimator, put their bend at
 **1.84%**. Two labs, two pipelines, one number.
 
 That agreement was the most quotable thing in `RESULTS.md` §3, and it is what
-this report is about. Plasmids come in families; families have characteristic
-sizes; families have characteristic copy numbers. A bend can appear in pooled
-data simply because the families change over along the size axis, with no
-threshold anywhere. The dataset already carries family labels, so the two
+this report is about. Plasmids come in PTUs; PTUs have characteristic
+sizes; PTUs have characteristic copy numbers. A bend can appear in pooled
+data simply because the PTUs change over along the size axis, with no
+threshold anywhere. The dataset already carries PTU labels, so the two
 explanations can be told apart.
 
 ## The test
 
-A real threshold is a **within-family** phenomenon: a family spanning it
-should bend. A composition effect is purely **between-family**: remove each
-family's own mean and the bend leaves with it.
+A real threshold is a **within-PTU** phenomenon: a PTU spanning it
+should bend. A composition effect is purely **between-PTU**: remove each
+PTU's own mean and the bend leaves with it.
 
 ![Bar chart of delta AIC. Pooled, the two-segment fit beats a single line by
-148.1. Centred on plasmid family it beats it by 1.3. Three breaks of the
+148.1. Centred on plasmid PTU it beats it by 1.3. Three breaks of the
 pooled magnitude planted into the centred data are recovered by the same test
-at 45.2, 45.1 and 33.6.](../../figures/output/breakpoint-is-between-families.svg)
+at 45.2, 45.1 and 33.6.](../../figures/output/breakpoint-is-between-PTUs.svg)
 
 | fit | ΔAIC | slope below | slope above |
 |---|---:|---:|---:|
 | Pooled, as published | **−148.1** | −0.683 | −0.150 |
-| **Bend held at 1.73%, family as a fixed effect** | **−19.4** | **−0.499** | **−0.119** |
-| Family-centred, bend re-fitted | −1.3 | −0.356 | −0.598 |
+| **Bend held at 1.73%, PTU as a fixed effect** | **−19.4** | **−0.499** | **−0.119** |
+| PTU-centred, bend re-fitted | −1.3 | −0.356 | −0.598 |
 
 ΔAIC is AIC(segmented) − AIC(single line), so negative favours the bend.
 
 The middle row is the test that answers the question. Centring size within
-each family moves the 1.73% mark to a different coordinate for every family,
+each PTU moves the 1.73% mark to a different coordinate for every PTU,
 so re-fitting a bend afterwards asks whether *any* kink hides inside
-families — a reasonable question, answered no, and not the one the headline
-was making. Holding the bend fixed and absorbing one intercept per family
-keeps the mark where it was. Thirty-eight of the 116 families straddle it,
+PTUs — a reasonable question, answered no, and not the one the headline
+was making. Holding the bend fixed and absorbing one intercept per PTU
+keeps the mark where it was. Thirty-eight of the 116 PTUs straddle it,
 holding 1,677 plasmids, so the test has something to work with.
 
 ΔAIC falls by 87%, but ΔAIC is a model-comparison statistic, not a share:
 the adjusted fit spends 116 parameters on intercepts while only 4.7% of the
-variation in size lies within families, so a large drop is expected either
+variation in size lies within PTUs, so a large drop is expected either
 way. The quantity that measures the bend is the change in slope, and it falls
 from **+0.533** to **+0.380** — **29%**. About seven tenths of the bend
 survives.
 
 The single-slope exponent moves too, from −0.620 pooled to **−0.399** once
-families are absorbed, so roughly a third of the headline exponent is also a
-between-family effect.
+PTUs are absorbed, so roughly a third of the headline exponent is also a
+between-PTU effect.
 
 Two further things the adjusted model says. Allowed to choose its own bend,
 it puts it at **0.84%** of chromosome length, not 1.73% — an argument against
@@ -95,7 +95,11 @@ is not one lineage's doing.
 
 A null is only worth reading if the test could have returned something else.
 Centring strips out most of the variation in plasmid size — **95.3%** of the
-variance in log relative size lies between families, only **4.7%** within —
+variance in log relative size lies between PTUs, only **4.7%** within. That
+is their medians being far apart rather than each PTU being narrow: across
+the 116 PTUs with three or more plasmids the median interquartile ratio is
+**1.26×**, but the median full range is **2.12×** and fourteen span more
+than tenfold, PTU-Lab50 by a factor of 95 —
 so the first objection is that the test went blind.
 
 It did not. A break of the pooled magnitude (a slope change of +0.533) was
@@ -111,13 +115,13 @@ re-run:
 With 4.7% of the variance left, a bend that size still registers at about −45.
 We observed −1.3.
 
-## What the families say one at a time
+## What the PTUs say one at a time
 
-Nine families carry at least five plasmids on each side of the fitted
+Nine PTUs carry at least five plasmids on each side of the fitted
 breakpoint. Three prefer a bend, and **all three flatten in the same direction as the
 pooled fit** — PTU-FK +0.561, PTU-Bac45 +1.111, PTU-E64 +0.812, against a
 pooled +0.533. An earlier version of this report said their directions
-disagreed, citing two families that do not prefer a bend at all. They
+disagreed, citing two PTUs that do not prefer a bend at all. They
 agree. The full
 table is in [`RESULTS.md`](RESULTS.md) §5.
 
@@ -136,11 +140,11 @@ than independent, so the nominal comparison flatters itself in both
 directions. The disagreement among those three bends is better read as
 small-sample noise than as nine lineages behaving differently.
 
-## Why families do this
+## Why PTUs do this
 
-Families occupy narrow size bands, and within a band copy number is fairly consistent. Pool several hundred such bands and the pooled curve bends where they hand over, whether or not anything bends inside them. That is the composition effect, and it accounts for about a third of this bend.
+PTUs occupy narrow size bands, and within a band copy number is fairly consistent. Pool several hundred such bands and the pooled curve bends where they hand over, whether or not anything bends inside them. That is the composition effect, and it accounts for about a third of this bend.
 
-The tempting next sentence is that a plasmid family *is* a replication and maintenance architecture which fixes both size and copy number. An earlier version of this file said exactly that. Nothing here measured it: the grouping variable is a predicted plasmid taxonomic unit, assigned from whole-sequence relatedness, and these data carry no replicon typing, no copy-number control genes and no partitioning systems. The mechanism is a plausible reason for the pattern, not a finding.
+The tempting next sentence is that a PTU *is* a replication and maintenance architecture which fixes both size and copy number. An earlier version of this file said exactly that. Nothing here measured it: the grouping variable is a predicted plasmid taxonomic unit, assigned from whole-sequence relatedness, and these data carry no replicon typing, no copy-number control genes and no partitioning systems. The mechanism is a plausible reason for the pattern, not a finding.
 
 ## What it costs the headline
 
@@ -158,13 +162,13 @@ does not establish that a lineage above the bend cannot persist.
 
 It is still a boundary between kinds of plasmid rather than a point an
 individual plasmid crosses as it grows. If the threshold means anything
-biologically, it acts on families over evolutionary time — which families
+biologically, it acts on PTUs over evolutionary time — which PTUs
 exist, and which persist — not on a plasmid working its way up a size
 gradient.
 
 That reframes the agreement with Maddamsetti. Two enterobacteria-dominated
-sequencing archives plausibly share a family composition. Two numbers agreeing
-because the same families dominate both samples is a different claim from two
+sequencing archives plausibly share a PTU composition. Two numbers agreeing
+because the same PTUs dominate both samples is a different claim from two
 numbers agreeing because they measure the same constant, and only the second
 would travel to a new sample.
 
@@ -177,11 +181,11 @@ which this report has now had to learn twice about its own tests.
 
 | claim | status | the strongest version the evidence would not support |
 |---|---|---|
-| Adjusting for family reduces the bend's magnitude by 29%, from a slope change of +0.533 to +0.380, and ΔAIC from −148.1 to −19.4 | supported | That families explain *most* of the bend. The 87% ΔAIC drop is a drop in evidence, not a variance share. |
+| Adjusting for PTU reduces the bend's magnitude by 29%, from a slope change of +0.533 to +0.380, and ΔAIC from −148.1 to −19.4 | supported | That PTUs explain *most* of the bend. The 87% ΔAIC drop is a drop in evidence, not a variance share. |
 | The centre-and-rescan test (ΔAIC −1.3) cannot distinguish no bend from a real shared threshold | supported | Anything about whether a bend is present. A simulation with a true shared threshold returns a positive ΔAIC from the same test. |
-| All three families that prefer a bend flatten in the same direction as the pooled fit | supported | That this shows the bend is biological; three families, the thinnest side of one holding six plasmids. |
+| All three PTUs that prefer a bend flatten in the same direction as the pooled fit | supported | That this shows the bend is biological; three PTUs, the thinnest side of one holding six plasmids. |
 | The residual bend is evidence of a replication-size transition | **not supported** | These data cannot separate it from within-lineage curvature, PTU misclassification, the PCN ≥ 1 truncation or sampling bias. The adjusted model prefers a bend at 0.84%. |
-| 95.3% of the variance in log relative size is between families | supported | That families are biologically discrete. It is a decomposition on predicted labels. |
+| 95.3% of the variance in log relative size is between PTUs | supported | That PTUs are biologically discrete. It is a decomposition on predicted labels. |
 | The PCN < 1 exclusion is a one-sided truncation that flattens the exponent monotonically | supported | That the authors' published exponent is wrong. It is conditional on a cut they stated. |
 | 1.73% and 1.84% are two different measurements landing 0.1 points apart | narrowed | "The breakpoint replicates." Different sample, estimator and filters, and the finding above gives a reason they might agree without a shared threshold. |
 | Median PCN 5.59 and 1.48 across the bend give 0.043% against 12.93% of daughters born plasmid-free | narrowed | That plasmid loss was measured. It is arithmetic on two medians of modelled point estimates, through a binomial model, with no interval available. |
@@ -201,8 +205,8 @@ Copy number is **modelled, not counted** — a sequencing-coverage ratio — and
 ships as a point estimate with no uncertainty. No claim above turns on a
 difference whose size could be swamped by an interval we cannot see. Plasmid
 taxonomic unit and mobility are likewise the authors' predictions, as their
-column names state. Noisy family assignment blurs families together and
-*weakens* the between-family signal, so misassignment works against the
+column names state. Noisy PTU assignment blurs PTUs together and
+*weakens* the between-PTU signal, so misassignment works against the
 central finding rather than manufacturing it.
 
 The analysis is ours, not the authors': per-genus slopes on PTU-level medians,
@@ -236,7 +240,7 @@ record can be recovered from them is an open question and the obvious next
 check.
 
 Every plasmid here was sequenced, assembled and binned, and copy number
-affects all three. Whether the family-level pattern is itself selected, or
+affects all three. Whether the PTU-level pattern is itself selected, or
 inherited from replicon architecture, these data cannot say.
 
 ## Figure

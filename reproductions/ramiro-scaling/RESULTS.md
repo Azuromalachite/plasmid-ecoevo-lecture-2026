@@ -137,19 +137,19 @@ machinery has to take over** — and that is the same threshold Effe et al.
 to 549 with ParAB plus a toxin-antitoxin system.
 
 This is a hypothesis the coincidence suggests, not a result these data
-establish. Replicon family annotation turned out to be present already, and
+establish. Replicon PTU annotation turned out to be present already, and
 §5 uses it; maintenance-gene annotation is still absent, and the mechanistic
 half of the hypothesis still rests on it. What §5 changes is the level the
-threshold would have to act on: families over evolutionary time, not
+threshold would have to act on: PTUs over evolutionary time, not
 plasmids along a size gradient.
 See [`../../concepts/random-segregation-is-not-a-floor.md`](../../concepts/random-segregation-is-not-a-floor.md).
 
-## 5. Most of the bend survives its families
+## 5. Most of the bend survives its PTUs
 
 §3 and §4 both treat the breakpoint as a threshold on plasmid size. The
 caveat below used to say that a mixture of replicon families with different
 characteristic copy numbers would produce the same segmented preference, and
-that separating the two needed family-level annotation.
+that separating the two needed PTU-level annotation.
 
 The annotation is in the file. `Predicted_ptu` is a plasmid taxonomic unit,
 139 of them. A PTU is **not** the same thing as a replicon family — the two
@@ -158,45 +158,45 @@ authors assign replicon types to far more plasmids than they assign named
 PTUs. A PTU is the nearest thing to a plasmid species, which is what this
 test needs.
 
-The two hypotheses differ in one place: **a real break is a within-family
-phenomenon**, and a family spanning the threshold should kink. A mixture is
-purely between-family.
+The two hypotheses differ in one place: **a real break is a within-PTU
+phenomenon**, and a PTU spanning the threshold should kink. A mixture is
+purely between-PTU.
 
 | fit | ΔAIC | slopes |
 |---|---:|---|
 | pooled, as in §3 | **−148.1** | −0.683 then −0.150 |
 | **knee held at 1.73%, PTU as a fixed effect** | **−19.4** | **−0.499 then −0.119** |
-| family-centred, knee rescanned | −1.3 | −0.356 then −0.598 |
+| PTU-centred, knee rescanned | −1.3 | −0.356 then −0.598 |
 
 **The second row is the one that answers the question, and an earlier version
 of this section reported only the third.** Centring *x* and *y* within PTU and
 then rescanning for a knee asks whether there is a kink anywhere in the
-within-family relationship. It does not ask whether the kink at 1.73% of
-chromosome length survives adjusting for family, because subtracting a
-different mean from each family means a fixed plasmid size no longer maps to
+within-PTU relationship. It does not ask whether the kink at 1.73% of
+chromosome length survives adjusting for PTU, because subtracting a
+different mean from each PTU means a fixed plasmid size no longer maps to
 one centred *x*. Holding the knee fixed and absorbing PTU intercepts — the
 within-transform applied to *y*, *x* **and** the hinge term, which is the step
 the rescan omits — gives ΔAIC −19.4, not −1.3.
 
-Thirty-eight of the 116 families straddle the knee, holding 1,677 records, so
-the hinge is identified within families rather than being an artefact of
+Thirty-eight of the 116 PTUs straddle the knee, holding 1,677 records, so
+the hinge is identified within PTUs rather than being an artefact of
 collinearity.
 
 The preference weakens by most of its magnitude and does not disappear. The single-slope exponent moves with it, from
-−0.620 pooled to **−0.399** once families are centred — so a third of the
-headline exponent in §1 is also a between-family effect.
+−0.620 pooled to **−0.399** once PTUs are centred — so a third of the
+headline exponent in §1 is also a between-PTU effect.
 
 **Those two reductions are not the same quantity, and an earlier version of
 this section leaned on the wrong one.** ΔAIC falls 87%, but ΔAIC is a
 model-comparison statistic, not a share of anything: the adjusted fit also
 spends 116 parameters on intercepts while only 4.7% of the variance in size
-lies within families, so a large drop is expected whether or not the bend is
+lies within PTUs, so a large drop is expected whether or not the bend is
 real. The quantity that measures the bend is the change in slope, and it
 falls from **+0.533** to **+0.380** — a **29%** reduction. Roughly seven
-tenths of the bend's magnitude survives adjusting for family.
+tenths of the bend's magnitude survives adjusting for PTU.
 
 So the honest summary is close to the opposite of what this section first
-said. Families account for something like a third of the bend, not most of
+said. PTUs account for something like a third of the bend, not most of
 it; what collapses under adjustment is the *evidence*, not the *effect*.
 
 Two things still qualify it. Allowed to choose, the adjusted model puts its
@@ -211,12 +211,12 @@ section claimed the opposite.** It argued that a near-null rescan was an
 absence rather than blindness, on the strength of breaks injected into the
 centred data and recovered at ΔAIC ≈ −45. But those breaks were injected at
 a common *centred* coordinate. A real shared threshold sits at a common
-*original* size, which centring scatters across families, so the controls
+*original* size, which centring scatters across PTUs, so the controls
 validated the detection of something no biological threshold would look
 like.
 
 `reproduce.py` now simulates data that genuinely has a shared threshold —
-116 families in narrow size bands, a true bend at the fitted knee — and runs
+116 PTUs in narrow size bands, a true bend at the fitted knee — and runs
 the rescan on it. The rescan returns a **positive** ΔAIC: it misses a bend
 that is really there, where the fixed-effects test with the knee held at the
 truth finds it. A near-null rescan therefore says nothing either way, and
@@ -240,7 +240,7 @@ negative value favours the segmented model. The receipt records it under
 `delta_aic_segmented_minus_single`, and the single line is fitted with two
 parameters against the hinge's four.
 
-**How nine families were arrived at.** The file holds 3,961 records across 139
+**How nine PTUs were arrived at.** The file holds 3,961 records across 139
 PTU labels. 116 PTUs hold at least three records and supply the 3,930 used for
 centring; 23 hold one or two, 15 of them singletons, and the median PTU holds
 ten. Nine PTUs hold at least five records on **each** side of the fitted
@@ -248,22 +248,22 @@ breakpoint, and those nine hold 943 records — 23.8% of the file. The nine are
 therefore the largest, best-sampled, mostly Enterobacterales-associated
 lineages, not a sample of plasmid diversity.
 
-The per-family test is weak where it matters most. Taking the thinner side of
-each family: PTU-E64 has 6, PTU-E42 8, PTU-FK and PTU-FS 9 each, PTU-B/O/K/Z
+The per-PTU test is weak where it matters most. Taking the thinner side of
+each PTU: PTU-E64 has 6, PTU-E42 8, PTU-FK and PTU-FS 9 each, PTU-B/O/K/Z
 and PTU-Bac45 11, PTU-I1 22, PTU-E5 38 and PTU-FE 101. A hinge fitted across a
 side holding six points is nearly unconstrained, which is the likeliest reading
 of the disagreeing directions below. Records within a PTU are also related by
 descent, so they are not independent observations and the nominal AIC
 comparison flatters itself.
 
-Nine families have at least five records on each side of the fitted
+Nine PTUs have at least five records on each side of the fitted
 breakpoint. Three prefer a kink, and **all three flatten**, in the same direction as the
 pooled fit: PTU-FK +0.561, PTU-Bac45 +1.111, PTU-E64 +0.812, against a pooled
 +0.533. An earlier version of this section said their directions disagreed
 and cited PTU-FS and PTU-E5 as the evidence. Those two score −3.7 and −2.0
-and are not among the three; the sentence compared the wrong families. The
+and are not among the three; the sentence compared the wrong PTUs. The
 correction runs against the reading this document reaches, which is why it is
-stated plainly: within the families large enough to test it, the bend goes
+stated plainly: within the PTUs large enough to test it, the bend goes
 the same way it goes in the pooled data.
 
 ### What this means for §3 and §4
@@ -272,8 +272,8 @@ The arithmetic in §4 is untouched: median PCN really is 5.59 below the break
 and 1.48 above, a 301-fold step in daughters born plasmid-free.
 
 What changes is how much of the break is a property of plasmids and how much
-of the catalogue. Most of it is composition — small-plasmid families carry
-high copy number, large-plasmid families low, and each sits in its own narrow
+of the catalogue. Most of it is composition — small-plasmid PTUs carry
+high copy number, large-plasmid PTUs low, and each sits in its own narrow
 band. A residual bend survives that adjustment, and these data do not
 distinguish it from within-lineage curvature, PTU misclassification, the
 PCN ≥ 1 truncation or sampling bias. It is not evidence of a replication-size
@@ -282,10 +282,10 @@ transition; it is a reason not to have closed the question.
 The consequence for §3 is sharper, and it cuts against the most quotable
 claim in this document. A breakpoint agreeing with Maddamsetti's to within
 0.1 percentage points reads as independent confirmation of a physical
-constant. If both datasets are assembled from similar family compositions —
+constant. If both datasets are assembled from similar PTU compositions —
 and both are enterobacteria-dominated sequencing archives — then the
 agreement may be reporting a shared taxonomic makeup rather than a shared
-threshold. Distinguishing those needs the family composition of
+threshold. Distinguishing those needs the PTU composition of
 Maddamsetti's sample, which is not in these data.
 
 ## 6. The comparator dataset, and how to get it
@@ -350,7 +350,7 @@ separates the low-coverage artefact from the low-copy replicon.
 
 Everything above rests on one file, and three of its limitations trace to
 that single fact: no accession, so no join to anything; copy numbers below
-one already removed; and a family label whose relation to replication
+one already removed; and a PTU label whose relation to replication
 machinery this document had to concede was unmeasured.
 
 [COPLA2's RefSeq 224 reference database](https://castillo.dicom.unican.es/copla2/databases)
@@ -358,12 +358,12 @@ removes all three at once. It carries a RefSeq accession, a PTU, a
 **replicon type**, a MOB class and a host-range grade for 89,393 plasmids,
 and Maddamsetti's Supplementary Data 1 carries RefSeq accessions beside its
 copy numbers. **94.8% of his plasmids join**, giving 11,379 with copy number,
-size, family and replicon type together — nearly three times the Ramiro
+size, PTU and replicon type together — nearly three times the Ramiro
 subset, and keeping the 2,359 plasmids below one copy.
 [`copla_replication.py`](copla_replication.py) regenerates all of it and
 writes [`copla_receipt.json`](copla_receipt.json).
 
-### The bend replicates, and families absorb even less of it
+### The bend replicates, and PTUs absorb even less of it
 
 | | pooled | PTU absorbed | replicon absorbed | genus absorbed |
 |---|---:|---:|---:|---:|
@@ -374,13 +374,13 @@ writes [`copla_receipt.json`](copla_receipt.json).
 
 The pooled bend sits at **1.76%** of chromosome length on the full set and
 **1.62%** under the Ramiro copy-number filter, against 1.73% in the Ramiro
-subset and 1.84% published. Absorbing the family leaves ΔAIC at −66.1 and
+subset and 1.84% published. Absorbing the PTU leaves ΔAIC at −66.1 and
 −35.2 — the same sign, the same conclusion.
 
 What changes is the magnitude, and it moves **against** the composition
-reading. In the Ramiro subset the slope change fell 29% under family
+reading. In the Ramiro subset the slope change fell 29% under PTU
 adjustment. Here it falls **9%** on the full set and **16%** under the same
-copy-number filter. On the larger, accession-keyed sample, families account
+copy-number filter. On the larger, accession-keyed sample, PTUs account
 for less of the bend than §5 estimated, not more.
 
 ### A PTU is not a replicon family, now measured
@@ -401,16 +401,16 @@ bend at all (ΔAIC −1325.6 of −1392.2), so it is not host taxonomy either.
 ### What this does not fix
 
 Copy number is still modelled from coverage with no published uncertainty.
-Plasmids within a family are still related by descent, so the AIC comparisons
-still flatter themselves. Only 88 of 529 families straddle the knee, so the
-within-family hinge rests on a minority as it did before. And a replicon type
+Plasmids within a PTU are still related by descent, so the AIC comparisons
+still flatter themselves. Only 88 of 529 PTUs straddle the knee, so the
+within-PTU hinge rests on a minority as it did before. And a replicon type
 is an annotation, not an experiment — 58.3% of the joined plasmids carry one
 at all.
 
 One result here is odd enough to flag rather than interpret: after absorbing
 either grouping, the slope *above* the bend turns positive (+0.133 for PTU,
 +0.151 for replicon), meaning copy number rising with size among large
-plasmids within a family. That is not something this analysis predicted and
+plasmids within a PTU. That is not something this analysis predicted and
 it is not something these data explain.
 
 ## What this does not establish
@@ -428,8 +428,8 @@ it is not something these data explain.
   it is still upstream of every number here.
 - That the breakpoint is biological. This was listed here as untested; §5
   now tests it, and the mixture reading wins. What remains untested is
-  whether the family-level pattern — small families with high copy number,
-  large families with low — is itself selected or merely inherited from
+  whether the PTU-level pattern — small PTUs with high copy number,
+  large PTUs with low — is itself selected or merely inherited from
   replicon architecture.
 - That genera truly share an exponent. Q has modest power at nine groups;
   "no detected heterogeneity" is not proof of none.
