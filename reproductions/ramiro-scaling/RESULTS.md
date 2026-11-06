@@ -85,11 +85,31 @@ breakpoint lands within 0.1 percentage points. The upper slope agrees
 closely. **The authors' own data prefer the segmented model by a wide margin,
 and their paper fits a single power law.**
 
-The lower slopes differ (−0.68 against −0.88) and the PCN floor does **not**
-explain it: the floor barely touches small plasmids, where that segment
-lives. Multimapping treatment is a candidate — `pseuPIRA` incorporates
-ambiguous reads where `CoverM` trims — but settling it needs accession-matched
-comparison, which these data cannot provide.
+The lower slopes differ, −0.683 here against −0.880 there. An earlier
+version of this section argued that the PCN floor could not explain the gap,
+because the floor barely touches small plasmids, where that segment lives.
+That was an argument from the shape of *our* data, and it is wrong.
+
+Maddamsetti's Supplementary Data 1 is downloadable (§6) and keeps the
+plasmids below one copy that this subset excludes, so the floor can simply be
+applied to their file:
+
+| subset | n | bend | slope below | slope above |
+|---|---:|---:|---:|---:|
+| theirs, all plasmids | 12,006 | 1.84% | −0.879 | −0.125 |
+| **theirs, PCN ≥ 1 (our floor)** | 9,519 | **1.68%** | **−0.796** | **−0.143** |
+| ours, PCN ≥ 1 | 3,961 | 1.73% | −0.683 | −0.150 |
+
+The floor closes **about 42%** of the lower-slope gap and moves the bend and
+the upper slope toward ours as well. It does not close all of it, so
+something else — multimapping treatment is still a candidate, since `pseuPIRA`
+incorporates ambiguous reads where `CoverM` trims — accounts for the rest. But
+the first-order answer is the filter, not the estimator.
+
+This also deflates the agreement in the table above. Under a common floor
+their bend sits at 1.68% and ours at 1.73%, which is closer than the headline
+comparison; under no floor theirs is 1.84%. The two numbers being a tenth of
+a point apart was partly a coincidence of differing exclusions.
 
 **Read §5 before citing this section.** The breakpoint is real in the pooled
 data and it does land where Maddamsetti's does. It is not, however, a
@@ -240,6 +260,30 @@ and both are enterobacteria-dominated sequencing archives — then the
 agreement may be reporting a shared taxonomic makeup rather than a shared
 threshold. Distinguishing those needs the family composition of
 Maddamsetti's sample, which is not in these data.
+
+## 6. The comparator dataset, and how to get it
+
+Maddamsetti's per-plasmid table is **Supplementary Data 1**, served by the
+publisher at `static-content.springer.com`:
+
+```
+41467_2025_61205_MOESM3_ESM.csv     4,334,409 bytes
+sha256 131faa58f5528d814877cca9ffa8c3e56b41e92518385d740c1b7e530f2bc3a7
+16,861 replicons -> 12,006 plasmids, 22 columns
+```
+
+It carries `AnnotationAccession` and `SeqID`, so unlike the Ramiro modelling
+subset it can be joined to external annotation. PMC serves the same file
+behind a "Preparing to download" page that an automated request cannot pass;
+the publisher's own host does not. [`explore.ipynb`](explore.ipynb) fetches
+it, checks that hash, and reproduces their published figure from it: bend at
+1.84%, slopes −0.879 and −0.125, against their published 1.84%, −0.880 and
+−0.125.
+
+The single power law on the same file gives −0.717, which is the −0.71
+Shahzadi et al. (2026) report — they reuse these plasmids and these copy
+numbers, so the two papers are not independent samples and their agreement
+is not corroboration.
 
 ## What this does not establish
 
