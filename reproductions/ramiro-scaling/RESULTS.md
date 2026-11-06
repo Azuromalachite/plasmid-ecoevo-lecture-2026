@@ -312,6 +312,40 @@ Shahzadi et al. (2026) report — they reuse these plasmids and these copy
 numbers, so the two papers are not independent samples and their agreement
 is not corroboration.
 
+## 7. The two tails
+
+Maddamsetti's file keeps the plasmids below one copy that this subset
+excludes, and carries the coverage each estimate came from, so it is the one
+that can say what lives at the extremes. The two tails are nothing like each
+other.
+
+| | top 1% (n = 121, >= 132 copies) | below one copy (n = 2,487) |
+|---|---|---|
+| median length | 2,505 bp | 111,773 bp |
+| median % of chromosome | 0.056% | 2.566% |
+| median read coverage | 87.7x | **0.6x** |
+| called from under 5x | 0.8% | **95.5%** |
+| enriched genera | *Salmonella* 3.7x | *Agrobacterium* **25x**, *Paracoccus* 6.0x, *Pantoea* 5.6x, *Rhizobium* 5.1x |
+
+**The high tail is small and well measured**, and sits where the scaling
+relationship predicts rather than off it. Its extreme top is where to be most
+sceptical: two independent *Chlamydia psittaci* genomes put a 7.55 kb plasmid
+above 2,000 copies at more than 4,000x coverage, where that plasmid is
+normally described at single-digit copy number. Copy number is a ratio, and
+anything that depresses the chromosomal denominator inflates it.
+
+**The low tail is two populations wearing one label.** The first is a
+measurement problem: a ratio estimated from 0.6x coverage is barely an
+estimate. The second is real biology -- *Agrobacterium*, *Rhizobium*,
+*Paracoccus* and *Pantoea* carry large, genuinely low-copy secondary
+replicons, and a value slightly below one is what the measurement should give
+for a replicon held at one per chromosome in most of a culture.
+
+That bears directly on §3. The PCN >= 1 cut removes this whole population,
+and it accounts for about 42% of the slope difference between the two labs.
+What it removes is not a clean class, and no filter on copy number alone
+separates the low-coverage artefact from the low-copy replicon.
+
 ## What this does not establish
 
 - Nothing about Fig. 5A, which uses a different and larger dataset.
