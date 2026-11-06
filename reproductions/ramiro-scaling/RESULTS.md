@@ -91,6 +91,11 @@ lives. Multimapping treatment is a candidate — `pseuPIRA` incorporates
 ambiguous reads where `CoverM` trims — but settling it needs accession-matched
 comparison, which these data cannot provide.
 
+**Read §5 before citing this section.** The breakpoint is real in the pooled
+data and it does land where Maddamsetti's does. It is not, however, a
+threshold that individual plasmids cross, and that changes what the
+agreement between two datasets is evidence for.
+
 ## 4. What the threshold costs, in inheritance
 
 Computed through [`battle_royale.segregation`](../../models/copy-number-burden/battle_royale/segregation.py)
@@ -112,17 +117,84 @@ machinery has to take over** — and that is the same threshold Effe et al.
 to 549 with ParAB plus a toxin-antitoxin system.
 
 This is a hypothesis the coincidence suggests, not a result these data
-establish. Testing it needs replicon family and maintenance-gene annotation
-on the same plasmids, which is the obvious next step and is not done here.
+establish. Replicon family annotation turned out to be present already, and
+§5 uses it; maintenance-gene annotation is still absent, and the mechanistic
+half of the hypothesis still rests on it. What §5 changes is the level the
+threshold would have to act on: families over evolutionary time, not
+plasmids along a size gradient.
 See [`../../concepts/random-segregation-is-not-a-floor.md`](../../concepts/random-segregation-is-not-a-floor.md).
+
+## 5. The breakpoint is between families, not within them
+
+§3 and §4 both treat the breakpoint as a threshold on plasmid size. The
+caveat below used to say that a mixture of replicon families with different
+characteristic copy numbers would produce the same segmented preference, and
+that separating the two needed family-level annotation.
+
+The annotation is in the file. `Predicted_ptu` is a plasmid taxonomic unit
+— 139 of them — and a PTU is a replicon family. So the two hypotheses can be
+told apart, because they differ in one place: **a real break is a
+within-family phenomenon**, and a family spanning the threshold should kink.
+A mixture is purely between-family, and removing the family means removes
+it.
+
+| fit | ΔAIC | slopes |
+|---|---:|---|
+| pooled, as in §3 | **−148.1** | −0.683 then −0.150 |
+| family-centred | **−1.3** | −0.356 then −0.598 |
+
+The preference disappears. The single-slope exponent moves with it, from
+−0.620 pooled to **−0.399** once families are centred — so a third of the
+headline exponent in §1 is also a between-family effect.
+
+**This is absence, not blindness.** Centring removes most of the range in
+the predictor: 95.3% of the variance in log relative size lies between
+families, only 4.7% within, because families occupy narrow size bands. A
+null result on 4.7% of the variance invites the obvious objection. So the
+pooled break (a slope change of +0.533) was injected into the centred data
+and the same test re-run:
+
+| injected at | ΔAIC | |
+|---|---:|---|
+| 25th percentile | −45.2 | recovered |
+| 50th percentile | −45.1 | recovered |
+| 75th percentile | −33.6 | recovered |
+
+A break of that size would have been seen at ΔAIC ≈ −45. The observed value
+is −1.3.
+
+Nine families have at least five records on each side of the fitted
+breakpoint. Three prefer a kink, and the directions disagree — PTU-FS runs
++0.63 then −3.41, PTU-E5 −1.10 then +0.84, PTU-E64 −0.74 then +0.07. Only
+PTU-FK (n = 227) resembles the pooled shape. A shared physical threshold
+would not produce that scatter; small-sample hinge fitting does.
+
+### What this means for §3 and §4
+
+The arithmetic in §4 is untouched: median PCN really is 5.59 below the break
+and 1.48 above, a 301-fold step in daughters born plasmid-free. What changes
+is what the break *is*. Not a size at which an individual plasmid's
+inheritance stops working, but the point where the **composition of families
+changes over** — small-plasmid families carry high copy number, large-plasmid
+families low, and each sits in its own narrow band.
+
+The consequence for §3 is sharper, and it cuts against the most quotable
+claim in this document. A breakpoint agreeing with Maddamsetti's to within
+0.1 percentage points reads as independent confirmation of a physical
+constant. If both datasets are assembled from similar family compositions —
+and both are enterobacteria-dominated sequencing archives — then the
+agreement may be reporting a shared taxonomic makeup rather than a shared
+threshold. Distinguishing those needs the family composition of
+Maddamsetti's sample, which is not in these data.
 
 ## What this does not establish
 
 - Nothing about Fig. 5A, which uses a different and larger dataset.
-- That the breakpoint is biological. A segmented fit preferred by AIC on
-  pooled data is also what a *mixture* of replicon families with different
-  characteristic copy numbers would produce. Distinguishing those needs
-  family-level annotation and held-out prediction by family, not by row.
+- That the breakpoint is biological. This was listed here as untested; §5
+  now tests it, and the mixture reading wins. What remains untested is
+  whether the family-level pattern — small families with high copy number,
+  large families with low — is itself selected or merely inherited from
+  replicon architecture.
 - That genera truly share an exponent. Q has modest power at nine groups;
   "no detected heterogeneity" is not proof of none.
 - Any causal direction. Larger plasmids having lower copy number is a

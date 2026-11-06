@@ -1,12 +1,12 @@
 {
-  "generated_utc": "2026-11-06T00:15:51+00:00",
+  "generated_utc": "2026-11-06T07:06:20+00:00",
   "status": "COMPLETED",
   "scope": "independent reanalysis of a curated author subset; NOT a reproduction of any published figure",
   "source": {
     "url": "https://raw.githubusercontent.com/PaulaRamiro/NpAUREO/main/Model/curateddataset.csv",
-    "sha256": "059c924ab75dacb676664d00d2ce05d758f64a0366dcb6d2f0d64f9149b3c744",
+    "sha256": "23bee155b1c946bd565840c4cc0f5ac2e1fec6e4192578ba9f6752ee5f58f78f",
     "sha256_expected": "23bee155b1c946bd565840c4cc0f5ac2e1fec6e4192578ba9f6752ee5f58f78f",
-    "matches_expected": false,
+    "matches_expected": true,
     "rows_parsed": 3961,
     "rows_used": 3961
   },
@@ -15,49 +15,49 @@
       "genus": "Escherichia",
       "ptus": 57,
       "records": 1613,
-      "slope": -0.7412855686224801,
-      "se": 0.0458203062611644,
-      "r2": 0.826351051386808
+      "slope": -0.6453541345793651,
+      "se": 0.026296320725303374,
+      "r2": 0.9163231839360771
     },
     {
       "genus": "Klebsiella",
       "ptus": 59,
       "records": 1060,
-      "slope": -0.6734429470317866,
-      "se": 0.08670957692088123,
-      "r2": 0.5141528728730959
+      "slope": -0.5586044610174956,
+      "se": 0.05171346417274078,
+      "r2": 0.6718128232156158
     },
     {
       "genus": "Salmonella",
       "ptus": 35,
       "records": 282,
-      "slope": -0.9299073114162021,
-      "se": 0.12073338850664236,
-      "r2": 0.642560037054235
+      "slope": -0.6921349445176872,
+      "se": 0.05215993786378883,
+      "r2": 0.8421648801852016
     },
     {
       "genus": "Staphylococcus",
       "ptus": 15,
       "records": 282,
-      "slope": -0.9875294502939385,
-      "se": 0.22372766453593412,
-      "r2": 0.5997933699486198
+      "slope": -0.7957046040153576,
+      "se": 0.1156025298892762,
+      "r2": 0.7846868082478766
     },
     {
       "genus": "Enterococcus",
       "ptus": 12,
       "records": 243,
-      "slope": -0.9794253096199308,
-      "se": 0.23709604228662945,
-      "r2": 0.6305125458597102
+      "slope": -0.6770163435397448,
+      "se": 0.10508471952025791,
+      "r2": 0.8058508471908932
     },
     {
       "genus": "Enterobacter",
       "ptus": 33,
       "records": 193,
-      "slope": -0.9285055570606199,
-      "se": 0.12999541713243756,
-      "r2": 0.6220285040795968
+      "slope": -0.667367531102555,
+      "se": 0.061784677148495205,
+      "r2": 0.7900760432762597
     },
     {
       "genus": "Acinetobacter",
@@ -71,9 +71,9 @@
       "genus": "Bacillus",
       "ptus": 20,
       "records": 123,
-      "slope": -0.7378175555675167,
-      "se": 0.1828242095364261,
-      "r2": 0.4750136369160246
+      "slope": -0.5286063247360788,
+      "se": 0.11145348559564801,
+      "r2": 0.5554957909243354
     },
     {
       "genus": "Pseudomonas",
@@ -85,57 +85,57 @@
     }
   ],
   "homogeneity": {
-    "pooled_slope": -0.7531660047700601,
-    "pooled_se": 0.03288222183137693,
-    "Q": 9.070029711922066,
+    "pooled_slope": -0.6431174936483853,
+    "pooled_se": 0.018845897387643997,
+    "Q": 7.0631302145364945,
     "df": 8,
-    "I2_percent": 11.797422344885703
+    "I2_percent": 0.0
   },
   "pcn_floor_sensitivity": [
     {
       "floor": 1,
       "kept": 3961,
-      "slope": -0.7987177314270044,
-      "r2": 0.5368648391106128
+      "slope": -0.6075305639957662,
+      "r2": 0.6629589896664876
     },
     {
       "floor": 1.5,
       "kept": 2999,
-      "slope": -0.7923058624000212,
-      "r2": 0.4744143276115139
+      "slope": -0.5772854605789476,
+      "r2": 0.6213103383996825
     },
     {
       "floor": 2,
       "kept": 2355,
-      "slope": -0.7821717227492685,
-      "r2": 0.38062575641333785
+      "slope": -0.5387650128259094,
+      "r2": 0.5267740531710892
     },
     {
       "floor": 3,
       "kept": 1789,
-      "slope": -0.7503152743194879,
-      "r2": 0.23658780795612622
+      "slope": -0.4593170524025254,
+      "r2": 0.34407124133147304
     },
     {
       "floor": 5,
       "kept": 1427,
-      "slope": -0.7019292239758427,
-      "r2": 0.1328483013654479
+      "slope": -0.3594656806357582,
+      "r2": 0.18415919663538616
     },
     {
       "floor": 10,
       "kept": 988,
-      "slope": -0.5373952762809562,
-      "r2": 0.04869036077571953
+      "slope": -0.19600769968396192,
+      "r2": 0.052731369891520496
     }
   ],
   "segmented": {
-    "single_slope": -0.8187161890190604,
-    "breakpoint_log10": -2.354122327748466,
-    "breakpoint_percent_of_chromosome": 0.4424637260290132,
-    "slope_below": -1.246642560662367,
-    "slope_above": -0.37062799731736207,
-    "delta_aic_segmented_minus_single": -204.57187422464813,
+    "single_slope": -0.6204200014055486,
+    "breakpoint_log10": -1.7626241375643226,
+    "breakpoint_percent_of_chromosome": 1.727332173963459,
+    "slope_below": -0.683174178550166,
+    "slope_above": -0.15017357397270858,
+    "delta_aic_segmented_minus_single": -148.14638262888548,
     "published_comparator": {
       "breakpoint_pct": 1.84,
       "slope_below": -0.88,
@@ -144,9 +144,121 @@
     }
   },
   "inheritance": {
-    "median_pcn_below": 13.0956524749303,
-    "median_pcn_above": 1.68102101884238,
-    "p_daughter_free_below": 1.305063322741162e-08,
-    "p_daughter_free_above": 0.09725781310054399
+    "median_pcn_below": 5.59215914910956,
+    "median_pcn_above": 1.47584824624295,
+    "p_daughter_free_below": 0.0004297191531388867,
+    "p_daughter_free_above": 0.12925603145733722
+  },
+  "break_or_mixture": {
+    "grouping": "Predicted_ptu alone, families with n>=3",
+    "families": 116,
+    "records": 3930,
+    "log_size_variance_within_family_percent": 4.673610753863371,
+    "pooled_delta_aic": -148.14638262888548,
+    "family_centred_delta_aic": -1.30093215458146,
+    "family_centred_single_slope": -0.3991805796546598,
+    "family_centred_slope_below": -0.35649285479859383,
+    "family_centred_slope_above": -0.5976578650059986,
+    "injected_break_magnitude": 0.5330006045774575,
+    "power_check": [
+      {
+        "quantile": 0.25,
+        "knee": -0.05655470519454203,
+        "delta_aic": -45.17969152304613
+      },
+      {
+        "quantile": 0.5,
+        "knee": -0.001317437389621312,
+        "delta_aic": -45.084596266688095
+      },
+      {
+        "quantile": 0.75,
+        "knee": 0.055379850905455164,
+        "delta_aic": -33.6396691705304
+      }
+    ],
+    "per_family": [
+      {
+        "ptu": "PTU-FE",
+        "n": 299,
+        "below": 101,
+        "above": 198,
+        "slope_below": -0.4261036468583588,
+        "slope_above": 0.05472172624608207,
+        "delta_aic": 1.8236852435247783
+      },
+      {
+        "ptu": "PTU-FK",
+        "n": 227,
+        "below": 9,
+        "above": 218,
+        "slope_below": -0.7514268301115726,
+        "slope_above": -0.19023632652747735,
+        "delta_aic": -29.60727637816626
+      },
+      {
+        "ptu": "PTU-E5",
+        "n": 135,
+        "below": 97,
+        "above": 38,
+        "slope_below": -1.09988948363525,
+        "slope_above": 0.844149054331057,
+        "delta_aic": -2.0435561548263195
+      },
+      {
+        "ptu": "PTU-I1",
+        "n": 113,
+        "below": 22,
+        "above": 91,
+        "slope_below": -0.65962823617886,
+        "slope_above": 1.787972936879243,
+        "delta_aic": 1.2169279785240406
+      },
+      {
+        "ptu": "PTU-B/O/K/Z",
+        "n": 53,
+        "below": 11,
+        "above": 42,
+        "slope_below": -0.022815325518892853,
+        "slope_above": -2.6155055864713024,
+        "delta_aic": 3.471674315536177
+      },
+      {
+        "ptu": "PTU-Bac45",
+        "n": 35,
+        "below": 24,
+        "above": 11,
+        "slope_below": -1.3976667355789032,
+        "slope_above": -0.2865104198124371,
+        "delta_aic": -4.425606906347596
+      },
+      {
+        "ptu": "PTU-FS",
+        "n": 32,
+        "below": 9,
+        "above": 23,
+        "slope_below": 0.6287548113534249,
+        "slope_above": -3.4132908295730298,
+        "delta_aic": -3.732945106190016
+      },
+      {
+        "ptu": "PTU-E42",
+        "n": 29,
+        "below": 21,
+        "above": 8,
+        "slope_below": -0.7189080783298459,
+        "slope_above": 0.2970428661341721,
+        "delta_aic": 1.8300680994674394
+      },
+      {
+        "ptu": "PTU-E64",
+        "n": 20,
+        "below": 6,
+        "above": 14,
+        "slope_below": -0.7417424380875837,
+        "slope_above": 0.07039620240461641,
+        "delta_aic": -6.5572830024071465
+      }
+    ]
   }
 }

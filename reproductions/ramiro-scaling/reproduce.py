@@ -263,6 +263,89 @@ def main() -> int:
           f"  above {float((above < 2).mean()):.1%}"
           "   <- where the PCN floor bites")
 
+    # --- 6. is the breakpoint a break, or a mixture of families? --------
+    # RESULTS.md's own caveat: a segmented fit preferred by AIC on pooled
+    # data is also what a mixture of replicon families with different
+    # characteristic copy numbers produces. `Predicted_ptu` IS family-level
+    # annotation, so the two are separable here.
+    #
+    # A real break is within-family: a family spanning the threshold kinks.
+    # A mixture is between-family: remove the family means and it goes too.
+    # Grouping is by PTU alone, not (genus, PTU) -- a PTU is already a
+    # plasmid taxonomic unit, and splitting it by host would manufacture
+    # families that do not exist.
+    fam = defaultdict(list)
+    for i, r in enumerate(recs):
+        fam[r[1]].append(i)
+    keep = {p: idx for p, idx in fam.items() if len(idx) >= 3}
+
+    gm = xn.mean()
+    tss_x = float(((xn - gm) ** 2).sum())
+    within_x = 0.0
+    cx, cy = [], []
+    for idx in keep.values():
+        xs, ys = xn[idx], Y[idx]
+        within_x += float(((xs - xs.mean()) ** 2).sum())
+        cx.extend(xs - xs.mean())
+        cy.extend(ys - ys.mean())
+    cx, cy = np.asarray(cx), np.asarray(cy)
+
+    kc, _, _ = ols(cx, cy)
+    sse1c = float(((cy - np.polyval(np.polyfit(cx, cy, 1), cx)) ** 2).sum())
+    cc, loc, hic, sse2c = best_hinge(cx, cy)
+    nc = len(cx)
+    d_aic_c = aic(sse2c, nc, 4) - aic(sse1c, nc, 2)
+
+    print("\n  BREAK, OR MIXTURE OF FAMILIES?")
+    print(f"    families used            {len(keep)} PTUs with n>=3,"
+          f" {nc} records")
+    print(f"    variance in log size     {100 * within_x / tss_x:.1f}% within"
+          f" family, {100 * (tss_x - within_x) / tss_x:.1f}% between")
+    print(f"    pooled      dAIC {d_aic:+8.1f}   slopes"
+          f" {lo:+.3f} then {hi:+.3f}")
+    print(f"    family-centred dAIC {d_aic_c:+5.1f}   slopes"
+          f" {loc:+.3f} then {hic:+.3f}   (single line {kc:+.3f})")
+
+    # Could the centred test have SEEN a break? Centring removes most of the
+    # x-range, so a null result might be blindness rather than absence.
+    # Inject a break of exactly the pooled magnitude and try to recover it.
+    delta = hi - lo
+    power = []
+    for q in (0.25, 0.50, 0.75):
+        c0 = float(np.quantile(cx, q))
+        inj = cy + delta * np.maximum(cx - c0, 0.0)
+        s1 = float(((inj - np.polyval(np.polyfit(cx, inj, 1), cx)) ** 2).sum())
+        _, _, _, s2 = best_hinge(cx, inj)
+        power.append({"quantile": q, "knee": c0,
+                      "delta_aic": aic(s2, nc, 4) - aic(s1, nc, 2)})
+    print(f"    power check: inject the pooled break ({delta:+.3f}) into the"
+          f" centred data")
+    for p in power:
+        print(f"      at q={p['quantile']:.2f}  dAIC {p['delta_aic']:+9.1f}"
+              f"   {'recovered' if p['delta_aic'] < -10 else 'NOT recovered'}")
+
+    # Each family that spans the fitted breakpoint, on its own.
+    print("\n    EACH SPANNING FAMILY")
+    print(f"      {'PTU':<14}{'n':>5}{'below':>7}{'above':>7}"
+          f"{'seg lo':>9}{'seg hi':>9}{'dAIC':>9}")
+    per_family = []
+    for p, idx in sorted(keep.items(), key=lambda kv: -len(kv[1])):
+        xs, ys = xn[idx], Y[idx]
+        nb, na = int((xs < c).sum()), int((xs >= c).sum())
+        if nb < 5 or na < 5:
+            continue
+        s1 = float(((ys - np.polyval(np.polyfit(xs, ys, 1), xs)) ** 2).sum())
+        _, flo, fhi, s2 = best_hinge(xs, ys)
+        d = aic(s2, len(xs), 4) - aic(s1, len(xs), 2)
+        per_family.append({"ptu": p, "n": len(idx), "below": nb, "above": na,
+                           "slope_below": flo, "slope_above": fhi,
+                           "delta_aic": d})
+        print(f"      {p[:14]:<14}{len(idx):>5}{nb:>7}{na:>7}"
+              f"{flo:>9.3f}{fhi:>9.3f}{d:>9.1f}")
+    n_kink = sum(1 for f in per_family if f["delta_aic"] < -4)
+    print(f"      {n_kink} of {len(per_family)} prefer a kink -- and the"
+          f" directions disagree, which a shared threshold would not")
+
     receipt = {
         "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "status": "COMPLETED",
@@ -284,6 +367,20 @@ def main() -> int:
         "inheritance": {"median_pcn_below": m_lo, "median_pcn_above": m_hi,
                         "p_daughter_free_below": p_lo,
                         "p_daughter_free_above": p_hi},
+        "break_or_mixture": {
+            "grouping": "Predicted_ptu alone, families with n>=3",
+            "families": len(keep), "records": nc,
+            "log_size_variance_within_family_percent":
+                100 * within_x / tss_x,
+            "pooled_delta_aic": d_aic,
+            "family_centred_delta_aic": d_aic_c,
+            "family_centred_single_slope": kc,
+            "family_centred_slope_below": loc,
+            "family_centred_slope_above": hic,
+            "injected_break_magnitude": delta,
+            "power_check": power,
+            "per_family": per_family,
+        },
     }
     (HERE / "receipt.json").write_text(
         json.dumps(receipt, indent=2) + "\n", encoding="utf-8", newline="\n")
