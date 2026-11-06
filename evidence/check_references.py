@@ -62,7 +62,15 @@ READ_SUFFIXES = {".md", ".yml", ".py", ".ipynb"}
 
 # (2) The decision, written down. These carry no citations by their nature:
 # the bibliography itself, the citation file, figure output and plain text.
-UNCITED_SUFFIXES = {".bib", ".cff", ".svg", ".txt"}
+UNCITED_SUFFIXES = {".bib", ".cff", ".svg", ".txt", ".json", ".csv"}
+# .json: machine-written receipts under reproductions/. They record a
+# source URL and a hash, never a bibliography key, and a citation there
+# would not keep an entry alive anyway -- the file is output, not prose.
+# .csv: tabular data. Fetched author datasets land under reproductions/
+# and are gitignored, but this walker sees the working tree rather than
+# the index, so the type still needs a ruling. A table has no prose to
+# carry a key in; this is a decision about the type, not an exemption
+# for one file (OF-12).
 
 # Extensionless files are ruled on by NAME. OF-12: `""` used to sit in the set
 # above, where it read as a fifth decision and was in fact a standing exemption

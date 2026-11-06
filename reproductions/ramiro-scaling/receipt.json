@@ -1,0 +1,152 @@
+{
+  "generated_utc": "2026-11-06T00:15:51+00:00",
+  "status": "COMPLETED",
+  "scope": "independent reanalysis of a curated author subset; NOT a reproduction of any published figure",
+  "source": {
+    "url": "https://raw.githubusercontent.com/PaulaRamiro/NpAUREO/main/Model/curateddataset.csv",
+    "sha256": "059c924ab75dacb676664d00d2ce05d758f64a0366dcb6d2f0d64f9149b3c744",
+    "sha256_expected": "23bee155b1c946bd565840c4cc0f5ac2e1fec6e4192578ba9f6752ee5f58f78f",
+    "matches_expected": false,
+    "rows_parsed": 3961,
+    "rows_used": 3961
+  },
+  "per_genus": [
+    {
+      "genus": "Escherichia",
+      "ptus": 57,
+      "records": 1613,
+      "slope": -0.7412855686224801,
+      "se": 0.0458203062611644,
+      "r2": 0.826351051386808
+    },
+    {
+      "genus": "Klebsiella",
+      "ptus": 59,
+      "records": 1060,
+      "slope": -0.6734429470317866,
+      "se": 0.08670957692088123,
+      "r2": 0.5141528728730959
+    },
+    {
+      "genus": "Salmonella",
+      "ptus": 35,
+      "records": 282,
+      "slope": -0.9299073114162021,
+      "se": 0.12073338850664236,
+      "r2": 0.642560037054235
+    },
+    {
+      "genus": "Staphylococcus",
+      "ptus": 15,
+      "records": 282,
+      "slope": -0.9875294502939385,
+      "se": 0.22372766453593412,
+      "r2": 0.5997933699486198
+    },
+    {
+      "genus": "Enterococcus",
+      "ptus": 12,
+      "records": 243,
+      "slope": -0.9794253096199308,
+      "se": 0.23709604228662945,
+      "r2": 0.6305125458597102
+    },
+    {
+      "genus": "Enterobacter",
+      "ptus": 33,
+      "records": 193,
+      "slope": -0.9285055570606199,
+      "se": 0.12999541713243756,
+      "r2": 0.6220285040795968
+    },
+    {
+      "genus": "Acinetobacter",
+      "ptus": 9,
+      "records": 157,
+      "slope": -0.689328947210273,
+      "se": 0.12563239018383804,
+      "r2": 0.8113501116917209
+    },
+    {
+      "genus": "Bacillus",
+      "ptus": 20,
+      "records": 123,
+      "slope": -0.7378175555675167,
+      "se": 0.1828242095364261,
+      "r2": 0.4750136369160246
+    },
+    {
+      "genus": "Pseudomonas",
+      "ptus": 3,
+      "records": 8,
+      "slope": -0.5691116663343846,
+      "se": 0.1327637720286766,
+      "r2": 0.9483880506483777
+    }
+  ],
+  "homogeneity": {
+    "pooled_slope": -0.7531660047700601,
+    "pooled_se": 0.03288222183137693,
+    "Q": 9.070029711922066,
+    "df": 8,
+    "I2_percent": 11.797422344885703
+  },
+  "pcn_floor_sensitivity": [
+    {
+      "floor": 1,
+      "kept": 3961,
+      "slope": -0.7987177314270044,
+      "r2": 0.5368648391106128
+    },
+    {
+      "floor": 1.5,
+      "kept": 2999,
+      "slope": -0.7923058624000212,
+      "r2": 0.4744143276115139
+    },
+    {
+      "floor": 2,
+      "kept": 2355,
+      "slope": -0.7821717227492685,
+      "r2": 0.38062575641333785
+    },
+    {
+      "floor": 3,
+      "kept": 1789,
+      "slope": -0.7503152743194879,
+      "r2": 0.23658780795612622
+    },
+    {
+      "floor": 5,
+      "kept": 1427,
+      "slope": -0.7019292239758427,
+      "r2": 0.1328483013654479
+    },
+    {
+      "floor": 10,
+      "kept": 988,
+      "slope": -0.5373952762809562,
+      "r2": 0.04869036077571953
+    }
+  ],
+  "segmented": {
+    "single_slope": -0.8187161890190604,
+    "breakpoint_log10": -2.354122327748466,
+    "breakpoint_percent_of_chromosome": 0.4424637260290132,
+    "slope_below": -1.246642560662367,
+    "slope_above": -0.37062799731736207,
+    "delta_aic_segmented_minus_single": -204.57187422464813,
+    "published_comparator": {
+      "breakpoint_pct": 1.84,
+      "slope_below": -0.88,
+      "slope_above": -0.125,
+      "doi": "10.1038/s41467-025-61205-2"
+    }
+  },
+  "inheritance": {
+    "median_pcn_below": 13.0956524749303,
+    "median_pcn_above": 1.68102101884238,
+    "p_daughter_free_below": 1.305063322741162e-08,
+    "p_daughter_free_above": 0.09725781310054399
+  }
+}

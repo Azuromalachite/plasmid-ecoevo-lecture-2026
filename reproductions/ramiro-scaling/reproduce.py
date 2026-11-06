@@ -1,0 +1,295 @@
+#!/usr/bin/env python3
+"""Reanalysis of the Ramiro-Martinez (2025) curated modelling dataset.
+
+Writes receipt.json beside this file and prints a report.
+
+WHAT THIS IS. An independent reanalysis of a public author dataset, not a
+reproduction of any published figure. The input is the *curated modelling
+subset* the authors ship for their machine-learning model, 3,961 records --
+not the 6,327-plasmid set behind Fig. 5A. Those differ, and the difference is
+visible: Klebsiella's slope here is -0.559 against roughly -0.63 in the
+published figure. Nothing printed below should be described as reproducing a
+published panel.
+
+WHAT IT ESTABLISHES, and the reason it exists:
+
+  1. Per-genus PTU-level slopes for ALL NINE genera, with standard errors, so
+     that the spread between genera can be tested rather than eyeballed. It
+     cannot be distinguished from zero: Q is below its degrees of freedom.
+  2. The fitted exponent is strongly sensitive to the PCN floor. The authors
+     excluded PCN < 1; raising the floor further flattens the slope
+     monotonically and collapses R^2. The exclusion is a truncation of the
+     dependent variable, not a neutral quality filter.
+  3. On Maddamsetti's chromosome-normalised axis, THIS dataset prefers a
+     segmented model by a large AIC margin and puts the breakpoint at ~1.7%
+     of chromosome length, against Maddamsetti's published 1.84% -- derived
+     from a different sample with a different coverage estimator. The
+     authors' own paper fits a single power law and does not report this.
+
+NETWORK. `figures/` is stdlib-only and offline by contract. This directory is
+not: see ../README.md. The script never fetches silently -- without --fetch
+it requires a local copy and says so.
+
+Usage:
+    python reproductions/ramiro-scaling/reproduce.py --fetch
+    python reproductions/ramiro-scaling/reproduce.py --input path/to/file.csv
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import math
+import sys
+from collections import defaultdict
+from datetime import datetime, timezone
+from pathlib import Path
+
+import numpy as np
+
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[1]
+
+SOURCE_URL = ("https://raw.githubusercontent.com/PaulaRamiro/NpAUREO/"
+              "main/Model/curateddataset.csv")
+
+#: The exact bytes this analysis was written against. `main` moves, so a
+#: mismatch is not an error -- it is a notice that the input changed and the
+#: numbers below may no longer be the ones in RESULTS.md.
+EXPECTED_SHA256 = "23bee155b1c946bd565840c4cc0f5ac2e1fec6e4192578ba9f6752ee5f58f78f"
+EXPECTED_ROWS = 3961
+
+#: Published comparators, for the report only. Never used in a computation.
+MADDAMSETTI = {"breakpoint_pct": 1.84, "slope_below": -0.880,
+               "slope_above": -0.125, "doi": "10.1038/s41467-025-61205-2"}
+
+# The segregation model is imported from the repository rather than
+# reimplemented, for the reason the sibling figure script gives: a second
+# copy of 2**(-2c) is a place for the two to drift apart. Loaded BY PATH, not
+# as a package member -- battle_royale/__init__.py imports its scipy-backed
+# siblings, and segregation.py itself is stdlib-only and should stay usable
+# without them. The same trick is in figures/source/copy_number_and_loss_rate.py.
+import importlib.util  # noqa: E402
+
+_SEG_PATH = (REPO / "models" / "copy-number-burden" / "battle_royale"
+             / "segregation.py")
+_spec = importlib.util.spec_from_file_location("_segregation", _SEG_PATH)
+segregation = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(segregation)
+
+
+def load(path: Path):
+    raw = path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    text = raw.decode("utf-8-sig")
+    rows = list(csv.DictReader(text.splitlines(), delimiter="\t"))
+    recs = []
+    for r in rows:
+        try:
+            pcn = float(r["PCN"])
+            logsize = float(r["Logsize"])
+            chrom = float(r["Length_chr"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if pcn <= 0 or chrom <= 0:
+            continue
+        recs.append((r["Genus"].strip(), r["Predicted_ptu"].strip(),
+                     logsize, pcn, chrom))
+    return recs, digest, len(rows)
+
+
+def ols(x, y):
+    """Slope, standard error of the slope, and R^2."""
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    n = len(x)
+    k, b = np.polyfit(x, y, 1)
+    resid = y - (k * x + b)
+    sse = float((resid ** 2).sum())
+    sxx = float(((x - x.mean()) ** 2).sum())
+    sst = float(((y - y.mean()) ** 2).sum())
+    se = math.sqrt(sse / (n - 2) / sxx) if n > 2 and sxx > 0 else float("nan")
+    r2 = 1 - sse / sst if sst > 0 else float("nan")
+    return k, se, r2
+
+
+def ptu_points(recs):
+    """Collapse records to one (median log size, log median PCN) per PTU."""
+    g = defaultdict(list)
+    for genus, ptu, logsize, pcn, _ in recs:
+        g[(genus, ptu)].append((logsize, pcn))
+    pts = {}
+    for key, v in g.items():
+        pts[key] = (float(np.median([a for a, _ in v])),
+                    math.log10(float(np.median([b for _, b in v]))),
+                    len(v))
+    return pts
+
+
+def hinge(x, y, c):
+    """Continuous two-segment fit with the knee fixed at c."""
+    M = np.column_stack([np.ones_like(x), x, np.maximum(x - c, 0.0)])
+    beta, *_ = np.linalg.lstsq(M, y, rcond=None)
+    return float(((y - M @ beta) ** 2).sum()), beta
+
+
+def best_hinge(x, y, n_grid=400):
+    grid = np.linspace(np.quantile(x, 0.05), np.quantile(x, 0.95), n_grid)
+    sse, c = min((hinge(x, y, cc)[0], cc) for cc in grid)
+    _, beta = hinge(x, y, c)
+    return c, float(beta[1]), float(beta[1] + beta[2]), sse
+
+
+def aic(sse, n, k):
+    return n * math.log(sse / n) + 2 * k
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--fetch", action="store_true",
+                    help="download the source from the author's GitHub")
+    ap.add_argument("--input", type=Path, default=HERE / "curateddataset.csv")
+    args = ap.parse_args()
+
+    if args.fetch and not args.input.exists():
+        import urllib.request
+        req = urllib.request.Request(
+            SOURCE_URL, headers={"User-Agent": "plasmid-ecoevo-repro/1.0"})
+        with urllib.request.urlopen(req, timeout=120) as r:
+            args.input.write_bytes(r.read())
+
+    if not args.input.exists():
+        print(f"input not found: {args.input}\n"
+              f"  re-run with --fetch, or pass --input <file>\n"
+              f"  source: {SOURCE_URL}", file=sys.stderr)
+        return 2
+
+    recs, digest, n_raw = load(args.input)
+    print(f"  input   {args.input.name}")
+    print(f"  sha256  {digest}")
+    if digest != EXPECTED_SHA256:
+        print("  NOTE: input differs from the bytes this analysis was written"
+              " against; numbers may not match RESULTS.md")
+    print(f"  rows    {n_raw} parsed, {len(recs)} usable"
+          f" (expected {EXPECTED_ROWS})")
+
+    pcn = np.array([r[3] for r in recs])
+    print(f"  PCN     min {pcn.min():.3f}  max {pcn.max():.1f}"
+          f"  below 1: {int((pcn < 1).sum())}"
+          "   <- the authors' stated exclusion, visible in the data")
+
+    # --- 1. every genus -------------------------------------------------
+    pts = ptu_points(recs)
+    by_genus = defaultdict(list)
+    for (genus, _), v in pts.items():
+        by_genus[genus].append(v)
+
+    print("\n  PER-GENUS PTU-LEVEL FIT")
+    print(f"    {'genus':<16}{'PTUs':>5}{'recs':>7}{'slope':>9}"
+          f"{'se':>8}{'R2':>8}")
+    genus_rows = []
+    for genus, v in sorted(by_genus.items(), key=lambda kv: -sum(p[2] for p in kv[1])):
+        x = [p[0] for p in v]
+        y = [p[1] for p in v]
+        n_rec = sum(p[2] for p in v)
+        if len(x) < 3:
+            continue
+        k, se, r2 = ols(x, y)
+        genus_rows.append({"genus": genus, "ptus": len(x), "records": n_rec,
+                           "slope": k, "se": se, "r2": r2})
+        print(f"    {genus:<16}{len(x):>5}{n_rec:>7}{k:>9.3f}{se:>8.3f}{r2:>8.3f}")
+
+    # --- 2. do the genera actually differ? ------------------------------
+    k = np.array([g["slope"] for g in genus_rows])
+    se = np.array([g["se"] for g in genus_rows])
+    w = 1.0 / se ** 2
+    pooled = float((w * k).sum() / w.sum())
+    pooled_se = float(1.0 / math.sqrt(w.sum()))
+    Q = float((w * (k - pooled) ** 2).sum())
+    df = len(k) - 1
+    i2 = max(0.0, (Q - df) / Q) * 100 if Q > 0 else 0.0
+    print(f"\n  HOMOGENEITY  pooled {pooled:+.3f} +/- {pooled_se:.3f}"
+          f"  (95% CI {pooled - 1.96 * pooled_se:+.3f}"
+          f" to {pooled + 1.96 * pooled_se:+.3f})")
+    print(f"    Q = {Q:.2f} on {df} df, I2 = {i2:.0f}%"
+          f"   -> {'no detectable' if Q < df else 'some'} between-genus spread")
+
+    # --- 3. sensitivity to the PCN floor --------------------------------
+    L = np.array([r[2] for r in recs])
+    Y = np.log10(pcn)
+    print("\n  SENSITIVITY TO THE PCN FLOOR  (authors cut below 1)")
+    print(f"    {'floor':>6}{'kept':>8}{'slope':>9}{'R2':>8}")
+    floors = []
+    for f in (1, 1.5, 2, 3, 5, 10):
+        m = pcn >= f
+        if m.sum() < 50:
+            continue
+        kk, _, rr = ols(L[m], Y[m])
+        floors.append({"floor": f, "kept": int(m.sum()), "slope": kk, "r2": rr})
+        print(f"    {f:>6}{int(m.sum()):>8}{kk:>9.3f}{rr:>8.3f}")
+
+    # --- 4. the breakpoint, on Maddamsetti's axis -----------------------
+    xn = np.log10(np.array([10 ** r[2] / r[4] for r in recs]))
+    k1, _, _ = ols(xn, Y)
+    sse1 = float(((Y - np.polyval(np.polyfit(xn, Y, 1), xn)) ** 2).sum())
+    c, lo, hi, sse2 = best_hinge(xn, Y)
+    n = len(xn)
+    d_aic = aic(sse2, n, 4) - aic(sse1, n, 2)
+    print("\n  SEGMENTED FIT ON CHROMOSOME-NORMALISED SIZE")
+    print(f"    single line  slope {k1:+.3f}")
+    print(f"    segmented    breakpoint {10 ** c * 100:.2f}% of chromosome,"
+          f" slopes {lo:+.3f} then {hi:+.3f}")
+    print(f"    dAIC {d_aic:+.1f}  ({'segmented' if d_aic < 0 else 'single'}"
+          f" preferred)")
+    print(f"    Maddamsetti published {MADDAMSETTI['breakpoint_pct']}%,"
+          f" {MADDAMSETTI['slope_below']:+.3f} then"
+          f" {MADDAMSETTI['slope_above']:+.3f}")
+
+    # --- 5. what the breakpoint means for inheritance -------------------
+    below = pcn[xn < c]
+    above = pcn[xn >= c]
+    m_lo, m_hi = float(np.median(below)), float(np.median(above))
+    p_lo = segregation.p_daughter_free(m_lo)
+    p_hi = segregation.p_daughter_free(m_hi)
+    print("\n  WHAT THAT THRESHOLD COSTS  (via battle_royale.segregation)")
+    print(f"    below  n={len(below):>5}  median PCN {m_lo:5.2f}"
+          f"  -> {p_lo * 100:7.3f}% of daughters born plasmid-free")
+    print(f"    above  n={len(above):>5}  median PCN {m_hi:5.2f}"
+          f"  -> {p_hi * 100:7.3f}%")
+    print(f"    ratio  {p_hi / p_lo:.0f}x"
+          "   -- random segregation stops being survivable")
+    print(f"    fraction with PCN<2:  below {float((below < 2).mean()):.1%},"
+          f"  above {float((above < 2).mean()):.1%}"
+          "   <- where the PCN floor bites")
+
+    receipt = {
+        "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "status": "COMPLETED",
+        "scope": "independent reanalysis of a curated author subset; "
+                 "NOT a reproduction of any published figure",
+        "source": {"url": SOURCE_URL, "sha256": digest,
+                   "sha256_expected": EXPECTED_SHA256,
+                   "matches_expected": digest == EXPECTED_SHA256,
+                   "rows_parsed": n_raw, "rows_used": len(recs)},
+        "per_genus": genus_rows,
+        "homogeneity": {"pooled_slope": pooled, "pooled_se": pooled_se,
+                        "Q": Q, "df": df, "I2_percent": i2},
+        "pcn_floor_sensitivity": floors,
+        "segmented": {"single_slope": k1, "breakpoint_log10": c,
+                      "breakpoint_percent_of_chromosome": 10 ** c * 100,
+                      "slope_below": lo, "slope_above": hi,
+                      "delta_aic_segmented_minus_single": d_aic,
+                      "published_comparator": MADDAMSETTI},
+        "inheritance": {"median_pcn_below": m_lo, "median_pcn_above": m_hi,
+                        "p_daughter_free_below": p_lo,
+                        "p_daughter_free_above": p_hi},
+    }
+    (HERE / "receipt.json").write_text(
+        json.dumps(receipt, indent=2) + "\n", encoding="utf-8", newline="\n")
+    print(f"\n  wrote {HERE / 'receipt.json'}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

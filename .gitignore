@@ -30,3 +30,8 @@ submissions/
 # Archives dropped into the tree while working
 *.zip
 *.tar.gz
+
+# Other people's datasets, fetched by reproductions/ and not redistributed
+# here. The receipt records the URL and the SHA-256; re-fetch with --fetch.
+reproductions/**/curateddataset.csv
+reproductions/**/*.xlsx
