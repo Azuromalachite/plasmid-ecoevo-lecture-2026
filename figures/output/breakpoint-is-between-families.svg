@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="348" viewBox="0 0 760 348" font-family="Helvetica,Arial,sans-serif" role="img" aria-labelledby="t d">
+<title id="t">The segmented preference is between families, not within them</title>
+<desc id="d">Pooled, the two-segment fit beats a single line by dAIC -148.1. Centred on plasmid family it beats it by only -1.3. Three breaks of the pooled magnitude planted into the centred data were recovered by the same test at around dAIC -45, so the near-zero observed value is an absence rather than a test without power.</desc>
+<rect width="760" height="348" fill="#ffffff"/>
+<text x="24" y="30" font-size="15" font-weight="bold" fill="#1b1f23">Removing the family means removes the bend</text>
+<text x="24" y="48" font-size="12" fill="#5a6570">&#916;AIC, two segments minus one line. More negative is stronger evidence for a bend.</text>
+<line x1="250.0" y1="50" x2="250.0" y2="246" stroke="#d8d8d8" stroke-width="1"/>
+<text x="250.0" y="264" font-size="11" fill="#5a6570" text-anchor="middle">0</text>
+<line x1="367.5" y1="50" x2="367.5" y2="246" stroke="#d8d8d8" stroke-width="1"/>
+<text x="367.5" y="264" font-size="11" fill="#5a6570" text-anchor="middle">&#8722;40</text>
+<line x1="485.0" y1="50" x2="485.0" y2="246" stroke="#d8d8d8" stroke-width="1"/>
+<text x="485.0" y="264" font-size="11" fill="#5a6570" text-anchor="middle">&#8722;80</text>
+<line x1="602.5" y1="50" x2="602.5" y2="246" stroke="#d8d8d8" stroke-width="1"/>
+<text x="602.5" y="264" font-size="11" fill="#5a6570" text-anchor="middle">&#8722;120</text>
+<line x1="720.0" y1="50" x2="720.0" y2="246" stroke="#d8d8d8" stroke-width="1"/>
+<text x="720.0" y="264" font-size="11" fill="#5a6570" text-anchor="middle">&#8722;160</text>
+<line x1="250" y1="50" x2="250" y2="246" stroke="#5a6570" stroke-width="2"/>
+<text x="238" y="74" font-size="12" text-anchor="end" fill="#1b1f23" font-weight="bold">Pooled, as published</text>
+<rect x="250" y="60" width="435.2" height="20" rx="3" fill="#56B4E9"/>
+<text x="677.2" y="74" font-size="12" text-anchor="end" fill="#ffffff" font-weight="bold">&#8722;148.1</text>
+<text x="238" y="112" font-size="12" text-anchor="end" fill="#1b1f23">Planted break, 25th pct</text>
+<rect x="250" y="98" width="132.7" height="20" rx="3" fill="#009E73"/>
+<text x="374.7" y="112" font-size="12" text-anchor="end" fill="#ffffff" font-weight="bold">&#8722;45.2</text>
+<text x="238" y="150" font-size="12" text-anchor="end" fill="#1b1f23">Planted break, 50th pct</text>
+<rect x="250" y="136" width="132.4" height="20" rx="3" fill="#009E73"/>
+<text x="374.4" y="150" font-size="12" text-anchor="end" fill="#ffffff" font-weight="bold">&#8722;45.1</text>
+<text x="238" y="188" font-size="12" text-anchor="end" fill="#1b1f23">Planted break, 75th pct</text>
+<rect x="250" y="174" width="98.8" height="20" rx="3" fill="#009E73"/>
+<text x="340.8" y="188" font-size="12" text-anchor="end" fill="#ffffff" font-weight="bold">&#8722;33.6</text>
+<text x="238" y="226" font-size="12" text-anchor="end" fill="#1b1f23" font-weight="bold">Family-centred, observed</text>
+<rect x="250" y="212" width="3.8" height="20" rx="3" fill="#D55E00"/>
+<text x="261.8" y="226" font-size="12" fill="#1b1f23" font-weight="bold">&#8722;1.3</text>
+<line x1="250" y1="246" x2="720" y2="246" stroke="#5a6570" stroke-width="1"/>
+<text x="24" y="296" font-size="11" fill="#5a6570">Pooled breakpoint 1.73% of chromosome length. Variance in log relative size: 4.7% within families, 95.3% between.</text>
+<text x="24" y="312" font-size="11" fill="#5a6570">Copy number is estimated from sequencing coverage, not counted; the source publishes no uncertainty for it.</text>
+<text x="24" y="328" font-size="11" fill="#5a6570">Planted breaks are synthetic controls, not observations.</text>
+</svg>
