@@ -346,6 +346,73 @@ and it accounts for about 42% of the slope difference between the two labs.
 What it removes is not a clean class, and no filter on copy number alone
 separates the low-coverage artefact from the low-copy replicon.
 
+## 8. The same test on an independent, accession-keyed dataset
+
+Everything above rests on one file, and three of its limitations trace to
+that single fact: no accession, so no join to anything; copy numbers below
+one already removed; and a family label whose relation to replication
+machinery this document had to concede was unmeasured.
+
+[COPLA2's RefSeq 224 reference database](https://castillo.dicom.unican.es/copla2/databases)
+removes all three at once. It carries a RefSeq accession, a PTU, a
+**replicon type**, a MOB class and a host-range grade for 89,393 plasmids,
+and Maddamsetti's Supplementary Data 1 carries RefSeq accessions beside its
+copy numbers. **94.8% of his plasmids join**, giving 11,379 with copy number,
+size, family and replicon type together — nearly three times the Ramiro
+subset, and keeping the 2,359 plasmids below one copy.
+[`copla_replication.py`](copla_replication.py) regenerates all of it and
+writes [`copla_receipt.json`](copla_receipt.json).
+
+### The bend replicates, and families absorb even less of it
+
+| | pooled | PTU absorbed | replicon absorbed | genus absorbed |
+|---|---:|---:|---:|---:|
+| **all 11,379** ΔAIC | −1392.2 | −66.1 | −145.6 | −1325.6 |
+| slope change | +0.742 | +0.678 | +0.905 | +0.807 |
+| **9,020 at PCN ≥ 1** ΔAIC | −824.0 | −35.2 | −102.5 | −743.1 |
+| slope change | +0.656 | +0.550 | +0.822 | +0.688 |
+
+The pooled bend sits at **1.76%** of chromosome length on the full set and
+**1.62%** under the Ramiro copy-number filter, against 1.73% in the Ramiro
+subset and 1.84% published. Absorbing the family leaves ΔAIC at −66.1 and
+−35.2 — the same sign, the same conclusion.
+
+What changes is the magnitude, and it moves **against** the composition
+reading. In the Ramiro subset the slope change fell 29% under family
+adjustment. Here it falls **9%** on the full set and **16%** under the same
+copy-number filter. On the larger, accession-keyed sample, families account
+for less of the bend than §5 estimated, not more.
+
+### A PTU is not a replicon family, now measured
+
+§5 states this and could not support it. Of the 416 PTUs in the joined set
+that carry replicon annotations, **182 carry more than one replicon type**.
+PTU-FE spans IncFII, Col156;IncFIA and others; PTU-E3 is 52% Col(pHAD28) and
+27% a Col(pHAD28);Col440 combination. The two classifications are correlated
+and not interchangeable, which is what the correction asserted.
+
+And replicon type is the **worse** absorber of the two. Grouping by it leaves
+a *larger* slope change than the pooled fit (+0.905 against +0.742), so
+within a replicon type the bend is steeper than across the whole sample.
+Whatever generates the composition effect, it is not shared replication
+machinery as the annotation defines it. Grouping by genus barely touches the
+bend at all (ΔAIC −1325.6 of −1392.2), so it is not host taxonomy either.
+
+### What this does not fix
+
+Copy number is still modelled from coverage with no published uncertainty.
+Plasmids within a family are still related by descent, so the AIC comparisons
+still flatter themselves. Only 88 of 529 families straddle the knee, so the
+within-family hinge rests on a minority as it did before. And a replicon type
+is an annotation, not an experiment — 58.3% of the joined plasmids carry one
+at all.
+
+One result here is odd enough to flag rather than interpret: after absorbing
+either grouping, the slope *above* the bend turns positive (+0.133 for PTU,
++0.151 for replicon), meaning copy number rising with size among large
+plasmids within a family. That is not something this analysis predicted and
+it is not something these data explain.
+
 ## What this does not establish
 
 - Nothing about Fig. 5A, which uses a different and larger dataset.

@@ -65,4 +65,4 @@ of choices the papers state plainly and that nobody had followed through.
 
 | directory | study | what it establishes |
 |---|---|---|
-| [`ramiro-scaling/`](ramiro-scaling/) | Ramiro-Martinez et al. (2025) | per-genus scaling across all nine genera; the genera are not distinguishable; the breakpoint replicates on a second dataset, but is a between-family feature rather than a threshold on size ([report](ramiro-scaling/REPORT.md), [explorer](ramiro-scaling/explore.ipynb)) |
+| [`ramiro-scaling/`](ramiro-scaling/) | Ramiro-Martinez et al. (2025) | per-genus scaling across all nine genera; the genera are not distinguishable; the breakpoint replicates on a second dataset, but is a between-family feature rather than a threshold on size ([report](ramiro-scaling/REPORT.md), [explorer](ramiro-scaling/explore.ipynb), [COPLA2 replication](ramiro-scaling/copla_replication.py)) |

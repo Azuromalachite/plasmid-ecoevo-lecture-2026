@@ -1,0 +1,88 @@
+{
+  "generated_utc": "2026-11-06T23:11:45+00:00",
+  "sources": {
+    "maddamsetti_sha256": "131faa58f5528d814877cca9ffa8c3e56b41e92518385d740c1b7e530f2bc3a7",
+    "copla2_sha256": "ef2bc2a0bfecd08b914642583a25d13c12b631e3f988724584ce7e8e51c114e4",
+    "copla2_release": "RefSeq 224"
+  },
+  "joined": 11379,
+  "copla2_records": 89393,
+  "ptus_with_multiple_replicon_types": 182,
+  "ptus_compared": 416,
+  "subsets": {
+    "all": {
+      "n": 11379,
+      "bend_percent": 1.759633370907712,
+      "slope_below": -0.8826716014668419,
+      "slope_above": -0.14101661664024945,
+      "slope_change": 0.7416549848265924,
+      "delta_aic": -1392.2075526210574,
+      "absorbed": {
+        "ptu": {
+          "n": 7741,
+          "groups": 529,
+          "straddling": 88,
+          "slope_below": -0.5454729832991178,
+          "slope_above": 0.1325469237757454,
+          "slope_change": 0.6780199070748631,
+          "delta_aic": -66.05045232882549
+        },
+        "rep": {
+          "n": 6171,
+          "groups": 248,
+          "straddling": 94,
+          "slope_below": -0.7541054421656971,
+          "slope_above": 0.15122187148718091,
+          "slope_change": 0.905327313652878,
+          "delta_aic": -145.6044152749946
+        },
+        "genus": {
+          "n": 11218,
+          "groups": 177,
+          "straddling": 136,
+          "slope_below": -0.8830971584896131,
+          "slope_above": -0.07591540655463458,
+          "slope_change": 0.8071817519349785,
+          "delta_aic": -1325.6062671197506
+        }
+      }
+    },
+    "pcn_ge_1": {
+      "n": 9020,
+      "bend_percent": 1.6233960011931086,
+      "slope_below": -0.800034674552126,
+      "slope_above": -0.14451711519141985,
+      "slope_change": 0.6555175593607061,
+      "delta_aic": -824.0356271398741,
+      "absorbed": {
+        "ptu": {
+          "n": 6195,
+          "groups": 455,
+          "straddling": 65,
+          "slope_below": -0.5223470495801328,
+          "slope_above": 0.02746622885101868,
+          "slope_change": 0.5498132784311515,
+          "delta_aic": -35.237295915972936
+        },
+        "rep": {
+          "n": 4967,
+          "groups": 221,
+          "straddling": 73,
+          "slope_below": -0.7523365132511661,
+          "slope_above": 0.07011549639636427,
+          "slope_change": 0.8224520096475304,
+          "delta_aic": -102.53479754868022
+        },
+        "genus": {
+          "n": 8863,
+          "groups": 150,
+          "straddling": 117,
+          "slope_below": -0.8061217643607351,
+          "slope_above": -0.11815441842278984,
+          "slope_change": 0.6879673459379453,
+          "delta_aic": -743.1203856908542
+        }
+      }
+    }
+  }
+}
