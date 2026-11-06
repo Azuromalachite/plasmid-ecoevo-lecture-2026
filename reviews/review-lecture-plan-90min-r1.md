@@ -76,21 +76,21 @@ not public and must not be invented:
 
 | G0 (doublings) | 5 | 10 | 20 | 30 | 50 | 100 |
 | --- | --- | --- | --- | --- | --- | --- |
-| \(C^*\) (copies/cell) | 444 | 222 | 111 | 74 | 44 | 22 |
+| $C^*$ (copies/cell) | 444 | 222 | 111 | 74 | 44 | 22 |
 
 Against declared reference ranges for common origin classes, at a realistic
-batch duration of 10–30 doublings: a low- or medium-copy vector has \(C^*\)
-**above** its ceiling, and a high-copy pUC-like vector has \(C^*\) **below**
+batch duration of 10–30 doublings: a low- or medium-copy vector has $C^*$
+**above** its ceiling, and a high-copy pUC-like vector has $C^*$ **below**
 its floor.
 
 **So for the two commonest fixed-origin classes there is no trade-off at all,
 and the model tells them to move in opposite directions.** Only a vector whose
-reachable range straddles \(C^*\) meets the compromise the model is usually
+reachable range straddles $C^*$ meets the compromise the model is usually
 quoted for — 9 of 28 **grid cells**, which is a count over an analyst-chosen
 sweep and not a frequency over any population of plasmids.
 
-`[M]` The boundary is solved, not sampled: \(C^* \le C_{\min}\) exactly when
-\(G_0 \ge 1/(\beta C_{\min}\ln 2)\). Whether the trade-off exists is a property
+`[M]` The boundary is solved, not sampled: $C^* \le C_{\min}$ exactly when
+$G_0 \ge 1/(\beta C_{\min}\ln 2)$. Whether the trade-off exists is a property
 of **how long the culture runs**, not of the plasmid.
 
 `[I]` This is a better answer than either branch of the original question, and
@@ -100,7 +100,7 @@ started from, and for most of them the honest answer is that you are not near
 the optimum at all.*
 
 It also locates the 1 − 1/e invariant: the density penalty approaches 63 % only
-as \(C_{\min}\to 0\), running 54–63 % in the wide-range class and **9 %** in
+as $C_{\min}\to 0$, running 54–63 % in the wide-range class and **9 %** in
 the medium class. The retraction that removed "a 63.2 % sacrifice, always" was
 right, and this says by how much.
 
@@ -218,7 +218,7 @@ The plan places three quantities beside each other and calls them all PCN:
 
 | Where | Quantity |
 |---|---|
-| The toy model | \(C\) = plasmid copies **per cell / per carrier** |
+| The toy model | $C$ = plasmid copies **per cell / per carrier** |
 | Ramiro-Martínez et al. 2025 | PCN from read-depth ratio, nine genera |
 | Maddamsetti et al. 2025 | `[L]` *"the number of plasmid copies per the longest chromosome per cell"* |
 
@@ -359,8 +359,8 @@ conflict mechanisms as the **first** thing to compress.
 `[I]` So the payoff of the only thread spanning all five movements is allotted
 about a minute and is first in line to be cut. The compression list is right
 that the first two are expendable — they are examples. The third is not; it is
-where \(W_{\rm gene} \neq W_{\rm transposon} \neq W_{\rm plasmid} \neq
-W_{\rm host}\) stops being a claim and becomes a story.
+where $W_{\rm gene} \neq W_{\rm transposon} \neq W_{\rm plasmid} \neq
+W_{\rm host}$ stops being a claim and becomes a story.
 
 **Correction:** name the two expendable subsections in the cut rung instead of
 the whole section, and give the payoff its own minute. `[I]` The prior round's
@@ -523,7 +523,7 @@ become repository findings on a specific trigger:
 | Finding | Trigger | What would then be the defect |
 |---|---|---|
 | **1** — contested scaling law | A page or figure presenting the size–PCN scaling law is added to the repository | Presenting a single power law without the segmented / two-strategy reading, or without a `status` reflecting that the form is disputed |
-| **2** — PCN units | Repository content places a scaling-law PCN beside the toy model's \(C\) | The two quantities set side by side without the per-cell / per-chromosome qualification |
+| **2** — PCN units | Repository content places a scaling-law PCN beside the toy model's $C$ | The two quantities set side by side without the per-cell / per-chromosome qualification |
 
 `[M]` Finding 1's trigger would also be the first genuine site for the
 `CONTESTED` badge, which `docs/open-findings.md` **OF-4** records as defined
@@ -585,16 +585,16 @@ correction.
 **2. `[V]` The 1/e retraction propagated completely.** The invariant is kept
 and labelled an elegant property of the toy model only, with five reasons it is
 not a result about the density award: zero copy number is infeasible, the
-comparator is \(C_{\min}\), retention may depend on copy number, the pooled
+comparator is $C_{\min}$, retention may depend on copy number, the pooled
 score is relative, and the optimum may lie outside the feasible range. The
 claims-to-avoid list repeats it. `[M]` The prior round's retraction stands and
 the surviving statement is the useful one.
 
 **3. `[V]` The feasibility escape is stated in the imperative.** *Always show*
-\([C_{\min},C_{\max}]\) *and ask whether* \(C^*\) *exists inside it*, and *a
+$[C_{\min},C_{\max}]$ *and ask whether* $C^*$ *exists inside it*, and *a
 mathematically valid interior optimum may disappear biologically*. `[M]` I
-re-derived the model: \(Q = C\,2^{G_0(1-\beta C)}\) has a stationary point at
-\(C^{*} = 1/(\beta G_0 \ln 2)\) for **any** positive \(\beta, G_0\), so the
+re-derived the model: $Q = C\,2^{G_0(1-\beta C)}$ has a stationary point at
+$C^{*} = 1/(\beta G_0 \ln 2)$ for **any** positive $\beta, G_0$, so the
 existence of an interior optimum is a property of the functional form, not a
 result. The plan never claims otherwise, and the feasibility question is
 precisely what keeps the model falsifiable rather than tautological. The

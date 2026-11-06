@@ -115,6 +115,7 @@ nothing alike can both pass it.
 python evidence/check_claim_ids.py
 python evidence/check_references.py
 python evidence/check_participant_firewall.py
+python evidence/check_math_delimiters.py
 python figures/source/palette.py
 python figures/source/shewanella_oxa48_pathway.py && git status --porcelain
 ```
@@ -142,7 +143,13 @@ stops covering part of the repository. The same applies to a file with **no**
 extension: those are ruled on by name, in `UNCITED_NAMES`, so adding a
 `NOTES` or a `Makefile` fails until you say which it is.
 
-The two `test_check_*.py` scripts are not part of the routine run. Each mutates
+`check_math_delimiters.py` needs no dependencies. It refuses `\[...\]` and
+`\(...\)` in markdown, because CommonMark strips the backslash before MathJax
+runs and the reader sees raw LaTeX; use `$...$` and `$$...$$`, which survive.
+It reads `.md` files and the markdown cells of notebooks, never code cells, and
+skips code fences and inline spans so that writing *about* a regex stays legal.
+
+The three `test_check_*.py` scripts are not part of the routine run. Each mutates
 a temporary copy — 17 ways for the references checker, 11 for the
 firewall checker — and asserts the checker responds. Sixteen of the references
 cases assert a failure; one asserts that the checker stays green and still

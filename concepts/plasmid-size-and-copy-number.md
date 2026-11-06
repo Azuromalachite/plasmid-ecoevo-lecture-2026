@@ -54,7 +54,7 @@ and here the answer is no:
 Those are different quantities. Under fast growth a cell holds several
 chromosome equivalents, so they differ by a growth-rate-dependent factor — and
 in any growth competition that factor is itself under selection. A third
-value, the \(C\) in this repository's
+value, the $C$ in this repository's
 [copy-number model](../models/copy-number-burden/README.md), is copies per
 cell again and is not interchangeable with the second.
 
