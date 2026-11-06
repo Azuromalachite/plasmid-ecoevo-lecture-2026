@@ -45,6 +45,8 @@ at 45.2, 45.1 and 33.6.](../../figures/output/breakpoint-is-between-families.svg
 | Pooled, as published | **−148.1** | −0.683 | −0.150 |
 | Family-centred | **−1.3** | −0.356 | −0.598 |
 
+ΔAIC is AIC(segmented) − AIC(single line), so negative favours the bend.
+
 The preference collapses. The single-slope exponent moves with it, from −0.620
 pooled to **−0.399** once families are centred, so roughly a third of the
 headline exponent in §1 is also a between-family effect.
@@ -76,6 +78,21 @@ breakpoint. Three prefer a bend, their directions disagree with each other,
 and only `PTU-FK` resembles the pooled shape. A shared physical threshold
 would not produce that scatter; small-sample hinge fitting does. The full
 table is in [`RESULTS.md`](RESULTS.md) §5.
+
+Those nine are not a sample of plasmid diversity, and the arithmetic says so:
+
+| step | PTUs | records |
+|---|---:|---:|
+| in the file | 139 | 3,961 |
+| holding ≥ 3 records, used for centring | 116 | 3,930 |
+| holding ≥ 5 records **each side** of the break | **9** | **943** |
+
+The thinner side of each of the nine holds between 6 and 101 records — six for
+PTU-E64, nine for PTU-FK and PTU-FS. A hinge fitted across six points is
+nearly unconstrained, and plasmids within a PTU are related by descent rather
+than independent, so the nominal comparison flatters itself in both
+directions. The disagreement among those three bends is better read as
+small-sample noise than as nine lineages behaving differently.
 
 ## Why families do this
 
@@ -142,6 +159,22 @@ inverse-variance pooling with Cochran's Q, a continuous two-segment fit on
 chromosome-normalised size, and a variance decomposition by predicted PTU.
 Grouping is by PTU alone rather than by genus and PTU together, since a PTU is
 already a plasmid taxonomic unit.
+
+There is a second selection in the file that the file does not state. Every
+one of the 3,961 records carries a named PTU. COPLA writes `-` for an
+unclassified plasmid and `PTU-?` for a putative new one; neither appears.
+Against COPLA's own benchmark — 41% of new plasmids assignable overall, 63%
+within Enterobacterales — a file with no unassigned rows is one the
+unclassifiable plasmids have already been dropped from, which runs toward
+well-sampled lineages and sits upstream of every number here.
+
+The file also carries **no accession, assembly or strain identifier of any
+kind**: ten columns, none of which names a record. So these plasmids cannot be
+joined to the published PTU membership tables, to replicon or MOB typing, or
+to any external annotation. Questions of the form "do lineages with different
+partitioning architectures scale differently" are good ones and cannot be
+asked of this file; they need the accessions, which means going back to the
+authors' upstream data rather than their modelling subset.
 
 Every plasmid here was sequenced, assembled and binned, and copy number
 affects all three. Whether the family-level pattern is itself selected, or

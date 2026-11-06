@@ -163,6 +163,27 @@ and the same test re-run:
 A break of that size would have been seen at ΔAIC ≈ −45. The observed value
 is −1.3.
 
+**Sign convention.** ΔAIC here is AIC(segmented) − AIC(single line), so a
+negative value favours the segmented model. The receipt records it under
+`delta_aic_segmented_minus_single`, and the single line is fitted with two
+parameters against the hinge's four.
+
+**How nine families were arrived at.** The file holds 3,961 records across 139
+PTU labels. 116 PTUs hold at least three records and supply the 3,930 used for
+centring; 23 hold one or two, 15 of them singletons, and the median PTU holds
+ten. Nine PTUs hold at least five records on **each** side of the fitted
+breakpoint, and those nine hold 943 records — 23.8% of the file. The nine are
+therefore the largest, best-sampled, mostly Enterobacterales-associated
+lineages, not a sample of plasmid diversity.
+
+The per-family test is weak where it matters most. Taking the thinner side of
+each family: PTU-E64 has 6, PTU-E42 8, PTU-FK and PTU-FS 9 each, PTU-B/O/K/Z
+and PTU-Bac45 11, PTU-I1 22, PTU-E5 38 and PTU-FE 101. A hinge fitted across a
+side holding six points is nearly unconstrained, which is the likeliest reading
+of the disagreeing directions below. Records within a PTU are also related by
+descent, so they are not independent observations and the nominal AIC
+comparison flatters itself.
+
 Nine families have at least five records on each side of the fitted
 breakpoint. Three prefer a kink, and the directions disagree — PTU-FS runs
 +0.63 then −3.41, PTU-E5 −1.10 then +0.84, PTU-E64 −0.74 then +0.07. Only
@@ -190,6 +211,15 @@ Maddamsetti's sample, which is not in these data.
 ## What this does not establish
 
 - Nothing about Fig. 5A, which uses a different and larger dataset.
+- That these plasmids represent plasmids. Beyond the PCN floor in §2 there is
+  a **second selection in the file that it does not state**: every one of the
+  3,961 records carries a named PTU. COPLA writes `-` for an unclassified
+  plasmid and `PTU-?` for a putative new one, and neither string appears here.
+  Against COPLA's own benchmark — 41% of new plasmids assignable to an existing
+  PTU overall, 63% within Enterobacterales — a file with no unassigned rows is
+  one the unclassifiable plasmids have already been removed from. That selection
+  runs toward well-sampled lineages, and it is upstream of every number in this
+  document.
 - That the breakpoint is biological. This was listed here as untested; §5
   now tests it, and the mixture reading wins. What remains untested is
   whether the family-level pattern — small families with high copy number,
