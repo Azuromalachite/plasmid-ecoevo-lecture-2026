@@ -135,6 +135,66 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the model-selection changeset — OF-22 and OF-23
+
+### OF-22 — a searched breakpoint was charged as a fixed one
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §3, §5
+
+The pooled ΔAIC of −148.1 came from scanning a 200-point grid of
+breakpoints and keeping the best, then charging four parameters against
+two. Under the null of no bend the breakpoint is not a parameter at all,
+so AIC's regularity conditions fail — the Davies problem. Searching buys
+negative ΔAIC for free, and nothing here measured how much.
+
+Calibrating against no-bend data that keeps the real x values and PTU
+structure: the null median for a *searched* ΔAIC is −23.1 (parametric) or
+−28.6 (block resampled), and **88–93% of no-bend datasets reach the
+conventional −4**. The observed −148.1 gives an empirical p of 0.008
+against the parametric null and **0.052 against the block null** — not
+significant at 5% once realistic within-PTU correlation is allowed.
+
+The inversion is the useful part: the fixed-knee PTU fixed-effects result
+of −19.5, which reads as modest, lies beyond the entire null range under
+both nulls (p = 0.000), because that fit searched nothing. The impressive
+number was the weak one.
+
+**Correction:** applied. §9 carries the calibration table and says that
+every searched ΔAIC must be read against it rather than against −4.
+`aic_calibration.py` reproduces it and asserts the searched statistic is
+biased downward under the null. The quoted ΔAIC values are unchanged —
+what changes is what they are worth.
+
+---
+
+### OF-23 — a hinge was only ever compared against a straight line
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §3, §5
+
+The segmented fit was compared against a single line and the win read as a
+breakpoint at 1.73% of chromosome. A smooth curve also beats a straight
+line. At matched parameter count (k=4) a plain **cubic beats the hinge by
+19.0 AIC units** and a natural spline beats it by 10.6; five-fold CV and
+leave-one-PTU-out CV both prefer the cubic too.
+
+The differences among curved models are small — the hinge is 0.55% off the
+best on random folds — and that is the point. The data support curvature;
+they do not single out the one shape that implies a threshold.
+
+Separately, a cluster bootstrap over PTUs puts the breakpoint's 95%
+interval at **[0.41%, 2.05%]**, a factor of five, so the three significant
+figures in "1.73%" were never supported.
+
+**Correction:** applied. §9 carries both comparisons and the interval, and
+§3's opening sentence now points at them. `smooth_vs_hinge.py` reproduces
+it. Not done: the lecture pages that describe a threshold have not been
+revisited, and the Maddamsetti dataset has not been put through the same
+comparison.
+
+---
+
 ## Closed in the scaling-corrections changeset — OF-18 to OF-21
 
 Four claims in `reproductions/ramiro-scaling/RESULTS.md` were wrong or

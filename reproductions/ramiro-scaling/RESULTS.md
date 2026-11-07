@@ -78,7 +78,7 @@ Putting these data on Maddamsetti's chromosome-normalised axis:
 | breakpoint | 1.84% of chromosome | **1.73%** |
 | slope below | −0.880 | −0.683 |
 | slope above | −0.125 | −0.152 |
-| model preference | segmented | **ΔAIC = −148.1**, segmented |
+| model preference | segmented | **ΔAIC = −148.1**, segmented (see §9: against a no-bend null a *searched* ΔAIC of this size has empirical p = 0.008 to 0.052, and a cubic at the same parameter count fits better) |
 
 Different sample, different coverage estimator, different filters — and the
 breakpoint lands within 0.1 percentage points. The upper slope agrees
@@ -511,6 +511,107 @@ either grouping, the slope *above* the bend turns positive (+0.133 for PTU,
 plasmids within a PTU. That is not something this analysis predicted and
 it is not something these data explain.
 
+
+
+## 9. What a searched ΔAIC is worth, and whether a hinge is the right shape
+
+Two checks this document should have run before leaning on ΔAIC at all.
+Both bear on numbers quoted above. Neither changes a fitted coefficient;
+both change what the coefficients are worth.
+
+### A searched breakpoint is not a two-parameter model
+
+The pooled ΔAIC of −148.1 was earned by scanning a 200-point grid of
+breakpoints and keeping the best, then charged as four parameters against
+two, as though the knee had been named in advance. Under the null of no
+bend the breakpoint does not exist as a parameter at all, so the usual
+regularity conditions behind AIC and the likelihood-ratio test fail. This
+is the Davies problem and nothing here corrected for it.
+
+It cannot be corrected analytically, but it can be calibrated: generate
+data with **no bend**, keep the real x values and the real PTU structure,
+run the same search, and see what the search alone returns.
+
+| null | statistic | median | 5% crit | min | observed | empirical p |
+|---|---|---:|---:|---:|---:|---:|
+| parametric | pooled, knee **searched** | −23.1 | −92.9 | −233.6 | −148.1 | **0.008** |
+| parametric | PTU FE, knee fixed | +1.5 | −2.5 | −9.8 | −19.5 | **0.000** |
+| block | pooled, knee **searched** | −28.6 | −148.3 | −505.2 | −148.1 | **0.052** |
+| block | PTU FE, knee fixed | +1.5 | −2.5 | −8.9 | −19.5 | **0.000** |
+
+The parametric null adds a PTU random intercept and Gaussian noise with
+the variance decomposition of the real residuals. The block null resamples
+residuals from the *segmented* fit in whole PTU blocks onto a straight
+line, so the real residual shape and within-PTU correlation survive and
+the bend is not recycled into its own null.
+
+**The conventional bar of −4 is reached by 88–93% of no-bend datasets when
+the knee is searched**, and by 2% when it is fixed. So −4 means nothing
+here.
+
+**The headline number is the weak one.** −148.1 reads as overwhelming
+against a textbook −4 and is ordinary against its own null: p = 0.008
+under the parametric null and **p = 0.052 under the block null**, which is
+to say not significant at 5% once realistic within-PTU correlation is
+allowed. Meanwhile −19.5, which looks modest, is beyond the entire null
+range under both (p = 0.000) because that fit searched nothing.
+
+Every ΔAIC in this document that came from a knee search should be read
+against this table rather than against −4. The fixed-knee results are
+unaffected. Reproduced by `aic_calibration.py`.
+
+### A hinge beating a line is not evidence of a threshold
+
+A smoothly curving relationship also beats a straight line. The comparison
+never run here is hinge against smooth **at the same number of
+parameters**.
+
+| model | k | AIC | ΔAIC vs line |
+|---|---:|---:|---:|
+| line | 2 | 1437.2 | +0.0 |
+| quadratic | 3 | 1325.9 | −111.2 |
+| hinge, knee searched | 4 | 1289.0 | −148.1 |
+| **cubic** | **4** | **1270.0** | **−167.1** |
+| natural spline, 4 knots | 4 | 1278.4 | −158.8 |
+| natural spline, 5 knots | 5 | 1273.1 | −164.0 |
+
+At matched complexity a plain cubic beats the hinge by 19.0 AIC units and
+a natural spline beats it by 10.6. Cross-validation agrees on both
+designs:
+
+| model | random 5-fold MSE | leave-one-PTU-out MSE |
+|---|---:|---:|
+| line | 0.08416 | 0.08536 |
+| quadratic | 0.08180 | 0.08313 |
+| hinge | 0.08116 | 0.08213 |
+| **cubic** | **0.08071** | **0.08185** |
+| natural spline, 4 knots | 0.08086 | 0.08228 |
+
+The differences among the curved models are small -- the hinge is 0.55%
+off the best on random folds and 0.34% on held-out lineages -- and that is
+the finding. **The data support curvature. They do not single out a
+hinge**, and a hinge is the only one of these shapes that implies a
+threshold.
+
+Worth noting what the leave-one-PTU-out column does say: every model
+predicts unseen *lineages* almost as well as unseen *plasmids*
+(0.08185 against 0.08071 for the cubic). The size--copy-number
+relationship does transfer across PTUs. That supports a shared
+relationship; it does not support a shared discontinuity.
+
+### The knee does not survive an interval
+
+| | estimate | 95% interval |
+|---|---:|---|
+| breakpoint, % of chromosome | 1.71% | **[0.41%, 2.05%]** |
+
+Cluster bootstrap over PTUs, 400 resamples. The interval spans a factor of
+5.0. **Quoting a threshold at "1.73%" to three significant figures is not
+supported**, and statements elsewhere in this document that treat the
+breakpoint location as a measured quantity should be read with that
+interval attached.
+
+Reproduced by `smooth_vs_hinge.py`.
 
 ## Defects in the input files
 
