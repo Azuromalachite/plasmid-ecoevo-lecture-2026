@@ -157,10 +157,23 @@ def main() -> int:
     cop_raw, cop_sha = fetch(SOURCES["copla2"], a.work, a.exploratory)
 
     csv.field_size_limit(10_000_000)
-    cop = {}
+    # COPLA2 ships its own curation flag and the first version of this
+    # script ignored it. 25,363 of the 89,393 entries are marked Remove=Y
+    # with a stated reason -- Borreliaceae sequences, sub-1500 bp fragments,
+    # and oversized entries. EVERY sequence above 1.5 Mb is flagged, up to
+    # an 11,850,240 bp "plasmid". 371 flagged records reached this join.
+    cop, n_flagged = {}, 0
     for r in csv.DictReader(
             io.StringIO(cop_raw.decode("utf-8", "replace")), delimiter="\t"):
+        if (r.get("Remove") or "").strip().upper() == "Y":
+            n_flagged += 1
+            continue
         cop[r["ID"].strip()] = r
+    print(f"  COPLA2: kept {len(cop):,} entries, dropped {n_flagged:,} "
+          f"marked Remove=Y")
+    assert n_flagged > 0, (
+        "the Remove column parsed as all-N; check the header spelling "
+        "before trusting this join")
 
     rows = []
     for r in csv.DictReader(io.StringIO(mad_raw.decode("utf-8", "replace"))):

@@ -78,7 +78,7 @@ Putting these data on Maddamsetti's chromosome-normalised axis:
 | breakpoint | 1.84% of chromosome | **1.73%** |
 | slope below | −0.880 | −0.683 |
 | slope above | −0.125 | −0.152 |
-| model preference | segmented | **ΔAIC = −148.1**, segmented |
+| model preference | segmented | **ΔAIC = −148.1**, segmented (see §9: against a no-bend null a *searched* ΔAIC of this size has empirical p = 0.008 to 0.052, and a cubic at the same parameter count fits better) |
 
 Different sample, different coverage estimator, different filters — and the
 breakpoint lands within 0.1 percentage points. The upper slope agrees
@@ -189,9 +189,13 @@ headline exponent in §1 is also a between-PTU effect.
 **Those two reductions are not the same quantity, and an earlier version of
 this section leaned on the wrong one.** ΔAIC falls 87%, but ΔAIC is a
 model-comparison statistic, not a share of anything: the adjusted fit also
-spends 116 parameters on intercepts while only 4.7% of the variance in size
-lies within PTUs, so a large drop is expected whether or not the bend is
-real. The quantity that measures the bend is the change in slope, and it
+is not a share of anything. An earlier version of this file explained the
+drop by saying the adjusted fit "spends 116 parameters on intercepts". That
+is wrong: both models in that comparison carry the same PTU intercepts, so
+their penalties cancel exactly and the two differ by a single parameter
+(`n_ptu + 3` against `n_ptu + 2`, `reproduce.py:403`). The drop is real, and
+it is a drop in *evidence* for a hinge once between-PTU variation is removed
+-- a different question from how large the hinge is. The quantity that measures the bend is the change in slope, and it
 falls from **+0.533** to **+0.380** — a **29%** reduction. Roughly seven
 tenths of the bend's magnitude survives adjusting for PTU.
 
@@ -314,6 +318,19 @@ is not corroboration.
 
 ## 7. The two tails
 
+> **Units correction, 7 November 2026.** `PIRASequencingCoverage` in the
+> Maddamsetti supplement is **mapped reads per base**, not base depth: it
+> equals `PIRAReadCount / replicon_length` exactly, for all 16,861 rows, to
+> a relative error of 1.5e-10 (implied read length 1.0000). Earlier versions
+> of this file read "0.6x" as base coverage and argued that the low tail was
+> partly a measurement artefact. **That argument is withdrawn.** A value of
+> 0.57 on a 111,773 bp plasmid is 63,279 mapped reads, and not one of the
+> 2,487 sub-one-copy plasmids was called from fewer than 1,000 reads. The
+> units cancel in the copy-number ratio, so no fitted result anywhere in
+> this document changes -- only the interpretation of measurement quality.
+> Checked by `coverage_units.py`.
+
+
 Maddamsetti's file keeps the plasmids below one copy that this subset
 excludes, and carries the coverage each estimate came from, so it is the one
 that can say what lives at the extremes. The two tails are nothing like each
@@ -323,31 +340,42 @@ other.
 |---|---|---|
 | median length | 2,505 bp | 111,773 bp |
 | median % of chromosome | 0.056% | 2.566% |
-| median read coverage | 87.7x | **0.6x** |
-| called from under 5x | 0.8% | **95.5%** |
+| median mapped read count | 269,374 | 63,279 |
+| called from under 1,000 reads | 0 | 0 |
 | enriched genera | *Salmonella* 3.7x | *Agrobacterium* **25x**, *Paracoccus* 6.0x, *Pantoea* 5.6x, *Rhizobium* 5.1x |
 
-**The high tail tracks sequencing depth, not biology, at its extreme.** A
-reader asked whether the two top rows, both *Chlamydia psittaci* at 7,553 bp,
-were one record entered twice. They are not -- different accessions, different
-assemblies, one isolate from a parrot foetus and one from a placenta -- and no
-plasmid accession appears twice anywhere in the file. What they are is the
-same plasmid in different genomes, and its other appearances settle the
-question:
+**The extreme top of the high tail is a library artefact.** A reader asked
+whether the two top rows, both *Chlamydia psittaci* at 7,553 bp, were one
+record entered twice. They are not -- different accessions, different
+assemblies, **both from horses**, one from fetal tissue and one from
+placental tissue. (An earlier version of this file said parrot; the parrot
+is a different, low-copy row in the same table.) No plasmid accession
+appears twice anywhere in the file.
 
-| accession | copies | coverage | isolate |
-|---|---:|---:|---|
-| `NZ_CP110212.1` | 1.7 | 30x | parrot, faeces |
-| `NZ_OU508368.1` | 3.9 | 6x | magpie, cloacal swab |
-| `NZ_CP047320.1` | 4.0 | 4x | goat |
-| `NZ_CP018053.1` | 7.9 | 7x | human |
-| `NZ_CP015297.1` | 14.5 | 33x | human |
-| `NZ_CP015299.1` | 30.0 | 46x | human |
-| **the two in the tail** | **2,268-2,423** | **4,615-4,722x** | parrot foetus, placenta |
+An earlier version also ran all eight rows together as one plasmid. They are
+**three species**, so the comparison to make is within *C. psittaci*:
 
-One conserved plasmid, a 1,400-fold range, and the extremes are exactly the
-only two assemblies sequenced past 4,000x. Copy number is a ratio, and at that
-depth the denominator is doing something the biology is not.
+| accession | species | copies | reads/base | chr reads/base | isolate |
+|---|---|---:|---:|---:|---|
+| `NZ_CP110212.1` | *C. psittaci* | 1.7 | 29.9 | 17.54 | Amazon parrot, faeces |
+| `NZ_CP047320.1` | *C. psittaci* | 4.0 | 4.0 | 0.99 | goat |
+| `NZ_CP092198.1` | *C. psittaci* | **2,268** | **4,721.6** | 2.08 | horse, placental tissue |
+| `NZ_CP092200.1` | *C. psittaci* | **2,423** | **4,615.4** | 1.90 | horse, fetal tissue |
+| `NZ_OU508368.1` | *C. abortus* | 3.9 | 5.5 | 1.44 | magpie, cloacal swab |
+| `NZ_CP018053.1` | *C. trachomatis* | 7.9 | 7.3 | 0.92 | human |
+| `NZ_CP015297.1` | *C. trachomatis* | 14.5 | 33.2 | 2.29 | human |
+| `NZ_CP015299.1` | *C. trachomatis* | 30.0 | 46.2 | 1.54 | human |
+
+Within *C. psittaci* the same 7,553 bp element is called at 1.7, 4.0, 2,268
+and 2,423 copies.
+
+It is worth being exact about which half of the ratio fails, because this
+document got it wrong on first writing. Copy number is plasmid coverage
+divided by chromosome coverage. The two horse rows have chromosome coverage
+of 1.90 and 2.08 reads per base -- the 75th and 77th percentile of the file,
+**better** than the median of 0.84. The denominator is unremarkable; the
+numerator is at the 100th percentile. Across all 12,006 rows copy number
+correlates +0.77 with the numerator and only -0.10 with the denominator.
 
 **And 23.5% of the file is not independent.** 2,818 of 12,006 rows share an
 organism and an exact plasmid length with another row -- the same plasmid in a
@@ -363,19 +391,31 @@ above 2,000 copies at more than 4,000x coverage, where that plasmid is
 normally described at single-digit copy number. Copy number is a ratio, and
 anything that depresses the chromosomal denominator inflates it.
 
-**The low tail is two populations wearing one label.** The first is a
-measurement problem: a ratio estimated from 0.6x coverage is barely an
-estimate. The second is real biology -- *Agrobacterium*, *Rhizobium*,
+**The low tail is one population, not two.** An earlier version of this
+file split it into a measurement artefact and real biology. With the units
+corrected the artefact half is withdrawn: the median sub-one-copy plasmid
+carries 63,279 mapped reads and the Poisson relative standard error on that
+count is 0.40%. What is left is real biology -- *Agrobacterium*, *Rhizobium*,
 *Paracoccus* and *Pantoea* carry large, genuinely low-copy secondary
 replicons, and a value slightly below one is what the measurement should give
 for a replicon held at one per chromosome in most of a culture.
 
 That bears directly on §3. The PCN >= 1 cut removes this whole population,
 and it accounts for about 42% of the slope difference between the two labs.
-What it removes is not a clean class, and no filter on copy number alone
-separates the low-coverage artefact from the low-copy replicon.
+What it removes is now easier to name than it was: a real low-copy biology
+concentrated in the genera that carry large secondary replicons.
 
 ## 8. The same test on an independent, accession-keyed dataset
+
+> **Defect found 7 November 2026: the COPLA2 `Remove` flag was never
+> consulted.** COPLA2 RefSeq 224 marks 25,363 of its 89,393 entries
+> `Remove=Y`, with a stated reason -- Borreliaceae sequences, sub-1500 bp
+> fragments, and oversized entries. Every sequence above 1.5 Mb is flagged,
+> up to an 11,850,240 bp "plasmid". `copla_replication.py` did not filter on
+> it, so **371 of this section's 11,381 joined plasmids (3.3%) should not
+> have been there**. The script now honours the flag; the numbers in the
+> tables below predate that fix and are marked where they are affected.
+
 
 Everything above rests on one file, and three of its limitations trace to
 that single fact: no accession, so no join to anything; copy numbers below
@@ -420,12 +460,41 @@ PTU-FE spans IncFII, Col156;IncFIA and others; PTU-E3 is 52% Col(pHAD28) and
 27% a Col(pHAD28);Col440 combination. The two classifications are correlated
 and not interchangeable, which is what the correction asserted.
 
-And replicon type is the **worse** absorber of the two. Grouping by it leaves
-a *larger* slope change than the pooled fit (+0.905 against +0.742), so
-within a replicon type the bend is steeper than across the whole sample.
-Whatever generates the composition effect, it is not shared replication
-machinery as the annotation defines it. Grouping by genus barely touches the
-bend at all (ΔAIC −1325.6 of −1392.2), so it is not host taxonomy either.
+~~And replicon type is the **worse** absorber of the two ... within a
+replicon type the bend is steeper than across the whole sample.~~
+**Withdrawn, 7 November 2026.** That comparison was computed on two
+different samples -- 8,411 plasmids carry a PTU call and 6,620 a replicon
+call -- and on a join that included the 371 curator-flagged records. Redone
+on the 6,005 records carrying **both** labels, curated, with the knee held
+fixed (§5 shows a refitted knee is not comparable once groups differ in mean
+size), the point estimates are pooled +0.758, PTU +0.686, replicon +0.923.
+The direction of the original claim survives as a point estimate, but it
+does not survive being tested:
+
+| | difference from pooled | 95% interval | excludes zero |
+|---|---:|---|---|
+| replicon - pooled | +0.212 | [-0.217, +0.625] | no |
+| PTU - pooled | -0.063 | [-0.366, +0.245] | no |
+
+That is a cluster bootstrap resampling whole replicon groups, which is the
+right unit because plasmids within a group are not independent. Neither
+adjustment's effect on the bend is resolvable from zero. The sign also
+reverses with the knee: replicon exceeds pooled at knees of 1.0-2.2% and
+falls below it at 3.0-4.0%.
+
+A granularity control rules out the obvious objection in the other
+direction: a random partition with the same 511 groups and the same group
+sizes gives +0.761, essentially the pooled value, so random grouping is
+neutral and the replicon point estimate is not an artefact of group count.
+The estimate is real; its *uncertainty* is what defeats it.
+
+**So this section cannot say which annotation absorbs the bend better, and
+no hypothesis about distinct replication strategies can rest on it.**
+Reproduced by `replicon_adjustment.py`.
+
+Grouping by genus barely touches the bend at all (ΔAIC −1325.6 of −1392.2),
+so it is not host taxonomy either -- that comparison has the same
+unmatched-sample and flag problems and has not been redone.
 
 ### What this does not fix
 
@@ -441,6 +510,129 @@ either grouping, the slope *above* the bend turns positive (+0.133 for PTU,
 +0.151 for replicon), meaning copy number rising with size among large
 plasmids within a PTU. That is not something this analysis predicted and
 it is not something these data explain.
+
+
+
+## 9. What a searched ΔAIC is worth, and whether a hinge is the right shape
+
+Two checks this document should have run before leaning on ΔAIC at all.
+Both bear on numbers quoted above. Neither changes a fitted coefficient;
+both change what the coefficients are worth.
+
+### A searched breakpoint is not a two-parameter model
+
+The pooled ΔAIC of −148.1 was earned by scanning a 200-point grid of
+breakpoints and keeping the best, then charged as four parameters against
+two, as though the knee had been named in advance. Under the null of no
+bend the breakpoint does not exist as a parameter at all, so the usual
+regularity conditions behind AIC and the likelihood-ratio test fail. This
+is the Davies problem and nothing here corrected for it.
+
+It cannot be corrected analytically, but it can be calibrated: generate
+data with **no bend**, keep the real x values and the real PTU structure,
+run the same search, and see what the search alone returns.
+
+| null | statistic | median | 5% crit | min | observed | empirical p |
+|---|---|---:|---:|---:|---:|---:|
+| parametric | pooled, knee **searched** | −23.1 | −92.9 | −233.6 | −148.1 | **0.008** |
+| parametric | PTU FE, knee fixed | +1.5 | −2.5 | −9.8 | −19.5 | **0.000** |
+| block | pooled, knee **searched** | −28.6 | −148.3 | −505.2 | −148.1 | **0.052** |
+| block | PTU FE, knee fixed | +1.5 | −2.5 | −8.9 | −19.5 | **0.000** |
+
+The parametric null adds a PTU random intercept and Gaussian noise with
+the variance decomposition of the real residuals. The block null resamples
+residuals from the *segmented* fit in whole PTU blocks onto a straight
+line, so the real residual shape and within-PTU correlation survive and
+the bend is not recycled into its own null.
+
+**The conventional bar of −4 is reached by 88–93% of no-bend datasets when
+the knee is searched**, and by 2% when it is fixed. So −4 means nothing
+here.
+
+**The headline number is the weak one.** −148.1 reads as overwhelming
+against a textbook −4 and is ordinary against its own null: p = 0.008
+under the parametric null and **p = 0.052 under the block null**, which is
+to say not significant at 5% once realistic within-PTU correlation is
+allowed. Meanwhile −19.5, which looks modest, is beyond the entire null
+range under both (p = 0.000) because that fit searched nothing.
+
+Every ΔAIC in this document that came from a knee search should be read
+against this table rather than against −4. The fixed-knee results are
+unaffected. Reproduced by `aic_calibration.py`.
+
+### A hinge beating a line is not evidence of a threshold
+
+A smoothly curving relationship also beats a straight line. The comparison
+never run here is hinge against smooth **at the same number of
+parameters**.
+
+| model | k | AIC | ΔAIC vs line |
+|---|---:|---:|---:|
+| line | 2 | 1437.2 | +0.0 |
+| quadratic | 3 | 1325.9 | −111.2 |
+| hinge, knee searched | 4 | 1289.0 | −148.1 |
+| **cubic** | **4** | **1270.0** | **−167.1** |
+| natural spline, 4 knots | 4 | 1278.4 | −158.8 |
+| natural spline, 5 knots | 5 | 1273.1 | −164.0 |
+
+At matched complexity a plain cubic beats the hinge by 19.0 AIC units and
+a natural spline beats it by 10.6. Cross-validation agrees on both
+designs:
+
+| model | random 5-fold MSE | leave-one-PTU-out MSE |
+|---|---:|---:|
+| line | 0.08416 | 0.08536 |
+| quadratic | 0.08180 | 0.08313 |
+| hinge | 0.08116 | 0.08213 |
+| **cubic** | **0.08071** | **0.08185** |
+| natural spline, 4 knots | 0.08086 | 0.08228 |
+
+The differences among the curved models are small -- the hinge is 0.55%
+off the best on random folds and 0.34% on held-out lineages -- and that is
+the finding. **The data support curvature. They do not single out a
+hinge**, and a hinge is the only one of these shapes that implies a
+threshold.
+
+Worth noting what the leave-one-PTU-out column does say: every model
+predicts unseen *lineages* almost as well as unseen *plasmids*
+(0.08185 against 0.08071 for the cubic). The size--copy-number
+relationship does transfer across PTUs. That supports a shared
+relationship; it does not support a shared discontinuity.
+
+### The knee does not survive an interval
+
+| | estimate | 95% interval |
+|---|---:|---|
+| breakpoint, % of chromosome | 1.71% | **[0.41%, 2.05%]** |
+
+Cluster bootstrap over PTUs, 400 resamples. The interval spans a factor of
+5.0. **Quoting a threshold at "1.73%" to three significant figures is not
+supported**, and statements elsewhere in this document that treat the
+breakpoint location as a measured quantity should be read with that
+interval attached.
+
+Reproduced by `smooth_vs_hinge.py`.
+
+## Defects in the input files
+
+Two problems in data this repository ships or downloads, recorded so that
+anyone reusing them starts from a known state.
+
+### `curateddataset.csv`, the `gc` column, is in mixed units
+
+2,155 of the 3,961 rows are fractions (median 0.485); 1,806 are percentages
+(median 49.81); there are **no values at all between 1 and 25**. Both halves
+have the same underlying GC, so it is a unit mix, not two populations.
+
+Taken raw it gives a mean "GC content" of 22.8% with a standard deviation of
+24.5. Normalised to percent it is 46.6% with a standard deviation of 7.7.
+Nothing in this repository reads that column -- neither `reproduce.py` nor
+any section above -- so no result here is affected, but anyone else using it
+should normalise first. Checked by `gc_units_check.py`.
+
+### COPLA2 RefSeq 224 ships a curation flag that must be applied
+
+25,363 of 89,393 entries are marked `Remove=Y`. See the note in §8.
 
 ## What this does not establish
 
