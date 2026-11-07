@@ -135,6 +135,128 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the scaling-corrections changeset — OF-18 to OF-21
+
+Four claims in `reproductions/ramiro-scaling/RESULTS.md` were wrong or
+unsupported on `main`. All four are corrected in the same commit as this
+entry. None of them changes a fitted number except OF-21, which withdraws
+a comparison rather than replacing it.
+
+### OF-18 — a coverage column was read in the wrong unit, and a conclusion was drawn from it
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §7
+
+`PIRASequencingCoverage` in the Maddamsetti supplement is **mapped reads
+per base**, not base depth: it equals `PIRAReadCount / replicon_length`
+exactly, for all 16,861 rows, to a relative error of 1.5e-10. §7 read
+"0.6x" as base coverage, called it "less than one read per base" and
+"barely an estimate", and concluded that the sub-one-copy tail was half a
+measurement artefact.
+
+That conclusion is the wrong way round. A value of 0.57 on a 111,773 bp
+plasmid is 63,279 mapped reads; not one of the 2,487 sub-one-copy plasmids
+was called from fewer than 1,000 reads; the Poisson relative standard error
+on the median is 0.40%. The low tail is *well* measured.
+
+The defect was invisible because the units cancel in the copy-number ratio,
+so every fitted result stayed correct while the prose around it did not.
+Nothing but interpretation was affected, which is exactly why nothing
+caught it: there was no number to disagree with.
+
+**Correction:** applied. The measurement-artefact argument is withdrawn,
+read counts replace coverage figures throughout §7 because they need no
+assumption about read length, and `coverage_units.py` asserts the identity
+and fails if the low tail ever does turn out to be read-starved.
+
+---
+
+### OF-19 — an AIC drop was explained by parameters that cancel
+
+**Severity:** moderate
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §5
+
+§5 explained the fall in ΔAIC from −148.1 to −19.4 by saying the adjusted
+fit "spends 116 parameters on intercepts". Both models in that comparison
+carry the same PTU intercepts — `reproduce.py:403` computes
+`aic(sse_fe2, nk, n_ptu + 3) - aic(sse_fe1, nk, n_ptu + 2)` — so the
+penalties cancel exactly and the two models differ by **one** parameter.
+
+The sentence was an explanation offered for a real observation, which is
+the dangerous kind of error: the ΔAIC values were right, the slope-change
+conclusion drawn from them was right, and only the stated reason was wrong.
+
+**Correction:** applied. The explanation is replaced with what the drop
+actually is — a drop in evidence for a hinge once between-PTU variation is
+removed, which is a different question from how large the hinge is.
+
+---
+
+### OF-20 — a curated database was used without its curation flag
+
+**Severity:** moderate
+**Location:** `reproductions/ramiro-scaling/copla_replication.py`
+
+COPLA2 RefSeq 224 marks 25,363 of its 89,393 entries `Remove=Y` with a
+stated reason: Borreliaceae sequences, sub-1500 bp fragments, and oversized
+entries. Every sequence above 1.5 Mb is flagged, up to an 11,850,240 bp
+"plasmid". The join never read the column, so **371 flagged records (3.3%)
+entered §8's 11,381**.
+
+3.3% is small, and the effect on §8's headline numbers is correspondingly
+small. It is recorded as moderate rather than trivial because the size of
+the effect was not knowable before it was measured, and because the same
+omission in a size-sensitive analysis is not small: in an independent check
+not published here, applying the flag moved one family's dip statistic
+threefold.
+
+**Correction:** applied. `copla_replication.py` now drops `Remove=Y` and
+asserts that the column parsed as something other than all-N, so a renamed
+header fails loudly instead of silently restoring the old behaviour. §8's
+tables predate the fix and say so; they have not been regenerated.
+
+---
+
+### OF-21 — a comparison between two annotations was made on two different samples
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §8
+
+§8 stated that replicon type is "the **worse** absorber of the two",
+leaving a larger slope change than the pooled fit (+0.905 against +0.742),
+and concluded that "within a replicon type the bend is steeper than across
+the whole sample".
+
+Three defects. The two adjustments were computed on different samples —
+8,411 plasmids carry a PTU call and 6,620 a replicon call. The join
+included the 371 flagged records of OF-20. And the knee was refitted, which
+§5 shows is not a valid comparison once groups differ in mean size.
+
+Redone on the 6,005 records carrying both labels, curated, knee held fixed,
+the point estimates are pooled +0.758, PTU +0.686, replicon +0.923 — the
+same direction. But a cluster bootstrap over whole replicon groups puts the
+replicon-minus-pooled difference at +0.212 [−0.217, +0.625] and the
+PTU difference at −0.063 [−0.366, +0.245]. Neither is distinguishable from
+zero, and the sign of the replicon comparison reverses across a knee grid
+from 1.0% to 4.0%.
+
+A granularity control was run because the obvious objection points the
+other way: replicon has *more* groups here than PTU (511 against 416). A
+random partition with the same group-size profile gives +0.761, essentially
+the pooled value, so random grouping is neutral and the point estimate is
+not an artefact of group count. The estimate is real; its uncertainty is
+what defeats it.
+
+**Correction:** applied. The claim is struck through and withdrawn rather
+than replaced, because the honest result is that this comparison cannot say
+which annotation absorbs the bend better. `replicon_adjustment.py`
+reproduces it and asserts that the intervals still contain zero and that
+the sign still reverses, so the withdrawal fails loudly if either stops
+being true. The genus comparison in the same paragraph has the same
+unmatched-sample and flag problems and has **not** been redone.
+
+---
+
 ## Closed in this changeset
 
 | ID | Was | Fix |
