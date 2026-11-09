@@ -52,16 +52,24 @@ as plasmids get bigger** -- about seven tenths of each size increase is
 paid off at the small end and about one seventh at the large end. That does
 not depend on there being a knee, or on where one sits.
 
-> **It does not survive the censoring, though. See OF-25.** A fixed
-> mapped-read threshold is a floor on plasmid DNA load, which is a line of
-> slope -1 in this plane -- the same constant-load line this section is
-> about. On the Maddamsetti file, where read counts are published, moving
-> away from that floor steepens the below-knee slope from -0.880 to -1.027
-> and then -1.114, crossing the constant-load value. How far the slope
-> really sits from -1 is **not identified** from a censored sample without
-> modelling the censoring. The *framing* -- that -1 is the baseline worth
-> measuring against -- stands. The measurement of the distance from it does
-> not.
+> **The sample is censored along this axis, and the direction of the bias
+> was reported backwards once. See OF-25 and OF-26.** A fixed mapped-read
+> threshold is a floor on plasmid DNA load, which is a line of slope -1 in
+> this plane -- the same constant-load line this section is about. OF-25
+> inferred from that, wrongly, that the measured distance from -1 was not
+> identified.
+>
+> Simulating a known slope and applying the real floor settles it: the
+> floor removes the bottom of the copy-number distribution, and it bites
+> harder at small sizes than large ones, so it makes the fitted slope
+> **steeper** than the truth by about **0.03** at a true slope of -0.62.
+> The real estimate is therefore slightly too steep and the truth is
+> slightly **shallower**, which makes compensation *more* partial, not
+> less. The floor also does not manufacture the bend: a straight truth put
+> through it yields dAIC -5.6, against -1462 in the data.
+>
+> So this section's conclusion stands, with the caveat that its slope is
+> biased steep by a small amount of a known sign.
 
 ### The bent load fit is not a second result
 

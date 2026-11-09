@@ -135,6 +135,81 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the bias-direction changeset — OF-26
+
+### OF-26 — OF-25 read its own evidence backwards
+
+**Severity:** major
+**Location:** `docs/open-findings.md` OF-25,
+`reproductions/ramiro-scaling/RESULTS.md` §0
+
+OF-25's derivation is correct and worth keeping: a fixed mapped-read
+threshold is a floor on plasmid DNA load, which is a line of slope -1 in
+the plane §0 measures, and it binds hardest at small sizes. The *inference*
+drawn from it is wrong.
+
+OF-25 observed that restricting to plasmids far from the floor steepens the
+below-knee slope from -0.880 to -1.027 to -1.114, and concluded that the
+censored sample was biased shallow, that the true slope might sit at or
+past -1, and that the distance from -1 was "not identified". Every part of
+that is wrong, and the mechanism says so plainly: the floor removes the
+*bottom* of the copy-number distribution at each size, and it removes more
+at small sizes than large ones, so it lifts the left end of the cloud and
+leaves the right end alone. That makes the fitted slope **steeper**, not
+shallower. A margin restriction is more of the same truncation, so
+`margin > 10` is further from the truth, not nearer it.
+
+Simulating a known slope, using the real sizes and the real per-assembly
+chromosome coverages, and applying the real floor:
+
+| true slope | fitted on everything | fitted on survivors | bias | kept |
+|---:|---:|---:|---:|---:|
+| -0.40 | -0.401 | -0.455 | **-0.054** | 92% |
+| -0.62 | -0.620 | -0.650 | **-0.029** | 95% |
+| -0.80 | -0.801 | -0.812 | -0.011 | 96% |
+| -1.00 | -1.002 | -0.996 | +0.006 | 96% |
+| -1.20 | -1.200 | -1.181 | +0.018 | 96% |
+
+The bias is negative — steeper — wherever the slope is shallower than -1,
+and it vanishes at -1 because a floor parallel to the relationship removes
+a band of constant width. It is also **small**: about 0.03 at the relevant
+slope, not the 0.15 to 0.23 the margin sweep appeared to show.
+
+**And the floor does not create the bend.** A straight truth put through
+it:
+
+| true slope | kept below | kept above | knee | dAIC |
+|---:|---:|---:|---:|---:|
+| -0.62 | -0.678 | -0.616 | 0.96% | **-5.6** |
+| -1.00 | -1.007 | -0.964 | 1.79% | **-0.8** |
+
+Against -0.880 then -0.129 with dAIC -1462 in the data. Three orders of
+magnitude apart, so the bend is not a censoring artefact.
+
+**What this means for §0.** Its conclusion stands. The measured slope is
+biased steep by roughly 0.03, so the truth is slightly shallower, so
+compensation is slightly *more* partial than reported. OF-25's withdrawal
+of that conclusion is itself withdrawn.
+
+**One limitation this simulation has.** It conditions on the sizes and
+chromosome coverages that are *in the file*, which are themselves
+post-filter. A fully specified version would need the pre-filter
+population, which the supplement does not provide. Re-applying the filter
+to an already-filtered design measures the incremental bias, so 0.03 is a
+lower bound on the total. The sign does not depend on that, because the
+mechanism does not.
+
+**Correction:** applied. §0's note is rewritten, OF-25 is marked as
+superseded on its inference while keeping its derivation, and
+`censor_direction.py` in the private working set reproduces the
+simulation. **This is the third correction to this one paragraph**, after
+OF-24 and OF-25. The pattern is worth naming: each round found a real
+defect and then over-read what it implied, and the over-reading was caught
+only by writing the mechanism out and simulating it rather than reasoning
+from a sensitivity sweep.
+
+---
+
 ## Closed in the censoring changeset — OF-25
 
 ### OF-25 — the read-count filter is a floor on the quantity section 0 measures
@@ -181,13 +256,14 @@ The below-knee slope crosses -1. At `margin > 10` the small plasmids are
 indistinguishable from carrying a constant DNA load, which is the exact
 negation of §0's conclusion.
 
-**Why this is not a correction in the other direction either.** Selecting
-on margin is selecting on load, so it biases the opposite way: at a given
-size, a high margin requires a high copy number, which pushes small
-plasmids up and steepens the fit. Neither the unfiltered sample nor any
-margin-restricted subset is unbiased. The honest statement is that the
-distance of the slope from -1 is **not identified** from this sample
-without a censoring model.
+**Superseded by OF-26 from here down.** This entry went on to argue that
+neither the unfiltered sample nor any margin-restricted subset is unbiased,
+and that the distance of the slope from -1 is therefore not identified.
+That is wrong. The floor removes the bottom of the copy-number distribution
+and bites hardest at small sizes, so it biases the slope **steep** by about
+0.03 — the margin sweep above is more truncation in the same direction, not
+a bracket around the truth. See OF-26 for the simulation. The derivation at
+the top of this entry stands; the inference below it does not.
 
 **What the published numbers in §0 rest on.** §0 quotes -0.620 from the
 Ramiro curated subset, not from Maddamsetti. That file publishes no read
