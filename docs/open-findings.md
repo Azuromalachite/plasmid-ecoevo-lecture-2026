@@ -135,6 +135,82 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the truncated-fit changeset — OF-27
+
+### OF-27 — the truncated regression, which OF-25 named as not done
+
+**Severity:** moderate (a refinement, not a defect)
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §0
+
+OF-25 said that modelling the censoring "would give an estimate rather than
+a range. It has not been attempted." OF-26 then fixed the direction of the
+bias. This closes the gap.
+
+**Why truncation and not Tobit.** Rows below the floor are *absent* from
+the published file, not recorded as censored with an unknown value. Tobit
+models censoring and is the wrong likelihood. For an observed row the right
+one is the normal density renormalised by the probability of having been
+observed at all:
+
+    log L = sum_i [ log phi((y_i - mu_i)/s) - log s
+                    - log( 1 - Phi((t_i - mu_i)/s) ) ]
+
+with `t_i = log10(10,000 / (L_p,i . cc_i))` — each row carries its own
+lower bound, set by its length and its assembly's chromosome coverage.
+Conditioning on observed covariates is valid because selection is a
+deterministic function of `y` and `t`, and `t` is a function of covariates.
+
+**Validated before use.** On simulated data with a known slope, truncated
+at the real floor:
+
+| true slope | least squares on survivors | truncated fit | OLS error | truncated error |
+|---:|---:|---:|---:|---:|
+| -0.40 | -0.455 | **-0.400** | -0.055 | -0.000 |
+| -0.62 | -0.649 | **-0.620** | -0.029 | +0.000 |
+| -0.80 | -0.812 | **-0.801** | -0.012 | -0.001 |
+| -1.00 | -0.997 | **-1.002** | +0.003 | -0.002 |
+
+Four settings out of four, and the script asserts it beats least squares in
+at least three — so a future change that breaks the estimator fails loudly
+instead of quietly returning a plausible number.
+
+**The estimate.**
+
+| | least squares | truncation-corrected |
+|---|---:|---:|
+| pooled slope | -0.717 | **-0.680** |
+| implied load slope | +0.283 | **+0.320** |
+| size increase paid off | 72% | **68%** |
+| below the knee | -0.886 | -0.870 |
+| above the knee | -0.146 | **-0.110** |
+| knee | 1.73% | 1.73% (unchanged) |
+
+The correction is +0.036 pooled, in the direction OF-26 predicted, and it
+leaves the knee where it was. The proportionally largest change is above
+the knee, where the paid-off share falls from 14.6% to 11.0%: the largest
+plasmids compensate even less than the uncorrected fit suggested.
+
+**So §0's conclusion is strengthened, not weakened.** Compensation is
+partial and weakens with size, and correcting for the floor makes it
+slightly more partial at both ends.
+
+**What it still does not fix.** The likelihood conditions on the lengths
+and chromosome coverages that are *in the file*, which are themselves
+post-filter — an assembly whose only plasmid fell below the floor
+contributes no row at all, so its covariates are missing too. Correcting
+that needs the pre-filter population, which the supplement does not
+provide. The estimate is therefore a correction for truncation in the
+response, not for selection in the design.
+
+**And it is the Maddamsetti file.** §0's headline -0.620 comes from the
+Ramiro subset, which publishes no read counts, so neither the diagnosis nor
+this correction can be applied there.
+
+**Correction:** applied. Reproduced by `truncated_fit.py` in the private
+working set.
+
+---
+
 ## Closed in the bias-direction changeset — OF-26
 
 ### OF-26 — OF-25 read its own evidence backwards
@@ -277,9 +353,9 @@ is not identified. Reproduced by `censoring.py` in the private working
 set; the derivation and the table above are the parts that bear on the
 public claim.
 
-**Not done.** Modelling the censoring — a truncated regression with the
-per-assembly floor as the truncation point — would give an estimate rather
-than a range. It has not been attempted.
+**Done, in OF-27.** A truncated regression with each row's own floor puts
+the correction at +0.036 on the pooled slope. The direction is the one
+OF-26 established, not the one this entry assumed.
 
 ---
 

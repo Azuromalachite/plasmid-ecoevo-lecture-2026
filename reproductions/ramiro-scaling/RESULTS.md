@@ -69,7 +69,12 @@ not depend on there being a knee, or on where one sits.
 > through it yields dAIC -5.6, against -1462 in the data.
 >
 > So this section's conclusion stands, with the caveat that its slope is
-> biased steep by a small amount of a known sign.
+> biased steep by a small amount of a known sign. **OF-27 now estimates
+> that amount instead of bounding it**: a truncated regression with each
+> row's own floor puts the correction at **+0.036** on the pooled slope
+> (-0.717 to -0.680 on the Maddamsetti file), which moves the share of each
+> size increase paid off from 72% to **68%**. Compensation is slightly
+> *more* partial than the uncorrected fit says.
 
 ### The bent load fit is not a second result
 
