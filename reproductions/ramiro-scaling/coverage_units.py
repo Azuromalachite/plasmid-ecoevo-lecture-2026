@@ -79,13 +79,24 @@ def main(path):
         print(f"  {g:<16}{len(v):>7}{st.median([r['cv'] for r in v]):>16.2f}"
               f"{rc:>16,.0f}{100/math.sqrt(rc):>15.2f}%")
 
-    low = [r for r in plas if r["pcn"] < 1]
-    thin = sum(1 for r in low if r["rc"] < 1000)
-    print(f"\n  sub-one-copy plasmids called from under 1,000 reads: "
-          f"{thin} of {len(low):,}")
-    assert thin == 0, (
-        "some of the low tail really is read-starved; the withdrawal of the "
-        "measurement-artefact argument would need qualifying")
+    # The file has a hard floor at 10,000 mapped reads, so asking whether
+    # any row falls under 1,000 is unfalsifiable -- it reports the upstream
+    # selection, not the sequencing. Detect the floor instead, and fail if
+    # it ever moves, which is a thing that can happen.
+    allrc = sorted(r["rc"] for r in plas)
+    floor = allrc[0]
+    near = sum(1 for v in allrc if v < floor * 1.01)
+    print(f"\n  lowest mapped-read count in the file: {floor:,.0f}")
+    print(f"  rows within 1% of it: {near}")
+    assert 9_000 <= floor <= 11_000, (
+        f"the read floor has moved to {floor:,.0f}; the selection this file "
+        f"was published under has changed and \u00a77's framing needs "
+        f"revisiting")
+    print("  -> a floor at 10,000 with a pile-up just above it is an "
+          "upstream")
+    print("     filter. Any statement that no row is short of reads "
+          "describes")
+    print("     that selection, not the sequencing (OF-24).")
 
     # --- which half of the ratio drives the tails ---------------------
     def corr(a, b):

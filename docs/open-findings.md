@@ -135,6 +135,57 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the read-floor changeset — OF-24
+
+### OF-24 — a supporting observation was circular, and its check could not fail
+
+**Severity:** moderate
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §7,
+`docs/open-findings.md` OF-18, `reproductions/ramiro-scaling/coverage_units.py`
+
+OF-18 withdrew the claim that the sub-one-copy tail was half a measurement
+artefact. The withdrawal is correct and rests on the units identity. But it
+was *supported* with a second observation — "not one of the 2,487
+sub-one-copy plasmids was called from fewer than 1,000 reads" — and that
+observation cannot distinguish anything.
+
+The published file has a hard floor at **10,000 mapped reads**. From the
+data, not from the prose: zero plasmids below 10,000, 15 in the first
+hundred reads above it, and a pile-up at the boundary. That is the
+signature of an upstream selection, so no row in the file can be under
+1,000 and the sentence reports the filter rather than the sequencing.
+
+Worse, `coverage_units.py` asserted it:
+
+```python
+assert thin == 0, (
+    "some of the low tail really is read-starved; the withdrawal of the "
+    "measurement-artefact argument would need qualifying")
+```
+
+That assertion has no domain in which it can fail. It is the defect class
+recorded for checks that cannot see their own failure, committed here in a
+script written to guard against exactly that.
+
+**What does not change.** The units identity is unaffected
+(`PIRASequencingCoverage == PIRAReadCount / replicon_length`, exact over
+16,861 rows), the Poisson precision argument is unaffected, and the
+withdrawal of the measurement-artefact reading stands. What is withdrawn is
+one redundant supporting sentence.
+
+**What this costs.** The floor is also a selection effect worth naming in a
+size–copy-number study: 10,000 mapped reads is a very different sequencing
+depth for a 3 kb plasmid than for a 300 kb one, and the file does not say
+how many plasmids were removed to impose it. That cannot be recovered from
+the supplement.
+
+**Correction:** applied. The sentence is marked circular where it appears,
+the assertion is replaced with one that detects the floor and reports it as
+selection, and the script now fails if the floor ever moves or disappears —
+which is a condition that can actually occur.
+
+---
+
 ## Closed in the model-selection changeset — OF-22 and OF-23
 
 ### OF-22 — a searched breakpoint was charged as a fixed one
@@ -215,9 +266,12 @@ exactly, for all 16,861 rows, to a relative error of 1.5e-10. §7 read
 measurement artefact.
 
 That conclusion is the wrong way round. A value of 0.57 on a 111,773 bp
-plasmid is 63,279 mapped reads; not one of the 2,487 sub-one-copy plasmids
-was called from fewer than 1,000 reads; the Poisson relative standard error
-on the median is 0.40%. The low tail is *well* measured.
+plasmid is 63,279 mapped reads, and the Poisson relative standard error on
+the median is 0.40%. The low tail is *well* measured on counting grounds.
+
+An earlier version of this entry also said that not one of the 2,487
+sub-one-copy plasmids was called from fewer than 1,000 reads. True, and
+circular: see OF-24.
 
 The defect was invisible because the units cancel in the copy-number ratio,
 so every fitted result stayed correct while the prose around it did not.
@@ -226,8 +280,9 @@ caught it: there was no number to disagree with.
 
 **Correction:** applied. The measurement-artefact argument is withdrawn,
 read counts replace coverage figures throughout §7 because they need no
-assumption about read length, and `coverage_units.py` asserts the identity
-and fails if the low tail ever does turn out to be read-starved.
+assumption about read length, and `coverage_units.py` asserts the identity.
+The read-starvation check it used to carry was unfalsifiable and has been
+replaced; see OF-24.
 
 ---
 

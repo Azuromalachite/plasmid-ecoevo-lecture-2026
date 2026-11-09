@@ -384,8 +384,11 @@ is not corroboration.
 > a relative error of 1.5e-10 (implied read length 1.0000). Earlier versions
 > of this file read "0.6x" as base coverage and argued that the low tail was
 > partly a measurement artefact. **That argument is withdrawn.** A value of
-> 0.57 on a 111,773 bp plasmid is 63,279 mapped reads, and not one of the
-> 2,487 sub-one-copy plasmids was called from fewer than 1,000 reads. The
+> 0.57 on a 111,773 bp plasmid is 63,279 mapped reads. (An earlier version
+> added "and not one of the 2,487 was called from fewer than 1,000 reads",
+> which is true and **circular**: the published file has a hard floor at
+> 10,000 mapped reads, so no row in it can be under 1,000. See OF-24. The
+> withdrawal rests on the units identity, not on the read counts.) The
 > units cancel in the copy-number ratio, so no fitted result anywhere in
 > this document changes -- only the interpretation of measurement quality.
 > Checked by `coverage_units.py`.
@@ -402,6 +405,7 @@ other.
 | median % of chromosome | 0.056% | 2.566% |
 | median mapped read count | 269,374 | 63,279 |
 | called from under 1,000 reads | 0 | 0 |
+| *(but the file is prefiltered at 10,000 reads, so this row is a property of the selection -- OF-24)* | | |
 | enriched genera | *Salmonella* 3.7x | *Agrobacterium* **25x**, *Paracoccus* 6.0x, *Pantoea* 5.6x, *Rhizobium* 5.1x |
 
 **The extreme top of the high tail is a library artefact.** A reader asked
