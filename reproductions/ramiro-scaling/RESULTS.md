@@ -50,8 +50,18 @@ median chromosome in this file.
 So the interpretable statement is **compensation is partial, and it weakens
 as plasmids get bigger** -- about seven tenths of each size increase is
 paid off at the small end and about one seventh at the large end. That does
-not depend on there being a knee, or on where one sits, which is why it
-survives everything in sections 9 and 14.
+not depend on there being a knee, or on where one sits.
+
+> **It does not survive the censoring, though. See OF-25.** A fixed
+> mapped-read threshold is a floor on plasmid DNA load, which is a line of
+> slope -1 in this plane -- the same constant-load line this section is
+> about. On the Maddamsetti file, where read counts are published, moving
+> away from that floor steepens the below-knee slope from -0.880 to -1.027
+> and then -1.114, crossing the constant-load value. How far the slope
+> really sits from -1 is **not identified** from a censored sample without
+> modelling the censoring. The *framing* -- that -1 is the baseline worth
+> measuring against -- stands. The measurement of the distance from it does
+> not.
 
 ### The bent load fit is not a second result
 

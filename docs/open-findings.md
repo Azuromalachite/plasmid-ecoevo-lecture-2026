@@ -135,6 +135,78 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the censoring changeset — OF-25
+
+### OF-25 — the read-count filter is a floor on the quantity section 0 measures
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §0
+
+OF-24 recorded that the published file has a hard floor at 10,000 mapped
+reads and named it a size-dependent inclusion rule. It did not work out
+what that rule is a rule *about*.
+
+A plasmid's mapped read count is its own reads per base times its length,
+exactly (median relative error 1.3e-10 over 12,006 rows). Reads per base is
+copy number times the chromosome's reads per base, to 0.2% (median relative
+error 2.4e-3; `PIRACopyNumber` is not exactly that ratio, which is itself
+recorded in §7). Therefore
+
+    N_p = cc . L_p . PCN = cc . load
+
+and the threshold `N_p >= 10,000` is a floor on **plasmid DNA load** at
+10,000/cc base pairs, set per assembly by its chromosome coverage. In the
+log(copy number) against log(relative size) plane that floor is a line of
+**slope exactly -1** — the same constant-load line §0 draws as its
+baseline. The sample is truncated along the one axis the claim is measured
+on.
+
+**How hard it binds.** 9.5% of plasmids sit within a factor of two of the
+threshold, and it binds hardest where §0's claim is strongest: 13–15% of
+the three smallest size deciles are within 2x of the cut, against 2% of the
+two largest. The median margin above the floor rises from 5.3x at the small
+end to 24.9x at the large end.
+
+**What it does to the slope.** Restricting to plasmids clear of the floor:
+
+| subset | n | straight | below knee | above knee | knee |
+|---|---:|---:|---:|---:|---:|
+| all | 12,006 | -0.717 | -0.880 | -0.129 | 1.82% |
+| margin > 2 | 10,868 | -0.737 | -0.901 | -0.150 | 1.90% |
+| margin > 5 | 8,193 | -0.775 | -0.963 | -0.183 | 1.97% |
+| margin > 10 | 5,601 | -0.789 | **-1.027** | -0.200 | 1.97% |
+| margin > 50 | 1,303 | -0.778 | **-1.114** | -0.256 | 2.31% |
+
+The below-knee slope crosses -1. At `margin > 10` the small plasmids are
+indistinguishable from carrying a constant DNA load, which is the exact
+negation of §0's conclusion.
+
+**Why this is not a correction in the other direction either.** Selecting
+on margin is selecting on load, so it biases the opposite way: at a given
+size, a high margin requires a high copy number, which pushes small
+plasmids up and steepens the fit. Neither the unfiltered sample nor any
+margin-restricted subset is unbiased. The honest statement is that the
+distance of the slope from -1 is **not identified** from this sample
+without a censoring model.
+
+**What the published numbers in §0 rest on.** §0 quotes -0.620 from the
+Ramiro curated subset, not from Maddamsetti. That file publishes no read
+counts, so this test **cannot be run on it**. Whether it carries a
+comparable floor is unknown, which makes §0's figure unverifiable rather
+than demonstrably biased. Either way the robustness claim goes.
+
+**Correction:** applied. §0 keeps the framing, which is what makes -1 the
+number to measure against, and now says that the measured distance from it
+is not identified. Reproduced by `censoring.py` in the private working
+set; the derivation and the table above are the parts that bear on the
+public claim.
+
+**Not done.** Modelling the censoring — a truncated regression with the
+per-assembly floor as the truncation point — would give an estimate rather
+than a range. It has not been attempted.
+
+---
+
 ## Closed in the read-floor changeset — OF-24
 
 ### OF-24 — a supporting observation was circular, and its check could not fail
@@ -177,7 +249,8 @@ one redundant supporting sentence.
 size–copy-number study: 10,000 mapped reads is a very different sequencing
 depth for a 3 kb plasmid than for a 300 kb one, and the file does not say
 how many plasmids were removed to impose it. That cannot be recovered from
-the supplement.
+the supplement. **OF-25 works out what the rule is a rule about, and it is
+worse than a nuisance: it is a floor on the exact quantity §0 measures.**
 
 **Correction:** applied. The sentence is marked circular where it appears,
 the assertion is replaced with one that detects the floor and reports it as
