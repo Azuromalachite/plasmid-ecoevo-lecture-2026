@@ -12,6 +12,66 @@ Run [`reproduce.py`](reproduce.py) to regenerate every number below;
 
 ---
 
+
+## 0. What the host pays for, and the baseline that gives the slope a meaning
+
+Every fit below regresses copy number on relative plasmid size and reports
+a slope. A slope of -0.62 is a number until there is something to compare
+it against, and the comparison that matters is not zero.
+
+A cell replicates, and pays for, **length x copy number** -- total plasmid
+DNA. Two plasmids make the point: 3 kb at 500 copies is 1.5 Mb; 30 kb at
+10 copies is 0.3 Mb. Five times the load from a plasmid ten times shorter.
+
+That supplies the null:
+
+    load = size x copy number,  so  PCN ~ size^b  =>  load ~ size^(1+b)
+
+| copy-number slope | implied load slope | meaning |
+|---|---|---|
+| **-1** | **0** | copy number cancels size exactly; every plasmid costs the same |
+| steeper than -1 | negative | bigger plasmids would cost less |
+| shallower than -1 | positive | bigger plasmids cost more; compensation is partial |
+
+**Nothing in this dataset is near -1.**
+
+| | PCN slope | load slope | share of each size increase paid off |
+|---|---:|---:|---:|
+| pooled | -0.620 | +0.380 | 62% |
+| below 1.73% of chromosome | -0.683 | +0.317 | 68% |
+| above 1.73% | -0.149 | +0.851 | 15% |
+
+The same thing without fitting anything, by size decile: median copy number
+falls 15-fold across the range while median plasmid DNA per cell still
+rises 7.1-fold, from 0.04 Mb to 0.31 Mb. Thirteen plasmids (0.3%) carry
+over 1 Mb of plasmid DNA per cell; the largest load is 4.2 Mb, 84% of a
+median chromosome in this file.
+
+So the interpretable statement is **compensation is partial, and it weakens
+as plasmids get bigger** -- about seven tenths of each size increase is
+paid off at the small end and about one seventh at the large end. That does
+not depend on there being a knee, or on where one sits, which is why it
+survives everything in sections 9 and 14.
+
+### The bent load fit is not a second result
+
+Fitting a segmented model to load and quoting its dAIC alongside the
+copy-number one would be counting the same result twice. In relative units
+`log(load) = log(size) + log(copies)`, so the load regression is the
+copy-number regression with 1 added to one coefficient and the hinge term
+untouched: identical residuals (largest difference 1.5e-15), identical
+knee, identical dAIC of -148.1. `dna_load.py` asserts this rather than
+asserting it in prose.
+
+Absolute load in base pairs *is* a different fit, because chromosome length
+varies and the reparametrisation is no longer exact -- and its knee lands
+at **0.70%** against 1.73% for copy number, a factor of 2.5 apart. Two ways
+of writing down the same burden put the breakpoint in different places,
+both inside the [0.41%, 2.05%] interval of section 9. One more reason not
+to read a location off it.
+
+Reproduced by `dna_load.py`.
+
 ## 1. The nine genera cannot be told apart
 
 | genus | PTUs | records | slope | ± se | R² |
