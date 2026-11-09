@@ -81,6 +81,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("data")
     ap.add_argument("--reps", type=int, default=400)
+    ap.add_argument("--json", help="write the null draws here")
     a = ap.parse_args()
 
     rows = []
@@ -201,6 +202,20 @@ def main():
     print("  against a textbook -4 and is ordinary against its own null,")
     print("  because searching 200 knees buys most of it. -19.5 looks modest")
     print("  and is decisive, because that fit searched nothing.")
+
+    if a.json:
+        import json
+        Path(a.json).write_text(json.dumps({
+            "observed": {"pooled": obs_d, "fe": obs_fe,
+                         "knee_pct": float(10 ** obs_c),
+                         "slope_change": obs_change},
+            "n": n, "reps": a.reps, "grid": GRID_N,
+            "nulls": {name: {"pooled": [round(float(v), 2) for v in ds],
+                             "fe": [round(float(v), 2) for v in fes],
+                             "p_pooled": float(p1), "p_fe": float(p2)}
+                      for name, (ds, fes, p1, p2) in res.items()},
+        }, separators=(",", ":")), encoding="utf-8")
+        print(f"\n  wrote {a.json}")
 
     assert np.median(res["parametric"][0]) < 0, (
         "the searched statistic is not biased downward under the null, "
