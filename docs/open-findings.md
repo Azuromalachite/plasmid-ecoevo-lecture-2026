@@ -135,6 +135,651 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the floor-margin changeset — OF-29
+
+### OF-29 — OF-28's caveat named a mechanism that the file contradicts
+
+**Severity:** major
+**Location:** `docs/open-findings.md` OF-28,
+`reproductions/ramiro-scaling/RESULTS.md` §9
+
+OF-28 established that the second dataset replicates OF-23 once domain and
+block size are matched, and that is unaffected. But it closed by saying
+that the rows driving the unmatched result — sub-one-copy plasmids, and
+those above 10% of chromosome — "are drawn from exactly the corner where
+the 10,000-read floor of OF-24 and OF-25 bites hardest," and that deciding
+what the wide-domain bend means is therefore a measurement question.
+
+The first half is false and the file says so directly. The floor is a lower
+bound on L<sub>p</sub> × PCN, a line of slope −1 in these coordinates, so
+it binds **small** plasmids. Measured:
+
+| group | n | median margin above floor | within 2× of floor |
+|---|---:|---:|---:|
+| all plasmids | 12,006 | 8.9× | 9.5% |
+| PCN < 1 | 2,487 | 6.3× | 16.2% |
+| **above 10% of chromosome** | **298** | **50.4×** | **0.0%** |
+| matched subset | 9,401 | 9.5× | 7.8% |
+
+Not one of the 298 largest-relative plasmids sits within twice the floor;
+they are the least censored rows in the file, not the most. The rows that
+*are* near the floor have a median size of 0.53% of chromosome against
+1.35% overall. Sub-one-copy plasmids are enriched near the floor by about
+two-fold, but 84% are comfortable, and at a median 62,231 mapped reads
+their Poisson counting error is 0.4%.
+
+Three further checks, all pointing the same way:
+
+- **Raising the floor strengthens the hinge.** At 2×, 5× and 10× the
+  published floor — dropping 10%, 32% and 53% of rows — ΔAIC against the
+  cubic runs +109.4 → +120.7 → +113.8 → +97.9, the spline margin grows
+  monotonically from +19.2 to +41.0, and both cross-validations still
+  prefer the hinge.
+- **Assembly fixed effects do not remove it.** A separate intercept per
+  assembly absorbs any per-genome error in the chromosome denominator
+  exactly, which covers the multifork-replication inflation that is the
+  main mechanistic reason to distrust PCN < 1. ΔAIC +70.3, knee 1.78%.
+  Genus fixed effects: +67.0, knee 1.75%.
+- **Read reassignment barely moves the estimates.** The file carries two
+  nested copy numbers — `InitialCopyNumberEstimate` and `PIRACopyNumber`,
+  from read sets satisfying `Initial + Additional = PIRA` exactly on all
+  16,861 rows. Reassignment moves the median estimate by 0.2% overall and
+  0.7% for sub-one-copy rows. Control: the 3,320 plasmids that received
+  zero additional reads move by 2×10⁻⁵, confirming the two columns are one
+  formula on nested read sets. This bounds one perturbation, not mapping
+  ambiguity in general.
+
+**Correction:** applied. §9's closing paragraph is rewritten and OF-28's
+caveat is marked superseded from the sentence that names censoring. The
+conclusion changes direction: sub-one-copy plasmids are not the weak link
+they were assumed to be, and the wide-domain bend is not a censoring
+artefact.
+
+What replaces it is a different limitation, and a real one. The
+wide-domain advantage is **concentrated, not broad**: a leave-one-genus-out
+pass puts most of it in a single genus, and removing the four most
+influential genera flips the verdict to the cubic. So it is a result about
+part of this sample rather than a result about plasmids, and no claim
+should be built on it until that is understood. The influence analysis
+itself is held outside this repository.
+
+**Method note.** The caveat was written from a plausible mechanism rather
+than from a measurement — the floor was known to exist, the rows were known
+to be unusual, and the two were joined without checking. The check took one
+query. This is the fourth entry in this file where the error was an
+unmeasured mechanism asserted in a sentence that sounded careful, after
+OF-21, OF-25 and OF-26.
+
+---
+
+## Closed in the second-dataset changeset — OF-28
+
+### OF-28 — the second dataset appeared to reverse OF-23, and did not
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §9,
+`reproductions/ramiro-scaling/smooth_vs_hinge.py`
+
+OF-23 closed with a named not-done: "the Maddamsetti dataset has not been
+put through the same comparison." Run on that dataset, the comparison
+appears to reverse it outright. At matched k the **hinge beats the cubic
+by 109.4 AIC units** and the spline by 19.2, random-split CV prefers the
+hinge, and the cluster bootstrap puts the knee at 1.82% with a 95%
+interval of **[1.71%, 1.95%]** — a factor of 1.1, against the factor of 5
+that OF-23 said made three significant figures unsupportable.
+
+Every one of those is an artefact of two choices that were not matched to
+the first dataset.
+
+**The domain is not the same.** Ramiro's curated subset carries a hard
+PCN ≥ 1 floor — its minimum is exactly 1.0000 — and reaches 10.13% of
+chromosome. Maddamsetti's file spans 0.02–71.5%, and **20.7% of its rows
+sit below one copy**. Restricting it to Ramiro's domain costs 2,605 rows
+and flips the verdict back.
+
+**The bootstrap unit is not comparable.** Ramiro's 3,961 plasmids fall in
+139 PTUs, 28.5 per block. Maddamsetti's 12,006 fall in 4,644 assemblies,
+2.6 per block. Resampling blocks of 2.6 treats near-identical plasmids
+from one genome as independent evidence about a knee. The file carries
+`Organism` and `Genus`, giving blocks of 9.7 and 38.9, and the interval
+widens monotonically with block size:
+
+| bootstrap unit | blocks | per block | 95% interval | factor |
+|---|---:|---:|---|---:|
+| assembly | 4,644 | 2.6 | [1.71%, 1.95%] | 1.1 |
+| organism | 1,240 | 9.7 | [1.34%, 2.08%] | 1.6 |
+| genus | 309 | 38.9 | [1.20%, 2.18%] | 1.8 |
+
+Matched on both — Ramiro's domain, genus blocks of comparable size — the
+second dataset **replicates OF-23 line by line**:
+
+| | Ramiro, 3,961, 139 PTUs | Maddamsetti matched, 9,401, 275 genera |
+|---|---|---|
+| block size | 28.5 per block | 34.2 per block |
+| hinge vs cubic, k=4 | cubic by 19.0 | **cubic by 21.7** |
+| hinge vs spline-4, k=4 | spline by 10.6 | **spline by 17.3** |
+| random 5-fold CV | cubic | **cubic** |
+| leave-lineage-out CV | cubic | **cubic** |
+| knee | 1.71% | **1.69%** |
+| knee 95% interval | [0.41%, 2.05%], ×5.0 | **[0.56%, 2.04%], ×3.7** |
+
+So OF-23's conclusion is not dataset-specific, and it now has an
+independent replication on 9,401 plasmids from 275 genera that was not
+available when it was written.
+
+What the unmatched run does establish, and this is not nothing: **the
+shape verdict is contingent on domain**. On the wider domain the hinge
+genuinely does fit better.
+
+**Superseded from here by OF-29.** This entry went on to attribute that to
+censoring — the rows producing it "drawn from exactly the corner where the
+10,000-read floor of OF-24 and OF-25 bites hardest." That is false. The
+floor binds small plasmids, not large ones; none of the 298 plasmids above
+10% of chromosome sits within twice it; and raising the floor tenfold
+strengthens the hinge rather than removing it. OF-29 has the measurements
+and the limitation that replaces it, which is concentration in one genus
+rather than censoring.
+
+**Correction:** applied. §9 carries the matched comparison and the
+block-size table, and `smooth_vs_hinge.py` grew `--max-x`, `--min-pcn`
+and `--group` so both are reproducible.
+
+**Method note.** This entry was first drafted as a reversal, on the
+strength of the unmatched run, and was not committed only because the
+domain check happened to be run before the write-up rather than after.
+OF-21 and OF-26 record the same pattern from the other side. What caught
+it was asking what *else* differs between two files besides the one
+variable the comparison is about — here, two things did, and each alone
+was enough to flip the answer. Still open: whether sub-one-copy copy
+numbers are trustworthy enough to include at all, which OF-27's truncated
+regression bears on but does not settle.
+
+---
+
+## Closed in the truncated-fit changeset — OF-27
+
+### OF-27 — the truncated regression, which OF-25 named as not done
+
+**Severity:** moderate (a refinement, not a defect)
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §0
+
+OF-25 said that modelling the censoring "would give an estimate rather than
+a range. It has not been attempted." OF-26 then fixed the direction of the
+bias. This closes the gap.
+
+**Why truncation and not Tobit.** Rows below the floor are *absent* from
+the published file, not recorded as censored with an unknown value. Tobit
+models censoring and is the wrong likelihood. For an observed row the right
+one is the normal density renormalised by the probability of having been
+observed at all:
+
+    log L = sum_i [ log phi((y_i - mu_i)/s) - log s
+                    - log( 1 - Phi((t_i - mu_i)/s) ) ]
+
+with `t_i = log10(10,000 / (L_p,i . cc_i))` — each row carries its own
+lower bound, set by its length and its assembly's chromosome coverage.
+Conditioning on observed covariates is valid because selection is a
+deterministic function of `y` and `t`, and `t` is a function of covariates.
+
+**Validated before use.** On simulated data with a known slope, truncated
+at the real floor:
+
+| true slope | least squares on survivors | truncated fit | OLS error | truncated error |
+|---:|---:|---:|---:|---:|
+| -0.40 | -0.455 | **-0.400** | -0.055 | -0.000 |
+| -0.62 | -0.649 | **-0.620** | -0.029 | +0.000 |
+| -0.80 | -0.812 | **-0.801** | -0.012 | -0.001 |
+| -1.00 | -0.997 | **-1.002** | +0.003 | -0.002 |
+
+Four settings out of four, and the script asserts it beats least squares in
+at least three — so a future change that breaks the estimator fails loudly
+instead of quietly returning a plausible number.
+
+**The estimate.**
+
+| | least squares | truncation-corrected |
+|---|---:|---:|
+| pooled slope | -0.717 | **-0.680** |
+| implied load slope | +0.283 | **+0.320** |
+| size increase paid off | 72% | **68%** |
+| below the knee | -0.886 | -0.870 |
+| above the knee | -0.146 | **-0.110** |
+| knee | 1.73% | 1.73% (unchanged) |
+
+The correction is +0.036 pooled, in the direction OF-26 predicted, and it
+leaves the knee where it was. The proportionally largest change is above
+the knee, where the paid-off share falls from 14.6% to 11.0%: the largest
+plasmids compensate even less than the uncorrected fit suggested.
+
+**So §0's conclusion is strengthened, not weakened.** Compensation is
+partial and weakens with size, and correcting for the floor makes it
+slightly more partial at both ends.
+
+**What it still does not fix.** The likelihood conditions on the lengths
+and chromosome coverages that are *in the file*, which are themselves
+post-filter — an assembly whose only plasmid fell below the floor
+contributes no row at all, so its covariates are missing too. Correcting
+that needs the pre-filter population, which the supplement does not
+provide. The estimate is therefore a correction for truncation in the
+response, not for selection in the design.
+
+**And it is the Maddamsetti file.** §0's headline -0.620 comes from the
+Ramiro subset, which publishes no read counts, so neither the diagnosis nor
+this correction can be applied there.
+
+**Correction:** applied. Reproduced by `truncated_fit.py` in the private
+working set.
+
+---
+
+## Closed in the bias-direction changeset — OF-26
+
+### OF-26 — OF-25 read its own evidence backwards
+
+**Severity:** major
+**Location:** `docs/open-findings.md` OF-25,
+`reproductions/ramiro-scaling/RESULTS.md` §0
+
+OF-25's derivation is correct and worth keeping: a fixed mapped-read
+threshold is a floor on plasmid DNA load, which is a line of slope -1 in
+the plane §0 measures, and it binds hardest at small sizes. The *inference*
+drawn from it is wrong.
+
+OF-25 observed that restricting to plasmids far from the floor steepens the
+below-knee slope from -0.880 to -1.027 to -1.114, and concluded that the
+censored sample was biased shallow, that the true slope might sit at or
+past -1, and that the distance from -1 was "not identified". Every part of
+that is wrong, and the mechanism says so plainly: the floor removes the
+*bottom* of the copy-number distribution at each size, and it removes more
+at small sizes than large ones, so it lifts the left end of the cloud and
+leaves the right end alone. That makes the fitted slope **steeper**, not
+shallower. A margin restriction is more of the same truncation, so
+`margin > 10` is further from the truth, not nearer it.
+
+Simulating a known slope, using the real sizes and the real per-assembly
+chromosome coverages, and applying the real floor:
+
+| true slope | fitted on everything | fitted on survivors | bias | kept |
+|---:|---:|---:|---:|---:|
+| -0.40 | -0.401 | -0.455 | **-0.054** | 92% |
+| -0.62 | -0.620 | -0.650 | **-0.029** | 95% |
+| -0.80 | -0.801 | -0.812 | -0.011 | 96% |
+| -1.00 | -1.002 | -0.996 | +0.006 | 96% |
+| -1.20 | -1.200 | -1.181 | +0.018 | 96% |
+
+The bias is negative — steeper — wherever the slope is shallower than -1,
+and it vanishes at -1 because a floor parallel to the relationship removes
+a band of constant width. It is also **small**: about 0.03 at the relevant
+slope, not the 0.15 to 0.23 the margin sweep appeared to show.
+
+**And the floor does not create the bend.** A straight truth put through
+it:
+
+| true slope | kept below | kept above | knee | dAIC |
+|---:|---:|---:|---:|---:|
+| -0.62 | -0.678 | -0.616 | 0.96% | **-5.6** |
+| -1.00 | -1.007 | -0.964 | 1.79% | **-0.8** |
+
+Against -0.880 then -0.129 with dAIC -1462 in the data. Three orders of
+magnitude apart, so the bend is not a censoring artefact.
+
+**What this means for §0.** Its conclusion stands. The measured slope is
+biased steep by roughly 0.03, so the truth is slightly shallower, so
+compensation is slightly *more* partial than reported. OF-25's withdrawal
+of that conclusion is itself withdrawn.
+
+**One limitation this simulation has.** It conditions on the sizes and
+chromosome coverages that are *in the file*, which are themselves
+post-filter. A fully specified version would need the pre-filter
+population, which the supplement does not provide. Re-applying the filter
+to an already-filtered design measures the incremental bias, so 0.03 is a
+lower bound on the total. The sign does not depend on that, because the
+mechanism does not.
+
+**Correction:** applied. §0's note is rewritten, OF-25 is marked as
+superseded on its inference while keeping its derivation, and
+`censor_direction.py` in the private working set reproduces the
+simulation. **This is the third correction to this one paragraph**, after
+OF-24 and OF-25. The pattern is worth naming: each round found a real
+defect and then over-read what it implied, and the over-reading was caught
+only by writing the mechanism out and simulating it rather than reasoning
+from a sensitivity sweep.
+
+---
+
+## Closed in the censoring changeset — OF-25
+
+### OF-25 — the read-count filter is a floor on the quantity section 0 measures
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §0
+
+OF-24 recorded that the published file has a hard floor at 10,000 mapped
+reads and named it a size-dependent inclusion rule. It did not work out
+what that rule is a rule *about*.
+
+A plasmid's mapped read count is its own reads per base times its length,
+exactly (median relative error 1.3e-10 over 12,006 rows). Reads per base is
+copy number times the chromosome's reads per base, to 0.2% (median relative
+error 2.4e-3; `PIRACopyNumber` is not exactly that ratio, which is itself
+recorded in §7). Therefore
+
+    N_p = cc . L_p . PCN = cc . load
+
+and the threshold `N_p >= 10,000` is a floor on **plasmid DNA load** at
+10,000/cc base pairs, set per assembly by its chromosome coverage. In the
+log(copy number) against log(relative size) plane that floor is a line of
+**slope exactly -1** — the same constant-load line §0 draws as its
+baseline. The sample is truncated along the one axis the claim is measured
+on.
+
+**How hard it binds.** 9.5% of plasmids sit within a factor of two of the
+threshold, and it binds hardest where §0's claim is strongest: 13–15% of
+the three smallest size deciles are within 2x of the cut, against 2% of the
+two largest. The median margin above the floor rises from 5.3x at the small
+end to 24.9x at the large end.
+
+**What it does to the slope.** Restricting to plasmids clear of the floor:
+
+| subset | n | straight | below knee | above knee | knee |
+|---|---:|---:|---:|---:|---:|
+| all | 12,006 | -0.717 | -0.880 | -0.129 | 1.82% |
+| margin > 2 | 10,868 | -0.737 | -0.901 | -0.150 | 1.90% |
+| margin > 5 | 8,193 | -0.775 | -0.963 | -0.183 | 1.97% |
+| margin > 10 | 5,601 | -0.789 | **-1.027** | -0.200 | 1.97% |
+| margin > 50 | 1,303 | -0.778 | **-1.114** | -0.256 | 2.31% |
+
+The below-knee slope crosses -1. At `margin > 10` the small plasmids are
+indistinguishable from carrying a constant DNA load, which is the exact
+negation of §0's conclusion.
+
+**Superseded by OF-26 from here down.** This entry went on to argue that
+neither the unfiltered sample nor any margin-restricted subset is unbiased,
+and that the distance of the slope from -1 is therefore not identified.
+That is wrong. The floor removes the bottom of the copy-number distribution
+and bites hardest at small sizes, so it biases the slope **steep** by about
+0.03 — the margin sweep above is more truncation in the same direction, not
+a bracket around the truth. See OF-26 for the simulation. The derivation at
+the top of this entry stands; the inference below it does not.
+
+**What the published numbers in §0 rest on.** §0 quotes -0.620 from the
+Ramiro curated subset, not from Maddamsetti. That file publishes no read
+counts, so this test **cannot be run on it**. Whether it carries a
+comparable floor is unknown, which makes §0's figure unverifiable rather
+than demonstrably biased. Either way the robustness claim goes.
+
+**Correction:** applied. §0 keeps the framing, which is what makes -1 the
+number to measure against, and now says that the measured distance from it
+is not identified. Reproduced by `censoring.py` in the private working
+set; the derivation and the table above are the parts that bear on the
+public claim.
+
+**Done, in OF-27.** A truncated regression with each row's own floor puts
+the correction at +0.036 on the pooled slope. The direction is the one
+OF-26 established, not the one this entry assumed.
+
+---
+
+## Closed in the read-floor changeset — OF-24
+
+### OF-24 — a supporting observation was circular, and its check could not fail
+
+**Severity:** moderate
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §7,
+`docs/open-findings.md` OF-18, `reproductions/ramiro-scaling/coverage_units.py`
+
+OF-18 withdrew the claim that the sub-one-copy tail was half a measurement
+artefact. The withdrawal is correct and rests on the units identity. But it
+was *supported* with a second observation — "not one of the 2,487
+sub-one-copy plasmids was called from fewer than 1,000 reads" — and that
+observation cannot distinguish anything.
+
+The published file has a hard floor at **10,000 mapped reads**. From the
+data, not from the prose: zero plasmids below 10,000, 15 in the first
+hundred reads above it, and a pile-up at the boundary. That is the
+signature of an upstream selection, so no row in the file can be under
+1,000 and the sentence reports the filter rather than the sequencing.
+
+Worse, `coverage_units.py` asserted it:
+
+```python
+assert thin == 0, (
+    "some of the low tail really is read-starved; the withdrawal of the "
+    "measurement-artefact argument would need qualifying")
+```
+
+That assertion has no domain in which it can fail. It is the defect class
+recorded for checks that cannot see their own failure, committed here in a
+script written to guard against exactly that.
+
+**What does not change.** The units identity is unaffected
+(`PIRASequencingCoverage == PIRAReadCount / replicon_length`, exact over
+16,861 rows), the Poisson precision argument is unaffected, and the
+withdrawal of the measurement-artefact reading stands. What is withdrawn is
+one redundant supporting sentence.
+
+**What this costs.** The floor is also a selection effect worth naming in a
+size–copy-number study: 10,000 mapped reads is a very different sequencing
+depth for a 3 kb plasmid than for a 300 kb one, and the file does not say
+how many plasmids were removed to impose it. That cannot be recovered from
+the supplement. **OF-25 works out what the rule is a rule about, and it is
+worse than a nuisance: it is a floor on the exact quantity §0 measures.**
+
+**Correction:** applied. The sentence is marked circular where it appears,
+the assertion is replaced with one that detects the floor and reports it as
+selection, and the script now fails if the floor ever moves or disappears —
+which is a condition that can actually occur.
+
+---
+
+## Closed in the model-selection changeset — OF-22 and OF-23
+
+### OF-22 — a searched breakpoint was charged as a fixed one
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §3, §5
+
+The pooled ΔAIC of −148.1 came from scanning a 200-point grid of
+breakpoints and keeping the best, then charging four parameters against
+two. Under the null of no bend the breakpoint is not a parameter at all,
+so AIC's regularity conditions fail — the Davies problem. Searching buys
+negative ΔAIC for free, and nothing here measured how much.
+
+Calibrating against no-bend data that keeps the real x values and PTU
+structure: the null median for a *searched* ΔAIC is −23.1 (parametric) or
+−28.6 (block resampled), and **88–93% of no-bend datasets reach the
+conventional −4**. The observed −148.1 gives an empirical p of 0.008
+against the parametric null and **0.052 against the block null** — not
+significant at 5% once realistic within-PTU correlation is allowed.
+
+The inversion is the useful part: the fixed-knee PTU fixed-effects result
+of −19.5, which reads as modest, lies beyond the entire null range under
+both nulls (p = 0.000), because that fit searched nothing. The impressive
+number was the weak one.
+
+**Correction:** applied. §9 carries the calibration table and says that
+every searched ΔAIC must be read against it rather than against −4.
+`aic_calibration.py` reproduces it and asserts the searched statistic is
+biased downward under the null. The quoted ΔAIC values are unchanged —
+what changes is what they are worth.
+
+---
+
+### OF-23 — a hinge was only ever compared against a straight line
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §3, §5
+
+The segmented fit was compared against a single line and the win read as a
+breakpoint at 1.73% of chromosome. A smooth curve also beats a straight
+line. At matched parameter count (k=4) a plain **cubic beats the hinge by
+19.0 AIC units** and a natural spline beats it by 10.6; five-fold CV and
+leave-one-PTU-out CV both prefer the cubic too.
+
+The differences among curved models are small — the hinge is 0.55% off the
+best on random folds — and that is the point. The data support curvature;
+they do not single out the one shape that implies a threshold.
+
+Separately, a cluster bootstrap over PTUs puts the breakpoint's 95%
+interval at **[0.41%, 2.05%]**, a factor of five, so the three significant
+figures in "1.73%" were never supported.
+
+**Correction:** applied. §9 carries both comparisons and the interval, and
+§3's opening sentence now points at them. `smooth_vs_hinge.py` reproduces
+it.
+
+**The lecture-page half of that not-done is closed.**
+[`concepts/plasmid-size-and-copy-number.md`](../concepts/plasmid-size-and-copy-number.md)
+turned out not to describe a threshold at all — it already marked the
+segmented reading as disputed rather than established, and filed the two
+studies as `NOT COMPARABLE` rather than `contested`. What it did instead was
+link to none of this: no content page in the repository pointed at
+`reproductions/` at all, so a reader of the teaching material could not
+reach the reanalysis of the very datasets it discusses. That is now fixed,
+with the shape result, the DNA-load baseline, and the limit that the range
+to read the relationship over stays `UNRESOLVED`.
+
+One claim on that page became measurable in the process. It argued that the
+two studies differ by a growth-rate-dependent factor, since a fast-growing
+cell holds several chromosome equivalents. That factor is one number per
+sequenced genome, so a per-assembly intercept absorbs it exactly, and the
+curvature survives it — which narrows the page's own `NOT COMPARABLE`
+verdict to the studies' numbers rather than the shape.
+
+**Update.** The dataset half of that not-done — "the Maddamsetti dataset
+has not been put through the same comparison" — is closed by OF-28, which
+replicates every line of this entry on 9,401 plasmids from 275 genera.
+Read OF-28 before quoting this one: the comparison reverses if the second
+dataset is used on its own domain rather than this one's.
+
+---
+
+## Closed in the scaling-corrections changeset — OF-18 to OF-21
+
+Four claims in `reproductions/ramiro-scaling/RESULTS.md` were wrong or
+unsupported on `main`. All four are corrected in the same commit as this
+entry. None of them changes a fitted number except OF-21, which withdraws
+a comparison rather than replacing it.
+
+### OF-18 — a coverage column was read in the wrong unit, and a conclusion was drawn from it
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §7
+
+`PIRASequencingCoverage` in the Maddamsetti supplement is **mapped reads
+per base**, not base depth: it equals `PIRAReadCount / replicon_length`
+exactly, for all 16,861 rows, to a relative error of 1.5e-10. §7 read
+"0.6x" as base coverage, called it "less than one read per base" and
+"barely an estimate", and concluded that the sub-one-copy tail was half a
+measurement artefact.
+
+That conclusion is the wrong way round. A value of 0.57 on a 111,773 bp
+plasmid is 63,279 mapped reads, and the Poisson relative standard error on
+the median is 0.40%. The low tail is *well* measured on counting grounds.
+
+An earlier version of this entry also said that not one of the 2,487
+sub-one-copy plasmids was called from fewer than 1,000 reads. True, and
+circular: see OF-24.
+
+The defect was invisible because the units cancel in the copy-number ratio,
+so every fitted result stayed correct while the prose around it did not.
+Nothing but interpretation was affected, which is exactly why nothing
+caught it: there was no number to disagree with.
+
+**Correction:** applied. The measurement-artefact argument is withdrawn,
+read counts replace coverage figures throughout §7 because they need no
+assumption about read length, and `coverage_units.py` asserts the identity.
+The read-starvation check it used to carry was unfalsifiable and has been
+replaced; see OF-24.
+
+---
+
+### OF-19 — an AIC drop was explained by parameters that cancel
+
+**Severity:** moderate
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §5
+
+§5 explained the fall in ΔAIC from −148.1 to −19.4 by saying the adjusted
+fit "spends 116 parameters on intercepts". Both models in that comparison
+carry the same PTU intercepts — `reproduce.py:403` computes
+`aic(sse_fe2, nk, n_ptu + 3) - aic(sse_fe1, nk, n_ptu + 2)` — so the
+penalties cancel exactly and the two models differ by **one** parameter.
+
+The sentence was an explanation offered for a real observation, which is
+the dangerous kind of error: the ΔAIC values were right, the slope-change
+conclusion drawn from them was right, and only the stated reason was wrong.
+
+**Correction:** applied. The explanation is replaced with what the drop
+actually is — a drop in evidence for a hinge once between-PTU variation is
+removed, which is a different question from how large the hinge is.
+
+---
+
+### OF-20 — a curated database was used without its curation flag
+
+**Severity:** moderate
+**Location:** `reproductions/ramiro-scaling/copla_replication.py`
+
+COPLA2 RefSeq 224 marks 25,363 of its 89,393 entries `Remove=Y` with a
+stated reason: Borreliaceae sequences, sub-1500 bp fragments, and oversized
+entries. Every sequence above 1.5 Mb is flagged, up to an 11,850,240 bp
+"plasmid". The join never read the column, so **371 flagged records (3.3%)
+entered §8's 11,381**.
+
+3.3% is small, and the effect on §8's headline numbers is correspondingly
+small. It is recorded as moderate rather than trivial because the size of
+the effect was not knowable before it was measured, and because the same
+omission in a size-sensitive analysis is not small: in an independent check
+not published here, applying the flag moved one family's dip statistic
+threefold.
+
+**Correction:** applied. `copla_replication.py` now drops `Remove=Y` and
+asserts that the column parsed as something other than all-N, so a renamed
+header fails loudly instead of silently restoring the old behaviour. §8's
+tables predate the fix and say so; they have not been regenerated.
+
+---
+
+### OF-21 — a comparison between two annotations was made on two different samples
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §8
+
+§8 stated that replicon type is "the **worse** absorber of the two",
+leaving a larger slope change than the pooled fit (+0.905 against +0.742),
+and concluded that "within a replicon type the bend is steeper than across
+the whole sample".
+
+Three defects. The two adjustments were computed on different samples —
+8,411 plasmids carry a PTU call and 6,620 a replicon call. The join
+included the 371 flagged records of OF-20. And the knee was refitted, which
+§5 shows is not a valid comparison once groups differ in mean size.
+
+Redone on the 6,005 records carrying both labels, curated, knee held fixed,
+the point estimates are pooled +0.758, PTU +0.686, replicon +0.923 — the
+same direction. But a cluster bootstrap over whole replicon groups puts the
+replicon-minus-pooled difference at +0.212 [−0.217, +0.625] and the
+PTU difference at −0.063 [−0.366, +0.245]. Neither is distinguishable from
+zero, and the sign of the replicon comparison reverses across a knee grid
+from 1.0% to 4.0%.
+
+A granularity control was run because the obvious objection points the
+other way: replicon has *more* groups here than PTU (511 against 416). A
+random partition with the same group-size profile gives +0.761, essentially
+the pooled value, so random grouping is neutral and the point estimate is
+not an artefact of group count. The estimate is real; its uncertainty is
+what defeats it.
+
+**Correction:** applied. The claim is struck through and withdrawn rather
+than replaced, because the honest result is that this comparison cannot say
+which annotation absorbs the bend better. `replicon_adjustment.py`
+reproduces it and asserts that the intervals still contain zero and that
+the sign still reverses, so the withdrawal fails loudly if either stops
+being true. The genus comparison in the same paragraph has the same
+unmatched-sample and flag problems and has **not** been redone.
+
+---
+
 ## Closed in this changeset
 
 | ID | Was | Fix |
