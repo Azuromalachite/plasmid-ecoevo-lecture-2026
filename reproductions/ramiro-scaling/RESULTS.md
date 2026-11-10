@@ -161,7 +161,7 @@ Putting these data on Maddamsetti's chromosome-normalised axis:
 | breakpoint | 1.84% of chromosome | **1.73%** |
 | slope below | −0.880 | −0.683 |
 | slope above | −0.125 | −0.152 |
-| model preference | segmented | **ΔAIC = −148.1**, segmented (see §9: against a no-bend null a *searched* ΔAIC of this size has empirical p = 0.008 to 0.052, and a cubic at the same parameter count fits better) |
+| model preference | segmented | **ΔAIC = −148.1**, segmented (see §9: against a no-bend null a *searched* ΔAIC of this size has empirical p = 0.008 to 0.052, and a cubic at the same parameter count fits better -- on this dataset, and on Maddamsetti's own once the two are compared over the same domain) |
 
 Different sample, different coverage estimator, different filters — and the
 breakpoint lands within 0.1 percentage points. The upper slope agrees
@@ -699,6 +699,79 @@ breakpoint location as a measured quantity should be read with that
 interval attached.
 
 Reproduced by `smooth_vs_hinge.py`.
+
+### The second dataset agrees, but only when asked the same question
+
+Both subsections above measure one dataset. §8 already uses a second,
+independent one -- Maddamsetti's 12,006 plasmids, keyed by accession and
+assembled by a different group -- so the obvious check is to put it
+through the same six models. Run as it ships, it does not merely disagree.
+It reverses every line:
+
+| | Ramiro, 3,961 | Maddamsetti as shipped, 12,006 |
+|---|---|---|
+| hinge vs cubic, k=4 | cubic by 19.0 | **hinge by 109.4** |
+| hinge vs spline-4, k=4 | spline by 10.6 | **hinge by 19.2** |
+| random 5-fold CV | cubic | **hinge** |
+| knee 95% interval | [0.41%, 2.05%], ×5.0 | **[1.71%, 1.95%], ×1.1** |
+
+Taken at face value that retires both subsections above. It should not be
+taken at face value, because two things differ between the files besides
+which plasmids are in them, and either one alone is enough to produce the
+table.
+
+**They do not cover the same domain.** Ramiro's curated subset has a hard
+floor at one copy -- its minimum PCN is exactly 1.0000 -- and reaches
+10.13% of chromosome. Maddamsetti's spans 0.02--71.5%, and 2,487 of its
+rows, 20.7%, sit **below one copy**. A hinge whose upper segment is nearly
+flat has far more to work with when the domain runs out to 71%.
+
+**They are not bootstrapped over comparable blocks.** Ramiro's 3,961
+plasmids fall in 139 PTUs: 28.5 per block. Maddamsetti's 12,006 fall in
+4,644 assemblies: 2.6 per block. A cluster bootstrap over blocks of 2.6 is
+close to no clustering at all -- it treats two plasmids from one genome as
+two independent observations of where a knee is. The file also carries
+`Organism` and `Genus`, so the dependence can be measured rather than
+argued:
+
+| bootstrap unit | blocks | per block | 95% interval | factor |
+|---|---:|---:|---|---:|
+| assembly | 4,644 | 2.6 | [1.71%, 1.95%] | 1.1 |
+| organism | 1,240 | 9.7 | [1.34%, 2.08%] | 1.6 |
+| genus | 309 | 38.9 | [1.20%, 2.18%] | 1.8 |
+
+Most of the apparent precision was the choice of block.
+
+Matched on both counts -- restricted to Ramiro's domain, bootstrapped over
+genera of comparable size -- the second dataset replicates this section
+rather than reversing it:
+
+| | Ramiro, 3,961, 139 PTUs | Maddamsetti matched, 9,401, 275 genera |
+|---|---|---|
+| block size | 28.5 per block | 34.2 per block |
+| hinge vs cubic, k=4 | cubic by 19.0 | **cubic by 21.7** |
+| hinge vs spline-4, k=4 | spline by 10.6 | **spline by 17.3** |
+| random 5-fold CV | cubic | **cubic** |
+| leave-lineage-out CV | cubic | **cubic** |
+| knee | 1.71% | **1.69%** |
+| knee 95% interval | [0.41%, 2.05%], ×5.0 | **[0.56%, 2.04%], ×3.7** |
+
+Seven rows, two datasets, no shared records. **The data support curvature
+and do not single out a hinge** now rests on 13,362 plasmids rather than
+3,961, and the knee's interval is wide on both.
+
+What survives from the unmatched run is narrower than it looked, and
+genuine: **the shape verdict is contingent on domain.** Out where plasmids
+reach a tenth of a chromosome and copy numbers fall below one, a hinge
+does fit better, and the difference is not small. Whether that is a fact
+about plasmids or about measurement, this comparison cannot say -- those
+rows come from precisely the corner where the 10,000-read floor of §2 and
+the truncation of §0 bite hardest. It is a measurement question, and the
+answer is not in a model-selection table.
+
+Reproduced by `smooth_vs_hinge.py --group genus --max-x 10.13 --min-pcn 1`.
+Recorded as OF-28, including the fact that this subsection was first
+drafted as a reversal.
 
 ## Defects in the input files
 

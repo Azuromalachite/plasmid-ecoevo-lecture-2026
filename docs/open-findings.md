@@ -135,6 +135,86 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the second-dataset changeset — OF-28
+
+### OF-28 — the second dataset appeared to reverse OF-23, and did not
+
+**Severity:** major
+**Location:** `reproductions/ramiro-scaling/RESULTS.md` §9,
+`reproductions/ramiro-scaling/smooth_vs_hinge.py`
+
+OF-23 closed with a named not-done: "the Maddamsetti dataset has not been
+put through the same comparison." Run on that dataset, the comparison
+appears to reverse it outright. At matched k the **hinge beats the cubic
+by 109.4 AIC units** and the spline by 19.2, random-split CV prefers the
+hinge, and the cluster bootstrap puts the knee at 1.82% with a 95%
+interval of **[1.71%, 1.95%]** — a factor of 1.1, against the factor of 5
+that OF-23 said made three significant figures unsupportable.
+
+Every one of those is an artefact of two choices that were not matched to
+the first dataset.
+
+**The domain is not the same.** Ramiro's curated subset carries a hard
+PCN ≥ 1 floor — its minimum is exactly 1.0000 — and reaches 10.13% of
+chromosome. Maddamsetti's file spans 0.02–71.5%, and **20.7% of its rows
+sit below one copy**. Restricting it to Ramiro's domain costs 2,605 rows
+and flips the verdict back.
+
+**The bootstrap unit is not comparable.** Ramiro's 3,961 plasmids fall in
+139 PTUs, 28.5 per block. Maddamsetti's 12,006 fall in 4,644 assemblies,
+2.6 per block. Resampling blocks of 2.6 treats near-identical plasmids
+from one genome as independent evidence about a knee. The file carries
+`Organism` and `Genus`, giving blocks of 9.7 and 38.9, and the interval
+widens monotonically with block size:
+
+| bootstrap unit | blocks | per block | 95% interval | factor |
+|---|---:|---:|---|---:|
+| assembly | 4,644 | 2.6 | [1.71%, 1.95%] | 1.1 |
+| organism | 1,240 | 9.7 | [1.34%, 2.08%] | 1.6 |
+| genus | 309 | 38.9 | [1.20%, 2.18%] | 1.8 |
+
+Matched on both — Ramiro's domain, genus blocks of comparable size — the
+second dataset **replicates OF-23 line by line**:
+
+| | Ramiro, 3,961, 139 PTUs | Maddamsetti matched, 9,401, 275 genera |
+|---|---|---|
+| block size | 28.5 per block | 34.2 per block |
+| hinge vs cubic, k=4 | cubic by 19.0 | **cubic by 21.7** |
+| hinge vs spline-4, k=4 | spline by 10.6 | **spline by 17.3** |
+| random 5-fold CV | cubic | **cubic** |
+| leave-lineage-out CV | cubic | **cubic** |
+| knee | 1.71% | **1.69%** |
+| knee 95% interval | [0.41%, 2.05%], ×5.0 | **[0.56%, 2.04%], ×3.7** |
+
+So OF-23's conclusion is not dataset-specific, and it now has an
+independent replication on 9,401 plasmids from 275 genera that was not
+available when it was written.
+
+What the unmatched run does establish, and this is not nothing: **the
+shape verdict is contingent on domain**. On the wider domain the hinge
+genuinely does fit better. Whether that is a fact about plasmids or about
+measurement is a question this comparison cannot answer, because the rows
+producing it — sub-one-copy plasmids, and the 307 above 10% of chromosome
+— are drawn from exactly the corner where the 10,000-read floor of OF-24
+and OF-25 bites hardest. Deciding between those two readings is a
+measurement question, not a model-selection one.
+
+**Correction:** applied. §9 carries the matched comparison and the
+block-size table, and `smooth_vs_hinge.py` grew `--max-x`, `--min-pcn`
+and `--group` so both are reproducible.
+
+**Method note.** This entry was first drafted as a reversal, on the
+strength of the unmatched run, and was not committed only because the
+domain check happened to be run before the write-up rather than after.
+OF-21 and OF-26 record the same pattern from the other side. What caught
+it was asking what *else* differs between two files besides the one
+variable the comparison is about — here, two things did, and each alone
+was enough to flip the answer. Still open: whether sub-one-copy copy
+numbers are trustworthy enough to include at all, which OF-27's truncated
+regression bears on but does not settle.
+
+---
+
 ## Closed in the truncated-fit changeset — OF-27
 
 ### OF-27 — the truncated regression, which OF-25 named as not done
@@ -466,8 +546,13 @@ figures in "1.73%" were never supported.
 **Correction:** applied. §9 carries both comparisons and the interval, and
 §3's opening sentence now points at them. `smooth_vs_hinge.py` reproduces
 it. Not done: the lecture pages that describe a threshold have not been
-revisited, and the Maddamsetti dataset has not been put through the same
-comparison.
+revisited.
+
+**Update.** The second half of that not-done — "the Maddamsetti dataset
+has not been put through the same comparison" — is closed by OF-28, which
+replicates every line of this entry on 9,401 plasmids from 275 genera.
+Read OF-28 before quoting this one: the comparison reverses if the second
+dataset is used on its own domain rather than this one's.
 
 ---
 
