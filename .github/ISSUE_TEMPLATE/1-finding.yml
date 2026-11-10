@@ -1,6 +1,7 @@
 name: "Finding — something committed is wrong"
 description: "A claim, number, figure or statement already in this repository does not hold."
 title: "[finding] "
+labels: ["finding"]
 body:
   - type: markdown
     attributes:

@@ -1,6 +1,7 @@
 name: "Input-data defect — a file this repository ships or downloads is wrong"
 description: "A defect in source data rather than in this repository's own prose or code."
 title: "[input-data] "
+labels: ["input-data"]
 body:
   - type: markdown
     attributes:
