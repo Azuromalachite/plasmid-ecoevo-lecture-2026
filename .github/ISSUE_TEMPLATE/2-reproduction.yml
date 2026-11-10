@@ -1,6 +1,7 @@
 name: "Reproduction failure — a committed script does not give its stated number"
 description: "You ran something in this repository and got a different answer from the one written down."
 title: "[repro] "
+labels: ["repro"]
 body:
   - type: markdown
     attributes:
