@@ -626,10 +626,27 @@ figures in "1.73%" were never supported.
 
 **Correction:** applied. §9 carries both comparisons and the interval, and
 §3's opening sentence now points at them. `smooth_vs_hinge.py` reproduces
-it. Not done: the lecture pages that describe a threshold have not been
-revisited.
+it.
 
-**Update.** The second half of that not-done — "the Maddamsetti dataset
+**The lecture-page half of that not-done is closed.**
+[`concepts/plasmid-size-and-copy-number.md`](../concepts/plasmid-size-and-copy-number.md)
+turned out not to describe a threshold at all — it already marked the
+segmented reading as disputed rather than established, and filed the two
+studies as `NOT COMPARABLE` rather than `contested`. What it did instead was
+link to none of this: no content page in the repository pointed at
+`reproductions/` at all, so a reader of the teaching material could not
+reach the reanalysis of the very datasets it discusses. That is now fixed,
+with the shape result, the DNA-load baseline, and the limit that the range
+to read the relationship over stays `UNRESOLVED`.
+
+One claim on that page became measurable in the process. It argued that the
+two studies differ by a growth-rate-dependent factor, since a fast-growing
+cell holds several chromosome equivalents. That factor is one number per
+sequenced genome, so a per-assembly intercept absorbs it exactly, and the
+curvature survives it — which narrows the page's own `NOT COMPARABLE`
+verdict to the studies' numbers rather than the shape.
+
+**Update.** The dataset half of that not-done — "the Maddamsetti dataset
 has not been put through the same comparison" — is closed by OF-28, which
 replicates every line of this entry on 9,401 plasmids from 275 genera.
 Read OF-28 before quoting this one: the comparison reverses if the second
