@@ -1,0 +1,112 @@
+name: "Finding — something committed is wrong"
+description: "A claim, number, figure or statement already in this repository does not hold."
+title: "[finding] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form constrains **rigour, not shape** — the same stance
+        `CONTRIBUTING.md` takes when it says there is no page template.
+        Nothing here asks you to write the finding a particular way. The
+        required fields are the ones a finding cannot be acted on without.
+
+        If the artifact is a draft, plan or review rather than committed
+        public content, say so in the last field: those do not go to
+        `docs/open-findings.md`, because "the plan needs revision" and "the
+        repository contains an error" are different claims.
+
+  - type: input
+    id: location
+    attributes:
+      label: "Location"
+      description: "File, and section or line. A finding about an implicitly identified place cannot be re-checked."
+      placeholder: "reproductions/ramiro-scaling/RESULTS.md §9, the knee interval table"
+    validations:
+      required: true
+
+  - type: textarea
+    id: claim
+    attributes:
+      label: "The claim as written"
+      description: "Quote it. Paraphrase moves the target."
+    validations:
+      required: true
+
+  - type: textarea
+    id: contradicts
+    attributes:
+      label: "What contradicts it"
+      description: "The number, the source, the derivation, or the run. If a source says otherwise, link it and say which part you read."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: established
+    attributes:
+      label: "How this was established"
+      description: "The second half of the ledger's two-part tag. It separates a finding that can be acted on from an opinion."
+      options:
+        - "CONFIRMED by recomputation — I ran something and can give the command"
+        - "CONFIRMED by source check — I read the cited source"
+        - "CONFIRMED by derivation — it is wrong on the arithmetic alone"
+        - "PLAUSIBLE — I have not verified it, and I am saying so"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: "Severity"
+      description: "Does a conclusion change, a number change, or neither?"
+      options:
+        - "major — a stated conclusion does not survive"
+        - "minor — a number or attribution is wrong, the conclusion stands"
+        - "trivial — presentation, wording, a stale cross-reference"
+    validations:
+      required: true
+
+  - type: textarea
+    id: settles
+    attributes:
+      label: "What measurement would settle this?"
+      description: >-
+        The field this repository exists around. Name the check, run or
+        comparison whose result would decide it either way — including the
+        result that would show you wrong. "Someone should look into it" is
+        not an answer; "refit with assembly intercepts and see whether the
+        knee moves" is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: absence
+    attributes:
+      label: "If this is a claim of absence, what rules out your search having missed it?"
+      description: >-
+        An absence claim needs its own evidence. A control on other inputs is
+        not a control on this one: a search already normalised for whitespace
+        still missed a sentence here because it was case-sensitive and the
+        quarry began one. Which way could *this* search be wrong, and how did
+        you defeat that specific way? Leave blank if you are not claiming
+        absence.
+
+  - type: dropdown
+    id: route
+    attributes:
+      label: "Is this about committed public content?"
+      options:
+        - "Yes — committed, public, in main"
+        - "No — a draft, plan, lecture outline or unpublished artifact"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: policy
+    attributes:
+      label: "Before you post"
+      options:
+        - label: "Nothing in this issue quotes or derives from participant submissions or presentations. An issue is public content too."
+          required: true
+        - label: "I checked docs/open-findings.md and this is not already recorded."
+          required: true

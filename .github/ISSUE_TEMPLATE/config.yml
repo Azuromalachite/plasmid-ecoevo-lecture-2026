@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "How this repository judges a change"
+    url: "https://github.com/Azuromalachite/plasmid-ecoevo-lecture-2026/blob/main/CONTRIBUTING.md"
+    about: "The rigour checklist, the checks to run by hand, and the rule that every instrument needs evidence it can fail. Worth reading before opening anything."
+  - name: "Known unfixed defects"
+    url: "https://github.com/Azuromalachite/plasmid-ecoevo-lecture-2026/blob/main/docs/open-findings.md"
+    about: "Check whether it is already recorded. Each entry names its correction and what it leaves not done."
+  - name: "Participant-material policy"
+    url: "https://github.com/Azuromalachite/plasmid-ecoevo-lecture-2026/blob/main/docs/participant-material-policy.md"
+    about: "What must never enter Git, on any branch. An issue is public too: do not paste excluded material into one."

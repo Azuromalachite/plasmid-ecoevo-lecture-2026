@@ -1,0 +1,83 @@
+name: "Input-data defect — a file this repository ships or downloads is wrong"
+description: "A defect in source data rather than in this repository's own prose or code."
+title: "[input-data] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Two of these are already recorded: a `gc` column in mixed units, and
+        a curation flag shipped but not applied. Both were found the same
+        way — by looking at a column nobody had looked at. They are kept
+        under "Defects in the input files" so that anyone reusing the data
+        starts from a known state, whether or not a result here depends on
+        them.
+
+  - type: input
+    id: file
+    attributes:
+      label: "File, and where it comes from"
+      description: "Name, and the URL or script that fetches it. Say which release or version if it has one."
+      placeholder: "COPLA2 RefSeq 224, downloaded by copla_replication.py"
+    validations:
+      required: true
+
+  - type: input
+    id: field
+    attributes:
+      label: "Which column or field"
+    validations:
+      required: true
+
+  - type: input
+    id: extent
+    attributes:
+      label: "How many records, out of how many"
+      description: "A count, not an impression."
+      placeholder: "25,363 of 89,393"
+    validations:
+      required: true
+
+  - type: textarea
+    id: shape
+    attributes:
+      label: "What the defect looks like"
+      description: >-
+        What distinguishes the bad records from the good ones, and how you
+        can tell them apart. Mixed units, a flag not applied, a join key that
+        does not match, duplicate rows, a sentinel read as a value. If there
+        are two populations, give something that separates them — the `gc`
+        case turned on there being no values at all between 1 and 25.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reads
+    attributes:
+      label: "What in this repository reads it"
+      description: >-
+        Required even when the answer is nothing, because nothing is a real
+        and useful answer: it is what made the `gc` defect recordable without
+        changing a single result. Name the scripts and sections, or say that
+        you searched and found none, and how you searched.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: "Does a committed number change?"
+      options:
+        - "Yes, and I can say which"
+        - "Yes, but I have not worked out which"
+        - "No — nothing here reads it"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: policy
+    attributes:
+      label: "Before you post"
+      options:
+        - label: "Nothing in this issue quotes or derives from participant submissions or presentations."
+          required: true
