@@ -122,7 +122,7 @@ def fit_predict(name, xtr, ytr, xte, grid):
     return Mte @ b, k
 
 
-def load(path, max_x=None, min_pcn=None, group=None):
+def load(path, max_x=None, min_pcn=None, group=None, min_reads=None):
     """Either file. Returns x, y, group label, and what the group is.
 
     max_x and min_pcn exist to ask one specific question: the two files do
@@ -156,6 +156,9 @@ def load(path, max_x=None, min_pcn=None, group=None):
                     col = {"organism": "Organism", "genus": "Genus"}.get(
                         group, "AnnotationAccession")
                     g = r[col].strip() or "-"
+                    if (min_reads is not None
+                            and float(r["PIRAReadCount"]) < min_reads):
+                        continue
             except (TypeError, ValueError, KeyError):
                 continue
             if pcn <= 0 or rel <= 0:
@@ -183,9 +186,12 @@ def main():
                     default="assembly",
                     help="held-out and bootstrap unit (Maddamsetti only; "
                          "Ramiro always uses the PTU)")
+    ap.add_argument("--min-reads", type=float, default=None,
+                    help="drop plasmids below this mapped-read count "
+                         "(Maddamsetti only; its hard floor is 10,000)")
     a = ap.parse_args()
 
-    X, Y, G, unit = load(a.data, a.max_x, a.min_pcn, a.group)
+    X, Y, G, unit = load(a.data, a.max_x, a.min_pcn, a.group, a.min_reads)
     n = len(X)
     grid = np.linspace(np.quantile(X, .08), np.quantile(X, .92), GRID_N)
     lim = []
@@ -193,6 +199,9 @@ def main():
         lim.append(f"x <= {a.max_x}% of chromosome")
     if a.min_pcn is not None:
         lim.append(f"PCN >= {a.min_pcn}")
+    if a.min_reads is not None:
+        lim.append(f"reads >= {a.min_reads:,.0f} "
+                   f"({a.min_reads / 10000:.3g}x the floor)")
     print(f"{n:,} plasmids, {len(set(G)):,} {unit} labels "
           f"({n/len(set(G)):.1f} per block), held out by {unit}")
     if lim:

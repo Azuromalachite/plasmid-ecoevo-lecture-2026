@@ -135,6 +135,83 @@ appears, or if the status itself is retired.
 
 ---
 
+## Closed in the floor-margin changeset — OF-29
+
+### OF-29 — OF-28's caveat named a mechanism that the file contradicts
+
+**Severity:** major
+**Location:** `docs/open-findings.md` OF-28,
+`reproductions/ramiro-scaling/RESULTS.md` §9
+
+OF-28 established that the second dataset replicates OF-23 once domain and
+block size are matched, and that is unaffected. But it closed by saying
+that the rows driving the unmatched result — sub-one-copy plasmids, and
+those above 10% of chromosome — "are drawn from exactly the corner where
+the 10,000-read floor of OF-24 and OF-25 bites hardest," and that deciding
+what the wide-domain bend means is therefore a measurement question.
+
+The first half is false and the file says so directly. The floor is a lower
+bound on L<sub>p</sub> × PCN, a line of slope −1 in these coordinates, so
+it binds **small** plasmids. Measured:
+
+| group | n | median margin above floor | within 2× of floor |
+|---|---:|---:|---:|
+| all plasmids | 12,006 | 8.9× | 9.5% |
+| PCN < 1 | 2,487 | 6.3× | 16.2% |
+| **above 10% of chromosome** | **298** | **50.4×** | **0.0%** |
+| matched subset | 9,401 | 9.5× | 7.8% |
+
+Not one of the 298 largest-relative plasmids sits within twice the floor;
+they are the least censored rows in the file, not the most. The rows that
+*are* near the floor have a median size of 0.53% of chromosome against
+1.35% overall. Sub-one-copy plasmids are enriched near the floor by about
+two-fold, but 84% are comfortable, and at a median 62,231 mapped reads
+their Poisson counting error is 0.4%.
+
+Three further checks, all pointing the same way:
+
+- **Raising the floor strengthens the hinge.** At 2×, 5× and 10× the
+  published floor — dropping 10%, 32% and 53% of rows — ΔAIC against the
+  cubic runs +109.4 → +120.7 → +113.8 → +97.9, the spline margin grows
+  monotonically from +19.2 to +41.0, and both cross-validations still
+  prefer the hinge.
+- **Assembly fixed effects do not remove it.** A separate intercept per
+  assembly absorbs any per-genome error in the chromosome denominator
+  exactly, which covers the multifork-replication inflation that is the
+  main mechanistic reason to distrust PCN < 1. ΔAIC +70.3, knee 1.78%.
+  Genus fixed effects: +67.0, knee 1.75%.
+- **Read reassignment barely moves the estimates.** The file carries two
+  nested copy numbers — `InitialCopyNumberEstimate` and `PIRACopyNumber`,
+  from read sets satisfying `Initial + Additional = PIRA` exactly on all
+  16,861 rows. Reassignment moves the median estimate by 0.2% overall and
+  0.7% for sub-one-copy rows. Control: the 3,320 plasmids that received
+  zero additional reads move by 2×10⁻⁵, confirming the two columns are one
+  formula on nested read sets. This bounds one perturbation, not mapping
+  ambiguity in general.
+
+**Correction:** applied. §9's closing paragraph is rewritten and OF-28's
+caveat is marked superseded from the sentence that names censoring. The
+conclusion changes direction: sub-one-copy plasmids are not the weak link
+they were assumed to be, and the wide-domain bend is not a censoring
+artefact.
+
+What replaces it is a different limitation, and a real one. The
+wide-domain advantage is **concentrated, not broad**: a leave-one-genus-out
+pass puts most of it in a single genus, and removing the four most
+influential genera flips the verdict to the cubic. So it is a result about
+part of this sample rather than a result about plasmids, and no claim
+should be built on it until that is understood. The influence analysis
+itself is held outside this repository.
+
+**Method note.** The caveat was written from a plausible mechanism rather
+than from a measurement — the floor was known to exist, the rows were known
+to be unusual, and the two were joined without checking. The check took one
+query. This is the fourth entry in this file where the error was an
+unmeasured mechanism asserted in a sentence that sounded careful, after
+OF-21, OF-25 and OF-26.
+
+---
+
 ## Closed in the second-dataset changeset — OF-28
 
 ### OF-28 — the second dataset appeared to reverse OF-23, and did not
@@ -192,12 +269,16 @@ available when it was written.
 
 What the unmatched run does establish, and this is not nothing: **the
 shape verdict is contingent on domain**. On the wider domain the hinge
-genuinely does fit better. Whether that is a fact about plasmids or about
-measurement is a question this comparison cannot answer, because the rows
-producing it — sub-one-copy plasmids, and the 307 above 10% of chromosome
-— are drawn from exactly the corner where the 10,000-read floor of OF-24
-and OF-25 bites hardest. Deciding between those two readings is a
-measurement question, not a model-selection one.
+genuinely does fit better.
+
+**Superseded from here by OF-29.** This entry went on to attribute that to
+censoring — the rows producing it "drawn from exactly the corner where the
+10,000-read floor of OF-24 and OF-25 bites hardest." That is false. The
+floor binds small plasmids, not large ones; none of the 298 plasmids above
+10% of chromosome sits within twice it; and raising the floor tenfold
+strengthens the hinge rather than removing it. OF-29 has the measurements
+and the limitation that replaces it, which is concentration in one genus
+rather than censoring.
 
 **Correction:** applied. §9 carries the matched comparison and the
 block-size table, and `smooth_vs_hinge.py` grew `--max-x`, `--min-pcn`

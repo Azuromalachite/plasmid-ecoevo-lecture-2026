@@ -760,14 +760,38 @@ Seven rows, two datasets, no shared records. **The data support curvature
 and do not single out a hinge** now rests on 13,362 plasmids rather than
 3,961, and the knee's interval is wide on both.
 
-What survives from the unmatched run is narrower than it looked, and
-genuine: **the shape verdict is contingent on domain.** Out where plasmids
-reach a tenth of a chromosome and copy numbers fall below one, a hinge
-does fit better, and the difference is not small. Whether that is a fact
-about plasmids or about measurement, this comparison cannot say -- those
-rows come from precisely the corner where the 10,000-read floor of §2 and
-the truncation of §0 bite hardest. It is a measurement question, and the
-answer is not in a model-selection table.
+What survives from the unmatched run is narrower than it looked, and it is
+real: **the shape verdict is contingent on domain.** Out where plasmids
+reach a tenth of a chromosome and copy numbers fall below one, a hinge does
+fit better, and the margin is not small.
+
+**An earlier version of this paragraph explained that away as censoring,
+and was wrong.** It said those rows come from precisely the corner where
+the 10,000-read floor bites hardest. The floor is a lower bound on
+L<sub>p</sub> × PCN, so it bites the *small* plasmids: rows within twice
+the floor have a median size of **0.53%** of chromosome against 1.35%
+overall. The plasmids above 10% of chromosome are the furthest from it of
+any group in the file — **not one** of the 298 sits within twice the floor,
+and their median margin is **50×**. Sub-one-copy plasmids are modestly
+enriched near it, 16.2% within 2× against 7.7%, but 84% are comfortable and
+their median is 62,231 mapped reads, where Poisson counting error is 0.4%.
+
+Raising the floor confirms it rather than refuting it. Requiring 2×, 5× and
+10× the published floor drops 10%, 32% and 53% of the rows, and the hinge's
+advantage over a cubic runs **+109.4 → +120.7 → +113.8 → +97.9**, with the
+spline margin growing monotonically and both cross-validations still
+preferring the hinge throughout. Absorbing a separate intercept for every
+assembly — which removes any per-genome error in the chromosome denominator
+exactly, including the multifork-replication inflation that is the main
+mechanistic reason to distrust a copy number below one — leaves **+70.3**
+and the knee at 1.78%.
+
+So the wide-domain bend is not a censoring artefact, and sub-one-copy
+plasmids are not the weak link they were assumed to be. What the bend *is*
+remains open, and its support is concentrated rather than broad: a
+leave-one-genus-out pass puts most of the advantage in a single genus. That
+makes it a result about part of this sample, not yet a result about
+plasmids. Recorded as OF-29.
 
 Reproduced by `smooth_vs_hinge.py --group genus --max-x 10.13 --min-pcn 1`.
 Recorded as OF-28, including the fact that this subsection was first
