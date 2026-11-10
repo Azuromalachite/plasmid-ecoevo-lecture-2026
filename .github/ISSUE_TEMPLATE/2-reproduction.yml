@@ -1,0 +1,86 @@
+name: "Reproduction failure — a committed script does not give its stated number"
+description: "You ran something in this repository and got a different answer from the one written down."
+title: "[repro] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        There is no CI here; the checks are run by hand, by whoever is
+        editing. That makes this report the only signal that a number has
+        gone stale, so the fields below are the ones needed to tell
+        "the repository is wrong" apart from "the environment differs".
+
+  - type: input
+    id: script
+    attributes:
+      label: "Script"
+      placeholder: "reproductions/ramiro-scaling/smooth_vs_hinge.py"
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: "The exact command"
+      description: "Including every flag. A default that has changed is itself a finding."
+    validations:
+      required: true
+
+  - type: input
+    id: expected
+    attributes:
+      label: "Expected, and where it is written"
+      description: "The number as the repository states it, with the file and section it appears in."
+      placeholder: "dAIC -19.0, RESULTS.md section 9"
+    validations:
+      required: true
+
+  - type: input
+    id: observed
+    attributes:
+      label: "Observed"
+    validations:
+      required: true
+
+  - type: textarea
+    id: status
+    attributes:
+      label: "Exit status, read directly"
+      description: >-
+        Not "it failed" — the number. A changeset here was once committed
+        saying "all checkers exit 0" while one test exited 1, because the
+        reporting line read `$?` after a command substitution had reset it.
+        If you wrapped the run in anything that formats its own output,
+        confirm the status you are quoting is the script's.
+    validations:
+      required: true
+
+  - type: textarea
+    id: inputs
+    attributes:
+      label: "Input files, with SHA256"
+      description: >-
+        Name and digest for every data file the run read. This matters more
+        than it looks: a checkout here once rewrote 75 of 79 files through
+        line-ending normalisation, so a file can differ from its committed
+        blob without anyone touching it.
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: "Platform and versions"
+      placeholder: "Windows 11, uv 0.5.x, CPython 3.12, numpy 2.1.0"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Before you post"
+      options:
+        - label: "The working tree matches the committed blobs for the files involved (`git status --porcelain` is clean for them, and `git diff` shows nothing)."
+          required: true
+        - label: "Nothing in this issue quotes or derives from participant submissions or presentations."
+          required: true
